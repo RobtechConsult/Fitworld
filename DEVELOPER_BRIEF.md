@@ -23,28 +23,39 @@ Fundament der Hub-Brücke.
 
 ---
 
-## Briefing #002 — Workout-Tracking  ⏳ *als Nächstes*
+## Briefing #002 — Workout-Tracking  ✅ *umgesetzt*
 
 **Ziel:** Der CEO kann eine Trainingseinheit tracken (Kern der App).
 
+**Umgesetzt:**
+1. **Neue Einheit** (`/workouts`): Datum vorbelegt, optionaler Name, Notizen.
+2. **Übungen hinzufügen** via Such-/Filter-Picker (`ExercisePicker`, referenziert `exerciseId`).
+3. **Sätze loggen** je Übung: `reps`, `weightKg`, `completed`-Toggle (grün markiert); Satz hinzufügen
+   übernimmt die letzten Werte; letzte Übungswerte werden beim Hinzufügen vorbelegt (Progression).
+4. **Speichern** → `Workout` in `AppData.workouts` via `addWorkout()` (Store, localStorage).
+5. **Verlauf**: Liste vergangener Einheiten mit Volumen; Detailansicht mit Satz-Zusammenfassung; löschen.
+6. **Metriken** (`src/lib/metrics.ts`): `epley1RM`, `exerciseStats` (max. Gewicht, bestes 1-RM, letzte Werte),
+   `summarizeEntry`. Anzeige „Letztes Mal … · 1RM≈… kg" im Editor.
+
+**Umgesetzte Leitplanken:** State nur über Store · IDs via `newId()` · `workoutVolumeKg` aus
+`dataFormat.ts` wiederverwendet · keine personenbezogenen Daten im Code · Schema unverändert (v1).
+
+**Definition of Done:** Build grün · Einheit anlegen→loggen→speichern→wiederfinden getestet (E2E) ·
+Export enthält die Einheit in der Hub-Sicht · Screenshots geliefert. ✔️
+
+---
+
+## Briefing #003 — Körper-Metriken  ⏳ *als Nächstes empfohlen*
+
+**Ziel:** Körpergewicht/KFA/Umfänge erfassen → füllt die **Hub-Sicht** (`weight[]`) direkt.
+
 **Anforderungen (Vorschlag, CEO-Freigabe ausstehend):**
-1. **Neue Einheit starten** (`/workouts`): Datum vorbelegt, optionaler Name.
-2. **Übungen hinzufügen** aus der Übungs-DB (Such-/Filter-Picker; `exerciseId` referenzieren).
-3. **Sätze loggen** je Übung: `reps`, `weightKg`, optional `rpe`, `completed`-Toggle.
-   - Komfort: „Satz duplizieren", letzte Werte der Übung als Default (aus letztem Workout).
-4. **Speichern** → `Workout` in `AppData.workouts` (siehe `types.ts`), persistiert via Store.
-5. **Verlauf**: Liste vergangener Einheiten, Detailansicht.
-6. **Progression-Basis**: pro Übung „Bestwerte" (max. Gewicht / geschätztes 1RM) sichtbar.
+1. `/body`: Eintrag anlegen (Datum, `weightKg`, `bodyFatPct`, optionale Umfänge in cm, Notiz).
+2. Verlauf als Liste; letzter Wert aufs Dashboard.
+3. Mini-Trend (später zusammen mit Fortschritts-Graphen, Recharts).
+4. Speicherung analog Workouts über den Store (`BodyMetric` in `types.ts` existiert bereits).
 
-**Technische Leitplanken:**
-- Nur `src/store/StoreContext.tsx` mutiert `AppData` (Persistenz ist dort verdrahtet).
-- IDs via `newId()` aus `src/lib/storage.ts`.
-- Volumen/Progression-Helfer in `src/lib/dataFormat.ts` (`workoutVolumeKg`) wiederverwenden.
-- Keine echten personenbezogenen Daten/Secrets im Code (siehe PROJECT_KNOWLEDGE §6).
-- Bei Datenmodell-Änderung: `FORGEFIT_SCHEMA_VERSION` erhöhen + Logbuch-Eintrag.
-
-**Definition of Done:** Build grün · Einheit anlegen→loggen→speichern→wiederfinden funktioniert ·
-Export enthält die neue Einheit in der Hub-Sicht · Screenshots.
+**Definition of Done:** Build grün · Eintrag anlegen→speichern→im Export unter `hub.weight` sichtbar · Screenshots.
 
 ---
 

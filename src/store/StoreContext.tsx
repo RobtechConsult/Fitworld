@@ -8,7 +8,7 @@ import {
   useState,
   type ReactNode,
 } from 'react'
-import type { AppData, Exercise } from '@/lib/types'
+import type { AppData, Exercise, Workout } from '@/lib/types'
 import { loadAppData, newId, saveAppData } from '@/lib/storage'
 import { SEED_EXERCISES } from '@/data/exercises'
 
@@ -22,6 +22,10 @@ interface StoreValue {
     ex: Omit<Exercise, 'id' | 'isCustom' | 'createdAt'>,
   ) => Exercise
   deleteCustomExercise: (id: string) => void
+  /** Neue Einheit anlegen; erzeugt id + createdAt. */
+  addWorkout: (w: Omit<Workout, 'id' | 'createdAt'>) => Workout
+  updateWorkout: (id: string, patch: Partial<Omit<Workout, 'id'>>) => void
+  deleteWorkout: (id: string) => void
   replaceAll: (data: AppData) => void
 }
 
@@ -64,6 +68,23 @@ export function StoreProvider({ children }: { children: ReactNode }) {
     }))
   }, [])
 
+  const addWorkout = useCallback<StoreValue['addWorkout']>((w) => {
+    const created: Workout = { ...w, id: newId('wo'), createdAt: new Date().toISOString() }
+    setData((prev) => ({ ...prev, workouts: [created, ...prev.workouts] }))
+    return created
+  }, [])
+
+  const updateWorkout = useCallback<StoreValue['updateWorkout']>((id, patch) => {
+    setData((prev) => ({
+      ...prev,
+      workouts: prev.workouts.map((w) => (w.id === id ? { ...w, ...patch } : w)),
+    }))
+  }, [])
+
+  const deleteWorkout = useCallback((id: string) => {
+    setData((prev) => ({ ...prev, workouts: prev.workouts.filter((w) => w.id !== id) }))
+  }, [])
+
   const allExercises = useMemo(
     () => [...data.customExercises, ...SEED_EXERCISES],
     [data.customExercises],
@@ -88,9 +109,23 @@ export function StoreProvider({ children }: { children: ReactNode }) {
       update,
       addCustomExercise,
       deleteCustomExercise,
+      addWorkout,
+      updateWorkout,
+      deleteWorkout,
       replaceAll,
     }),
-    [data, allExercises, exerciseById, update, addCustomExercise, deleteCustomExercise, replaceAll],
+    [
+      data,
+      allExercises,
+      exerciseById,
+      update,
+      addCustomExercise,
+      deleteCustomExercise,
+      addWorkout,
+      updateWorkout,
+      deleteWorkout,
+      replaceAll,
+    ],
   )
 
   return <StoreContext.Provider value={value}>{children}</StoreContext.Provider>

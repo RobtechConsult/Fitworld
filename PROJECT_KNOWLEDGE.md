@@ -33,9 +33,9 @@ Ergebnisse per Screenshot zeigen · ehrlich bei Grenzen/Machbarkeit bleiben.
 
 ### Phase 1 — diese App *(in Arbeit)*
 - ✅ **Übungs-Datenbank** — Übungen mit Muskelgruppen, Gerät, Ausführung; eigene Übungen anlegbar.
-- ⏳ **Workout-Tracking** — Sätze, Wiederholungen, Gewicht; Progression. *(als Nächstes)*
+- ✅ **Workout-Tracking** — Einheit anlegen, Übungen wählen, Sätze/Wdh/Gewicht loggen, abschließen; Verlauf & Volumen; Progression-Hinweis (letzte Werte + geschätztes 1-RM).
 - ⏳ **Trainingspläne** — Splits/Routinen aus Übungen zusammenstellen.
-- ⏳ **Körper-Metriken** — Körpergewicht, KFA, Umfänge.
+- ⏳ **Körper-Metriken** — Körpergewicht, KFA, Umfänge. *(als Nächstes empfohlen)*
 - ⏳ **Fortschritts-Graphen** — swipebar, mit Zielen, dark & „fancy".
 - ✅ **Hub-Brücke (Fundament)** — gemeinsames JSON-Format + Export/Import.
 
@@ -101,6 +101,7 @@ src/
 | E-03 | 2026-07-25 | **Hub-Brücke früh:** gemeinsames JSON-Format + schlanker Export/Import ab Start | verhindert späteres Umbauen des Datenmodells |
 | E-04 | 2026-07-25 | **Stack/PWA/Deploy** wie Status Hub (React+TS+Vite+Tailwind v4, GitHub Pages) | Konsistenz, Code-/Wissenstransfer, spätere gemeinsame Basis |
 | E-05 | 2026-07-25 | **Arbeitstitel „ForgeFit"** als Platzhalter | finaler Name kommt vom CEO (+ Javis/Status Hub) später |
+| E-06 | 2026-07-25 | **1-RM-Schätzung via Epley-Formel** (`weight × (1 + reps/30)`) | einfacher, etablierter Standard; austauschbar in `src/lib/metrics.ts` |
 
 ## 10. Offene Fragen an den CEO
 
@@ -111,8 +112,8 @@ src/
 
 ## 11. Nächste Schritte (Roadmap kurz)
 
-1. **Workout-Tracking** (nächstes Forge-Briefing): Einheit starten, Übungen wählen, Sätze/Wdh/Gewicht loggen, speichern.
-2. **Körper-Metriken**: Gewicht/KFA erfassen → speist Hub-Sicht.
+1. ✅ **Workout-Tracking**: Einheit starten, Übungen wählen, Sätze/Wdh/Gewicht loggen, speichern, Verlauf.
+2. **Körper-Metriken** *(als Nächstes)*: Gewicht/KFA erfassen → speist Hub-Sicht.
 3. **Fortschritts-Graphen** (Recharts): Volumen/Kraft/Gewicht über Zeit, mit Zielen.
 4. **Trainingspläne**: Splits bauen, Workout aus Plan-Tag starten.
 5. **Backend-Anbindung** (später): CF Workers + D1, echte Hub-Datenbrücke.
