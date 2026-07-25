@@ -4,6 +4,12 @@ import { PageHeader } from '@/components/layout/AppShell'
 import { IconChevron, IconDumbbell, IconPlus, IconScale } from '@/components/icons'
 import { SEED_EXERCISES } from '@/data/exercises'
 
+function formatDate(iso: string): string {
+  const [y, m, d] = iso.split('-')
+  if (!y || !m || !d) return iso
+  return `${d}.${m}.${y}`
+}
+
 function StatCard({ label, value, hint }: { label: string; value: string; hint?: string }) {
   return (
     <div className="card px-4 py-3.5">
@@ -67,7 +73,7 @@ export function Dashboard() {
         <StatCard
           label="Körpergewicht"
           value={latestWeight?.weightKg != null ? `${latestWeight.weightKg} kg` : '–'}
-          hint={latestWeight ? `Stand ${latestWeight.date}` : 'noch kein Eintrag'}
+          hint={latestWeight ? `Stand ${formatDate(latestWeight.date)}` : 'noch kein Eintrag'}
         />
         <StatCard label="Pläne" value={String(data.plans.length)} hint="Splits/Routinen" />
       </div>
@@ -98,9 +104,9 @@ export function Dashboard() {
 
       <div className="card mt-6 px-4 py-4">
         <p className="text-sm text-[var(--color-ink-muted)]">
-          <span className="brand-text font-semibold">Phase 1</span> im Aufbau: Die Übungs­datenbank
-          steht, als Nächstes folgen Workout-Tracking, Pläne und Fortschritts-Graphen. Deine Daten
-          bleiben lokal auf dem Gerät und lassen sich jederzeit exportieren.
+          <span className="brand-text font-semibold">Phase 1</span>: Übungsdatenbank, Workout-Tracking
+          und Körper-Metriken sind live. Als Nächstes folgen Fortschritts-Graphen und Trainingspläne.
+          Deine Daten bleiben lokal auf dem Gerät und lassen sich jederzeit exportieren.
         </p>
       </div>
     </div>

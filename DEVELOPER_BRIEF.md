@@ -45,17 +45,36 @@ Export enthält die Einheit in der Hub-Sicht · Screenshots geliefert. ✔️
 
 ---
 
-## Briefing #003 — Körper-Metriken  ⏳ *als Nächstes empfohlen*
+## Briefing #003 — Körper-Metriken  ✅ *umgesetzt*
 
 **Ziel:** Körpergewicht/KFA/Umfänge erfassen → füllt die **Hub-Sicht** (`weight[]`) direkt.
 
-**Anforderungen (Vorschlag, CEO-Freigabe ausstehend):**
-1. `/body`: Eintrag anlegen (Datum, `weightKg`, `bodyFatPct`, optionale Umfänge in cm, Notiz).
-2. Verlauf als Liste; letzter Wert aufs Dashboard.
-3. Mini-Trend (später zusammen mit Fortschritts-Graphen, Recharts).
-4. Speicherung analog Workouts über den Store (`BodyMetric` in `types.ts` existiert bereits).
+**Umgesetzt:**
+1. `/body`: Eintrag anlegen (Datum, `weightKg`, `bodyFatPct`, aufklappbare Umfänge in cm, Notiz);
+   Komma-Eingabe erlaubt; mindestens ein Wert nötig.
+2. Statuskarten: aktuelles Gewicht mit **Trend** (Δ zum vorherigen Eintrag, grün/gelb) + KFA.
+3. Verlauf als Liste (Chips für Gewicht/KFA/Umfänge, Notiz), Einträge löschbar.
+4. Speicherung über Store (`addBodyMetric`/`deleteBodyMetric`); letzter Gewichtswert aufs Dashboard.
+5. Umfang-Definitionen in `src/data/measurements.ts` (stabile Keys).
 
-**Definition of Done:** Build grün · Eintrag anlegen→speichern→im Export unter `hub.weight` sichtbar · Screenshots.
+**Definition of Done:** Build grün · Eintrag anlegen→speichern→Verlauf/Trend/Dashboard/Export (`hub.weight`)
+getestet (E2E) · Screenshots. ✔️
+
+---
+
+## Briefing #004 — Fortschritts-Graphen  ⏳ *als Nächstes empfohlen*
+
+**Ziel:** Swipebare, „fancy" Graphen (Recharts) über Zeit — dark, mit Zielen.
+
+**Anforderungen (Vorschlag, CEO-Freigabe ausstehend):**
+1. `/progress`: Karten mit Charts für (a) Körpergewicht, (b) Trainingsvolumen je Einheit,
+   (c) geschätztes 1-RM einer wählbaren Übung.
+2. Zeitraum-Umschalter (z. B. 4W / 3M / 1J / alle).
+3. Optional Ziel-Linie (z. B. Zielgewicht) — Ziel-Datenmodell dann in `types.ts` ergänzen
+   (→ `schemaVersion` erhöhen + Logbuch).
+4. Recharts als neue Abhängigkeit; dark-theme-Farben aus den Design-Tokens ableiten.
+
+**Definition of Done:** Build grün · Graphen zeigen echte Daten aus Workouts/Körper-Metriken · Screenshots.
 
 ---
 

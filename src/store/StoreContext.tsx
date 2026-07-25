@@ -8,7 +8,7 @@ import {
   useState,
   type ReactNode,
 } from 'react'
-import type { AppData, Exercise, Workout } from '@/lib/types'
+import type { AppData, BodyMetric, Exercise, Workout } from '@/lib/types'
 import { loadAppData, newId, saveAppData } from '@/lib/storage'
 import { SEED_EXERCISES } from '@/data/exercises'
 
@@ -26,6 +26,9 @@ interface StoreValue {
   addWorkout: (w: Omit<Workout, 'id' | 'createdAt'>) => Workout
   updateWorkout: (id: string, patch: Partial<Omit<Workout, 'id'>>) => void
   deleteWorkout: (id: string) => void
+  /** Körper-Metrik anlegen; erzeugt id + createdAt. */
+  addBodyMetric: (m: Omit<BodyMetric, 'id' | 'createdAt'>) => BodyMetric
+  deleteBodyMetric: (id: string) => void
   replaceAll: (data: AppData) => void
 }
 
@@ -85,6 +88,16 @@ export function StoreProvider({ children }: { children: ReactNode }) {
     setData((prev) => ({ ...prev, workouts: prev.workouts.filter((w) => w.id !== id) }))
   }, [])
 
+  const addBodyMetric = useCallback<StoreValue['addBodyMetric']>((m) => {
+    const created: BodyMetric = { ...m, id: newId('bm'), createdAt: new Date().toISOString() }
+    setData((prev) => ({ ...prev, bodyMetrics: [created, ...prev.bodyMetrics] }))
+    return created
+  }, [])
+
+  const deleteBodyMetric = useCallback((id: string) => {
+    setData((prev) => ({ ...prev, bodyMetrics: prev.bodyMetrics.filter((m) => m.id !== id) }))
+  }, [])
+
   const allExercises = useMemo(
     () => [...data.customExercises, ...SEED_EXERCISES],
     [data.customExercises],
@@ -112,6 +125,8 @@ export function StoreProvider({ children }: { children: ReactNode }) {
       addWorkout,
       updateWorkout,
       deleteWorkout,
+      addBodyMetric,
+      deleteBodyMetric,
       replaceAll,
     }),
     [
@@ -124,6 +139,8 @@ export function StoreProvider({ children }: { children: ReactNode }) {
       addWorkout,
       updateWorkout,
       deleteWorkout,
+      addBodyMetric,
+      deleteBodyMetric,
       replaceAll,
     ],
   )

@@ -35,8 +35,8 @@ Ergebnisse per Screenshot zeigen · ehrlich bei Grenzen/Machbarkeit bleiben.
 - ✅ **Übungs-Datenbank** — Übungen mit Muskelgruppen, Gerät, Ausführung; eigene Übungen anlegbar.
 - ✅ **Workout-Tracking** — Einheit anlegen, Übungen wählen, Sätze/Wdh/Gewicht loggen, abschließen; Verlauf & Volumen; Progression-Hinweis (letzte Werte + geschätztes 1-RM).
 - ⏳ **Trainingspläne** — Splits/Routinen aus Übungen zusammenstellen.
-- ⏳ **Körper-Metriken** — Körpergewicht, KFA, Umfänge. *(als Nächstes empfohlen)*
-- ⏳ **Fortschritts-Graphen** — swipebar, mit Zielen, dark & „fancy".
+- ✅ **Körper-Metriken** — Gewicht, KFA & optionale Umfänge; Verlauf + Trend; speist `hub.weight`.
+- ⏳ **Fortschritts-Graphen** — swipebar, mit Zielen, dark & „fancy". *(als Nächstes empfohlen)*
 - ✅ **Hub-Brücke (Fundament)** — gemeinsames JSON-Format + Export/Import.
 
 ### Phase 2 — später (NICHT jetzt)
@@ -113,8 +113,8 @@ src/
 ## 11. Nächste Schritte (Roadmap kurz)
 
 1. ✅ **Workout-Tracking**: Einheit starten, Übungen wählen, Sätze/Wdh/Gewicht loggen, speichern, Verlauf.
-2. **Körper-Metriken** *(als Nächstes)*: Gewicht/KFA erfassen → speist Hub-Sicht.
-3. **Fortschritts-Graphen** (Recharts): Volumen/Kraft/Gewicht über Zeit, mit Zielen.
+2. ✅ **Körper-Metriken**: Gewicht/KFA/Umfänge erfassen → speist Hub-Sicht (`hub.weight`).
+3. **Fortschritts-Graphen** (Recharts) *(als Nächstes)*: Volumen/Kraft/Gewicht über Zeit, mit Zielen.
 4. **Trainingspläne**: Splits bauen, Workout aus Plan-Tag starten.
 5. **Backend-Anbindung** (später): CF Workers + D1, echte Hub-Datenbrücke.
 
