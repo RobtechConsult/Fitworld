@@ -1,14 +1,25 @@
+import { lazy, Suspense } from 'react'
 import { HashRouter, Navigate, Route, Routes } from 'react-router-dom'
 import { StoreProvider } from '@/store/StoreContext'
 import { AppShell } from '@/components/layout/AppShell'
 import { Dashboard } from '@/pages/Dashboard'
 import { Exercises } from '@/pages/exercises/Exercises'
 import { Workouts } from '@/pages/Workouts'
-import { Progress } from '@/pages/Progress'
 import { More } from '@/pages/More'
 import { Body } from '@/pages/Body'
 import { Plans } from '@/pages/Plans'
 import { DataPage } from '@/pages/DataPage'
+
+// Recharts ist groß -> Fortschritts-Graphen erst beim Öffnen laden (Code-Splitting).
+const Progress = lazy(() => import('@/pages/Progress').then((m) => ({ default: m.Progress })))
+
+function PageFallback() {
+  return (
+    <div className="flex h-40 items-center justify-center text-sm text-[var(--color-ink-muted)]">
+      Lädt …
+    </div>
+  )
+}
 
 export default function App() {
   return (
@@ -20,7 +31,14 @@ export default function App() {
             <Route index element={<Dashboard />} />
             <Route path="exercises" element={<Exercises />} />
             <Route path="workouts" element={<Workouts />} />
-            <Route path="progress" element={<Progress />} />
+            <Route
+              path="progress"
+              element={
+                <Suspense fallback={<PageFallback />}>
+                  <Progress />
+                </Suspense>
+              }
+            />
             <Route path="more" element={<More />} />
             <Route path="body" element={<Body />} />
             <Route path="plans" element={<Plans />} />

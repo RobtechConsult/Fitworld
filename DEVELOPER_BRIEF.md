@@ -62,19 +62,37 @@ getestet (E2E) · Screenshots. ✔️
 
 ---
 
-## Briefing #004 — Fortschritts-Graphen  ⏳ *als Nächstes empfohlen*
+## Briefing #004 — Fortschritts-Graphen  ✅ *umgesetzt*
 
-**Ziel:** Swipebare, „fancy" Graphen (Recharts) über Zeit — dark, mit Zielen.
+**Ziel:** Swipebare, „fancy" Graphen (Recharts) über Zeit — dark.
+
+**Umgesetzt:**
+1. `/progress`: swipebares Karussell mit 4 Charts — Körpergewicht (Area), Trainingsvolumen
+   je Einheit (Bar), geschätztes 1-RM einer wählbaren Übung (Line), Körperfett (Area). Punkt-Indikator.
+2. Zeitraum-Umschalter (4 Wochen / 3 Monate / 1 Jahr / alle).
+3. Übungs-Auswahl (Dropdown) für den 1-RM-Graphen, sortiert nach Häufigkeit.
+4. Recharts, dark-theme-Farben aus Design-Tokens; **lazy geladen** (Code-Splitting) → Start bleibt schlank.
+5. Chart-Daten-Helfer in `src/lib/metrics.ts` (`weightSeries`, `volumeSeries`, `oneRMSeries`, …).
+6. Leere Zustände je Chart + globaler Empty-State ohne Daten.
+
+**Zurückgestellt:** Ziel-Linien (z. B. Zielgewicht) — braucht Ziel-Feld in `types.ts`/`Settings`
+(→ `schemaVersion` erhöhen). Als eigenes Mini-Briefing später.
+
+**Definition of Done:** Build grün · Graphen mit echten Daten getestet (E2E, 8-Wochen-Beispiel) · Screenshots. ✔️
+
+---
+
+## Briefing #005 — Trainingspläne  ⏳ *als Nächstes empfohlen (letztes Phase-1-Modul)*
+
+**Ziel:** Splits/Routinen zusammenstellen und ein Workout direkt aus einem Plan-Tag starten.
 
 **Anforderungen (Vorschlag, CEO-Freigabe ausstehend):**
-1. `/progress`: Karten mit Charts für (a) Körpergewicht, (b) Trainingsvolumen je Einheit,
-   (c) geschätztes 1-RM einer wählbaren Übung.
-2. Zeitraum-Umschalter (z. B. 4W / 3M / 1J / alle).
-3. Optional Ziel-Linie (z. B. Zielgewicht) — Ziel-Datenmodell dann in `types.ts` ergänzen
-   (→ `schemaVersion` erhöhen + Logbuch).
-4. Recharts als neue Abhängigkeit; dark-theme-Farben aus den Design-Tokens ableiten.
+1. `/plans`: Plan anlegen (Name, Beschreibung), Tage hinzufügen (z. B. Push/Pull/Legs).
+2. Je Tag Übungen aus der DB wählen (`ExercisePicker` wiederverwenden) mit Ziel-Sätzen/Wdh-Bereich.
+3. Plan-Detail; „Workout aus diesem Tag starten" → öffnet `WorkoutEditor` mit vorbefüllten Übungen.
+4. Speicherung über Store (`Plan`/`PlanDay` in `types.ts` existieren bereits; CRUD ergänzen).
 
-**Definition of Done:** Build grün · Graphen zeigen echte Daten aus Workouts/Körper-Metriken · Screenshots.
+**Definition of Done:** Build grün · Plan anlegen→Tag→Übungen→Workout starten funktioniert · Screenshots.
 
 ---
 

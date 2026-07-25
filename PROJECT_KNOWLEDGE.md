@@ -34,9 +34,9 @@ Ergebnisse per Screenshot zeigen · ehrlich bei Grenzen/Machbarkeit bleiben.
 ### Phase 1 — diese App *(in Arbeit)*
 - ✅ **Übungs-Datenbank** — Übungen mit Muskelgruppen, Gerät, Ausführung; eigene Übungen anlegbar.
 - ✅ **Workout-Tracking** — Einheit anlegen, Übungen wählen, Sätze/Wdh/Gewicht loggen, abschließen; Verlauf & Volumen; Progression-Hinweis (letzte Werte + geschätztes 1-RM).
-- ⏳ **Trainingspläne** — Splits/Routinen aus Übungen zusammenstellen.
+- ⏳ **Trainingspläne** — Splits/Routinen aus Übungen zusammenstellen. *(als Nächstes empfohlen)*
 - ✅ **Körper-Metriken** — Gewicht, KFA & optionale Umfänge; Verlauf + Trend; speist `hub.weight`.
-- ⏳ **Fortschritts-Graphen** — swipebar, mit Zielen, dark & „fancy". *(als Nächstes empfohlen)*
+- ✅ **Fortschritts-Graphen** — swipebare Charts (Gewicht, Volumen, 1-RM, KFA) mit Zeitraum-Filter, dark & „fancy" (Recharts, lazy geladen). Ziel-Linien noch offen.
 - ✅ **Hub-Brücke (Fundament)** — gemeinsames JSON-Format + Export/Import.
 
 ### Phase 2 — später (NICHT jetzt)
@@ -102,6 +102,7 @@ src/
 | E-04 | 2026-07-25 | **Stack/PWA/Deploy** wie Status Hub (React+TS+Vite+Tailwind v4, GitHub Pages) | Konsistenz, Code-/Wissenstransfer, spätere gemeinsame Basis |
 | E-05 | 2026-07-25 | **Arbeitstitel „ForgeFit"** als Platzhalter | finaler Name kommt vom CEO (+ Javis/Status Hub) später |
 | E-06 | 2026-07-25 | **1-RM-Schätzung via Epley-Formel** (`weight × (1 + reps/30)`) | einfacher, etablierter Standard; austauschbar in `src/lib/metrics.ts` |
+| E-07 | 2026-07-25 | **Graphen mit Recharts, lazy geladen**; Ziel-Linien vorerst zurückgestellt | Recharts ist groß → Code-Splitting hält den Start schlank; Ziele bräuchten Schema-Änderung |
 
 ## 10. Offene Fragen an den CEO
 
@@ -114,8 +115,8 @@ src/
 
 1. ✅ **Workout-Tracking**: Einheit starten, Übungen wählen, Sätze/Wdh/Gewicht loggen, speichern, Verlauf.
 2. ✅ **Körper-Metriken**: Gewicht/KFA/Umfänge erfassen → speist Hub-Sicht (`hub.weight`).
-3. **Fortschritts-Graphen** (Recharts) *(als Nächstes)*: Volumen/Kraft/Gewicht über Zeit, mit Zielen.
-4. **Trainingspläne**: Splits bauen, Workout aus Plan-Tag starten.
+3. ✅ **Fortschritts-Graphen** (Recharts): Volumen/Kraft/Gewicht/KFA über Zeit, Zeitraum-Filter.
+4. **Trainingspläne** *(als Nächstes)*: Splits bauen, Workout aus Plan-Tag starten.
 5. **Backend-Anbindung** (später): CF Workers + D1, echte Hub-Datenbrücke.
 
 ---

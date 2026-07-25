@@ -12,8 +12,11 @@ fließen später nahtlos in das Schwester-Cockpit **Status Hub**.
 
 - ✅ PWA-Grundgerüst (dark & „fancy"), Dashboard + Navigation
 - ✅ Übungsdatenbank (Suche, Filter, eigene Übungen)
+- ✅ Workout-Tracking (Sätze/Wdh/Gewicht, Verlauf, Volumen, 1-RM)
+- ✅ Körper-Metriken (Gewicht, KFA, Umfänge, Trend)
+- ✅ Fortschritts-Graphen (swipebar: Gewicht, Volumen, 1-RM, KFA)
 - ✅ Hub-Brücke: gemeinsames JSON-Format + Export/Import
-- ⏳ Workout-Tracking · Körper-Metriken · Fortschritts-Graphen · Pläne
+- ⏳ Trainingspläne (letztes Phase-1-Modul)
 
 ## Tech-Stack
 

@@ -1,4 +1,5 @@
-import type { Workout, WorkoutEntry, WorkoutSet } from './types'
+import type { BodyMetric, Workout, WorkoutEntry, WorkoutSet } from './types'
+import { workoutVolumeKg } from './dataFormat'
 
 /** Geschätztes 1-RM (Epley-Formel). Nur für completed Sätze sinnvoll. */
 export function epley1RM(weightKg: number, reps: number): number {
@@ -51,6 +52,65 @@ export function exerciseStats(workouts: Workout[], exerciseId: string): Exercise
   }
 
   return { maxWeightKg, best1RMKg, sessions, lastEntry }
+}
+
+export interface SeriesPoint {
+  /** ISO-Datum (YYYY-MM-DD) – für Sortierung & Filter. */
+  date: string
+  value: number
+}
+
+/** Körpergewichts-Zeitreihe (aufsteigend), nur Einträge mit Gewicht. */
+export function weightSeries(metrics: BodyMetric[]): SeriesPoint[] {
+  return metrics
+    .filter((m) => m.weightKg != null)
+    .map((m) => ({ date: m.date, value: m.weightKg as number }))
+    .sort((a, b) => a.date.localeCompare(b.date))
+}
+
+/** KFA-Zeitreihe (aufsteigend), nur Einträge mit KFA. */
+export function bodyFatSeries(metrics: BodyMetric[]): SeriesPoint[] {
+  return metrics
+    .filter((m) => m.bodyFatPct != null)
+    .map((m) => ({ date: m.date, value: m.bodyFatPct as number }))
+    .sort((a, b) => a.date.localeCompare(b.date))
+}
+
+/** Trainingsvolumen je Einheit (aufsteigend nach Datum). */
+export function volumeSeries(workouts: Workout[]): SeriesPoint[] {
+  return workouts
+    .map((w) => ({ date: w.date, value: workoutVolumeKg(w) }))
+    .sort((a, b) => a.date.localeCompare(b.date))
+}
+
+/** Bestes geschätztes 1-RM je Einheit für eine Übung (aufsteigend). */
+export function oneRMSeries(workouts: Workout[], exerciseId: string): SeriesPoint[] {
+  const points: SeriesPoint[] = []
+  for (const w of workouts) {
+    const entry = w.entries.find((e) => e.exerciseId === exerciseId)
+    if (!entry) continue
+    let best = 0
+    for (const s of entry.sets) {
+      if (!s.completed) continue
+      const orm = epley1RM(s.weightKg, s.reps)
+      if (orm > best) best = orm
+    }
+    if (best > 0) points.push({ date: w.date, value: Math.round(best) })
+  }
+  return points.sort((a, b) => a.date.localeCompare(b.date))
+}
+
+/** Übungen, die in Workouts vorkommen, mit Häufigkeit (absteigend). */
+export function exercisesInWorkouts(workouts: Workout[]): Array<{ id: string; sessions: number }> {
+  const counts = new Map<string, number>()
+  for (const w of workouts) {
+    for (const e of w.entries) {
+      if (e.sets.some((s) => s.completed)) counts.set(e.exerciseId, (counts.get(e.exerciseId) ?? 0) + 1)
+    }
+  }
+  return [...counts.entries()]
+    .map(([id, sessions]) => ({ id, sessions }))
+    .sort((a, b) => b.sessions - a.sessions)
 }
 
 /** Kompakte Zusammenfassung eines Eintrags, z. B. "3×8 · 80 kg". */
