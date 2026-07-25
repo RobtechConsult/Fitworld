@@ -8,9 +8,15 @@ import {
   useState,
   type ReactNode,
 } from 'react'
-import type { AppData, BodyMetric, Exercise, Workout } from '@/lib/types'
+import type { AppData, BodyMetric, Exercise, Plan, Workout } from '@/lib/types'
 import { loadAppData, newId, saveAppData } from '@/lib/storage'
 import { SEED_EXERCISES } from '@/data/exercises'
+
+/** Transiente Vorgabe, um den Workout-Editor vorbefüllt zu öffnen (nicht persistiert). */
+export interface PendingStart {
+  exerciseIds: string[]
+  name?: string
+}
 
 interface StoreValue {
   data: AppData
@@ -29,6 +35,14 @@ interface StoreValue {
   /** Körper-Metrik anlegen; erzeugt id + createdAt. */
   addBodyMetric: (m: Omit<BodyMetric, 'id' | 'createdAt'>) => BodyMetric
   deleteBodyMetric: (id: string) => void
+  /** Trainingsplan anlegen; erzeugt id + createdAt. */
+  addPlan: (p: Omit<Plan, 'id' | 'createdAt'>) => Plan
+  updatePlan: (id: string, patch: Partial<Omit<Plan, 'id'>>) => void
+  deletePlan: (id: string) => void
+  /** Transiente Vorgabe für den Workout-Editor (z. B. aus einem Plan-Tag). */
+  pendingStart: PendingStart | null
+  startWorkoutFrom: (exerciseIds: string[], name?: string) => void
+  clearPendingStart: () => void
   replaceAll: (data: AppData) => void
 }
 
@@ -98,6 +112,29 @@ export function StoreProvider({ children }: { children: ReactNode }) {
     setData((prev) => ({ ...prev, bodyMetrics: prev.bodyMetrics.filter((m) => m.id !== id) }))
   }, [])
 
+  const addPlan = useCallback<StoreValue['addPlan']>((p) => {
+    const created: Plan = { ...p, id: newId('pl'), createdAt: new Date().toISOString() }
+    setData((prev) => ({ ...prev, plans: [created, ...prev.plans] }))
+    return created
+  }, [])
+
+  const updatePlan = useCallback<StoreValue['updatePlan']>((id, patch) => {
+    setData((prev) => ({
+      ...prev,
+      plans: prev.plans.map((p) => (p.id === id ? { ...p, ...patch } : p)),
+    }))
+  }, [])
+
+  const deletePlan = useCallback((id: string) => {
+    setData((prev) => ({ ...prev, plans: prev.plans.filter((p) => p.id !== id) }))
+  }, [])
+
+  const [pendingStart, setPendingStart] = useState<PendingStart | null>(null)
+  const startWorkoutFrom = useCallback((exerciseIds: string[], name?: string) => {
+    setPendingStart({ exerciseIds, name })
+  }, [])
+  const clearPendingStart = useCallback(() => setPendingStart(null), [])
+
   const allExercises = useMemo(
     () => [...data.customExercises, ...SEED_EXERCISES],
     [data.customExercises],
@@ -127,6 +164,12 @@ export function StoreProvider({ children }: { children: ReactNode }) {
       deleteWorkout,
       addBodyMetric,
       deleteBodyMetric,
+      addPlan,
+      updatePlan,
+      deletePlan,
+      pendingStart,
+      startWorkoutFrom,
+      clearPendingStart,
       replaceAll,
     }),
     [
@@ -141,6 +184,12 @@ export function StoreProvider({ children }: { children: ReactNode }) {
       deleteWorkout,
       addBodyMetric,
       deleteBodyMetric,
+      addPlan,
+      updatePlan,
+      deletePlan,
+      pendingStart,
+      startWorkoutFrom,
+      clearPendingStart,
       replaceAll,
     ],
   )

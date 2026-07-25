@@ -31,10 +31,10 @@ Ergebnisse per Screenshot zeigen · ehrlich bei Grenzen/Machbarkeit bleiben.
 
 ## 4. Scope
 
-### Phase 1 — diese App *(in Arbeit)*
+### Phase 1 — diese App ✅ *(Kern komplett)*
 - ✅ **Übungs-Datenbank** — Übungen mit Muskelgruppen, Gerät, Ausführung; eigene Übungen anlegbar.
 - ✅ **Workout-Tracking** — Einheit anlegen, Übungen wählen, Sätze/Wdh/Gewicht loggen, abschließen; Verlauf & Volumen; Progression-Hinweis (letzte Werte + geschätztes 1-RM).
-- ⏳ **Trainingspläne** — Splits/Routinen aus Übungen zusammenstellen. *(als Nächstes empfohlen)*
+- ✅ **Trainingspläne** — Splits mit Tagen & Ziel-Sätzen/Wdh zusammenstellen; Workout direkt aus einem Plan-Tag starten (Editor vorbefüllt).
 - ✅ **Körper-Metriken** — Gewicht, KFA & optionale Umfänge; Verlauf + Trend; speist `hub.weight`.
 - ✅ **Fortschritts-Graphen** — swipebare Charts (Gewicht, Volumen, 1-RM, KFA) mit Zeitraum-Filter, dark & „fancy" (Recharts, lazy geladen). Ziel-Linien noch offen.
 - ✅ **Hub-Brücke (Fundament)** — gemeinsames JSON-Format + Export/Import.
@@ -116,8 +116,12 @@ src/
 1. ✅ **Workout-Tracking**: Einheit starten, Übungen wählen, Sätze/Wdh/Gewicht loggen, speichern, Verlauf.
 2. ✅ **Körper-Metriken**: Gewicht/KFA/Umfänge erfassen → speist Hub-Sicht (`hub.weight`).
 3. ✅ **Fortschritts-Graphen** (Recharts): Volumen/Kraft/Gewicht/KFA über Zeit, Zeitraum-Filter.
-4. **Trainingspläne** *(als Nächstes)*: Splits bauen, Workout aus Plan-Tag starten.
-5. **Backend-Anbindung** (später): CF Workers + D1, echte Hub-Datenbrücke.
+4. ✅ **Trainingspläne**: Splits bauen, Workout aus Plan-Tag starten.
+
+**→ Phase-1-Kern abgeschlossen.** Nächste sinnvolle Schritte:
+5. **Live gehen** (CEO): Repo → Settings → Pages → Source „GitHub Actions"; finaler App-Name.
+6. **Feinschliff**: Ziel-Linien in Graphen (Schema-Bump), Einheiten-Umschaltung (kg/lbs).
+7. **Backend-Anbindung** (später): CF Workers + D1, echte Hub-Datenbrücke (automatischer Sync).
 
 ---
 *Zuletzt gepflegt: 2026-07-25 von Javis.*

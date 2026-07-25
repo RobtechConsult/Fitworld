@@ -1,5 +1,6 @@
-import { useMemo, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { useStore } from '@/store/StoreContext'
+import type { PendingStart } from '@/store/StoreContext'
 import { PageHeader } from '@/components/layout/AppShell'
 import { Sheet } from '@/components/Sheet'
 import { WorkoutEditor } from './workouts/WorkoutEditor'
@@ -19,9 +20,24 @@ function plural(n: number, one: string, many: string): string {
 }
 
 export function Workouts() {
-  const { data, exerciseById, deleteWorkout } = useStore()
+  const { data, exerciseById, deleteWorkout, pendingStart, clearPendingStart } = useStore()
   const [mode, setMode] = useState<'list' | 'edit'>('list')
   const [selected, setSelected] = useState<Workout | null>(null)
+  const [initial, setInitial] = useState<PendingStart | null>(null)
+
+  // „Workout aus Plan-Tag starten": Editor vorbefüllt öffnen.
+  useEffect(() => {
+    if (pendingStart) {
+      setInitial(pendingStart)
+      setMode('edit')
+      clearPendingStart()
+    }
+  }, [pendingStart, clearPendingStart])
+
+  const closeEditor = () => {
+    setInitial(null)
+    setMode('list')
+  }
 
   const workouts = useMemo(
     () =>
@@ -34,8 +50,16 @@ export function Workouts() {
   if (mode === 'edit') {
     return (
       <div>
-        <PageHeader title="Neue Einheit" subtitle="Sätze, Wiederholungen, Gewicht" />
-        <WorkoutEditor onDone={() => setMode('list')} onCancel={() => setMode('list')} />
+        <PageHeader
+          title="Neue Einheit"
+          subtitle={initial ? 'Aus Plan-Tag vorbefüllt' : 'Sätze, Wiederholungen, Gewicht'}
+        />
+        <WorkoutEditor
+          initialExerciseIds={initial?.exerciseIds}
+          initialName={initial?.name}
+          onDone={closeEditor}
+          onCancel={closeEditor}
+        />
       </div>
     )
   }
@@ -48,7 +72,7 @@ export function Workouts() {
           workouts.length ? `${plural(workouts.length, 'Einheit', 'Einheiten')} getrackt` : 'Noch keine Einheit'
         }
         action={
-          <button className="btn-primary !px-3" onClick={() => setMode('edit')}>
+          <button className="btn-primary !px-3" onClick={() => { setInitial(null); setMode('edit') }}>
             <IconPlus width={18} height={18} />
             Neu
           </button>
@@ -62,7 +86,7 @@ export function Workouts() {
             Wähle Übungen aus deiner Datenbank und logge Sätze, Wiederholungen und Gewicht. Deine
             Bestwerte und dein Volumen werden automatisch berechnet.
           </p>
-          <button className="btn-primary mt-1" onClick={() => setMode('edit')}>
+          <button className="btn-primary mt-1" onClick={() => { setInitial(null); setMode('edit') }}>
             <IconPlus width={18} height={18} />
             Einheit starten
           </button>

@@ -82,17 +82,28 @@ getestet (E2E) · Screenshots. ✔️
 
 ---
 
-## Briefing #005 — Trainingspläne  ⏳ *als Nächstes empfohlen (letztes Phase-1-Modul)*
+## Briefing #005 — Trainingspläne  ✅ *umgesetzt (Phase-1-Kern komplett)*
 
 **Ziel:** Splits/Routinen zusammenstellen und ein Workout direkt aus einem Plan-Tag starten.
 
-**Anforderungen (Vorschlag, CEO-Freigabe ausstehend):**
-1. `/plans`: Plan anlegen (Name, Beschreibung), Tage hinzufügen (z. B. Push/Pull/Legs).
-2. Je Tag Übungen aus der DB wählen (`ExercisePicker` wiederverwenden) mit Ziel-Sätzen/Wdh-Bereich.
-3. Plan-Detail; „Workout aus diesem Tag starten" → öffnet `WorkoutEditor` mit vorbefüllten Übungen.
-4. Speicherung über Store (`Plan`/`PlanDay` in `types.ts` existieren bereits; CRUD ergänzen).
+**Umgesetzt:**
+1. `/plans`: Plan anlegen (Name, Beschreibung), Liste mit Tage-/Übungszahl.
+2. Plan-Detail: Tage hinzufügen/entfernen; je Tag Übungen via `ExercisePicker` mit
+   editierbaren Ziel-Sätzen/Wdh-Bereich (kompakte Zahlenfelder).
+3. „Workout aus diesem Tag starten" → setzt `startWorkoutFrom(...)` im Store und navigiert zu
+   `/workouts`; der `WorkoutEditor` öffnet **vorbefüllt** (Name „Plan · Tag", Übungen geseedet).
+4. Store: `addPlan`/`updatePlan`/`deletePlan` + transienter `pendingStart` (nicht persistiert).
 
-**Definition of Done:** Build grün · Plan anlegen→Tag→Übungen→Workout starten funktioniert · Screenshots.
+**Definition of Done:** Build grün · Plan anlegen→Tag→Übungen→Workout starten getestet (E2E) · Screenshots. ✔️
+
+---
+
+## Phase 1 abgeschlossen ✅ — mögliche Folge-Briefings
+
+- **#006 Ziel-Linien in Graphen**: Zielgewicht/Ziel-KFA im Datenmodell (`Settings` oder eigenes
+  `goals`), Reference-Linie in Recharts. Braucht `schemaVersion`-Bump + Logbuch.
+- **#007 Einheiten kg/lbs**: `Settings.unit` respektieren (Anzeige-Konvertierung, intern kg bleibt).
+- **#008 Backend-Anbindung**: CF Workers + D1 (oder Supabase), echte App-übergreifende Hub-Brücke.
 
 ---
 

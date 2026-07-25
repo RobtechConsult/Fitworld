@@ -24,16 +24,39 @@ function emptySet(): WorkoutSet {
 export function WorkoutEditor({
   onDone,
   onCancel,
+  initialExerciseIds,
+  initialName,
 }: {
   onDone: (w: Workout) => void
   onCancel: () => void
+  /** Übungen, mit denen der Editor vorbefüllt startet (z. B. aus einem Plan-Tag). */
+  initialExerciseIds?: string[]
+  initialName?: string
 }) {
   const { data, exerciseById, addWorkout } = useStore()
-  const [draft, setDraft] = useState<Draft>({
-    date: today(),
-    name: '',
-    entries: [],
-    notes: '',
+
+  // Progression: letzte Werte dieser Übung vorbelegen (nicht abgeschlossen).
+  const seedEntry = (exerciseId: string): WorkoutEntry => {
+    const stats = exerciseStats(data.workouts, exerciseId)
+    const sets: WorkoutSet[] = stats.lastEntry
+      ? stats.lastEntry.sets.map((s) => ({
+          reps: s.reps,
+          weightKg: s.weightKg,
+          rpe: s.rpe,
+          completed: false,
+        }))
+      : [emptySet()]
+    return { exerciseId, sets: sets.length ? sets : [emptySet()] }
+  }
+
+  const [draft, setDraft] = useState<Draft>(() => {
+    const seededIds = [...new Set(initialExerciseIds ?? [])]
+    return {
+      date: today(),
+      name: initialName ?? '',
+      entries: seededIds.map(seedEntry),
+      notes: '',
+    }
   })
   const [picking, setPicking] = useState(false)
 
@@ -43,17 +66,7 @@ export function WorkoutEditor({
   const addExercise = (exerciseId: string) => {
     setPicking(false)
     if (draft.entries.some((e) => e.exerciseId === exerciseId)) return
-    // Progression: letzte Werte dieser Übung vorbelegen (nicht abgeschlossen).
-    const stats = exerciseStats(data.workouts, exerciseId)
-    const seededSets: WorkoutSet[] = stats.lastEntry
-      ? stats.lastEntry.sets.map((s) => ({
-          reps: s.reps,
-          weightKg: s.weightKg,
-          rpe: s.rpe,
-          completed: false,
-        }))
-      : [emptySet()]
-    patchEntries([...draft.entries, { exerciseId, sets: seededSets.length ? seededSets : [emptySet()] }])
+    patchEntries([...draft.entries, seedEntry(exerciseId)])
   }
 
   const updateSet = (ei: number, si: number, p: Partial<WorkoutSet>) => {

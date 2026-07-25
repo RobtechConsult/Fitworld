@@ -8,15 +8,15 @@ fließen später nahtlos in das Schwester-Cockpit **Status Hub**.
 > (Entscheidung E-01). Phase 1 ist eine private, datenhoheitliche Trainings-App. Details in
 > [`PROJECT_KNOWLEDGE.md`](./PROJECT_KNOWLEDGE.md).
 
-## Status — Phase 1
+## Status — Phase 1 ✅ (Kern komplett)
 
 - ✅ PWA-Grundgerüst (dark & „fancy"), Dashboard + Navigation
 - ✅ Übungsdatenbank (Suche, Filter, eigene Übungen)
 - ✅ Workout-Tracking (Sätze/Wdh/Gewicht, Verlauf, Volumen, 1-RM)
 - ✅ Körper-Metriken (Gewicht, KFA, Umfänge, Trend)
 - ✅ Fortschritts-Graphen (swipebar: Gewicht, Volumen, 1-RM, KFA)
+- ✅ Trainingspläne (Splits mit Tagen, Workout aus Plan-Tag starten)
 - ✅ Hub-Brücke: gemeinsames JSON-Format + Export/Import
-- ⏳ Trainingspläne (letztes Phase-1-Modul)
 
 ## Tech-Stack
 
