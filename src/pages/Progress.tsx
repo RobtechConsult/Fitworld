@@ -7,6 +7,7 @@ import {
   CartesianGrid,
   Line,
   LineChart,
+  ReferenceLine,
   ResponsiveContainer,
   Tooltip,
   XAxis,
@@ -138,6 +139,10 @@ export function Progress() {
   const convW = (pts: ReturnType<typeof toChartData>) =>
     pts.map((p) => ({ ...p, value: fromKg(p.value, unit) }))
 
+  // Ziel-Werte für Referenz-Linien.
+  const goalWeight = data.settings.goalWeightKg != null ? fromKg(data.settings.goalWeightKg, unit) : null
+  const goalFat = data.settings.goalBodyFatPct ?? null
+
   const usedExercises = useMemo(() => exercisesInWorkouts(data.workouts), [data.workouts])
   const [exerciseId, setExerciseId] = useState<string>('')
   const selectedExId = exerciseId || usedExercises[0]?.id || ''
@@ -234,7 +239,14 @@ export function Progress() {
               </defs>
               <CartesianGrid stroke={C.grid} strokeDasharray="3 3" vertical={false} />
               <XAxis dataKey="label" {...axisProps} interval="preserveStartEnd" minTickGap={24} />
-              <YAxis {...axisProps} domain={['dataMin - 1', 'dataMax + 1']} width={44} />
+              <YAxis
+                {...axisProps}
+                domain={[
+                  (min: number) => Math.floor(Math.min(min, goalWeight ?? min) - 1),
+                  (max: number) => Math.ceil(Math.max(max, goalWeight ?? max) + 1),
+                ]}
+                width={44}
+              />
               <Tooltip content={<CustomTooltip unit={wLabel} />} />
               <Area
                 type="monotone"
@@ -244,6 +256,14 @@ export function Progress() {
                 fill="url(#gWeight)"
                 dot={{ r: 2.5, fill: C.brand }}
               />
+              {goalWeight != null && (
+                <ReferenceLine
+                  y={goalWeight}
+                  stroke={C.positive}
+                  strokeDasharray="5 4"
+                  label={{ value: `Ziel ${goalWeight}`, position: 'insideTopRight', fill: C.positive, fontSize: 11 }}
+                />
+              )}
             </AreaChart>
           </ResponsiveContainer>
         </ChartCard>
@@ -310,7 +330,14 @@ export function Progress() {
               </defs>
               <CartesianGrid stroke={C.grid} strokeDasharray="3 3" vertical={false} />
               <XAxis dataKey="label" {...axisProps} interval="preserveStartEnd" minTickGap={24} />
-              <YAxis {...axisProps} domain={['dataMin - 1', 'dataMax + 1']} width={44} />
+              <YAxis
+                {...axisProps}
+                domain={[
+                  (min: number) => Math.floor(Math.min(min, goalFat ?? min) - 1),
+                  (max: number) => Math.ceil(Math.max(max, goalFat ?? max) + 1),
+                ]}
+                width={44}
+              />
               <Tooltip content={<CustomTooltip unit="%" />} />
               <Area
                 type="monotone"
@@ -320,6 +347,14 @@ export function Progress() {
                 fill="url(#gFat)"
                 dot={{ r: 2.5, fill: C.positive }}
               />
+              {goalFat != null && (
+                <ReferenceLine
+                  y={goalFat}
+                  stroke={C.accent}
+                  strokeDasharray="5 4"
+                  label={{ value: `Ziel ${goalFat}%`, position: 'insideTopRight', fill: C.accent, fontSize: 11 }}
+                />
+              )}
             </AreaChart>
           </ResponsiveContainer>
         </ChartCard>

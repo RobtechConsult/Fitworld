@@ -2,7 +2,7 @@ import { useMemo, useState } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
 import { useStore } from '@/store/StoreContext'
 import { PageHeader } from '@/components/layout/AppShell'
-import { IconPlus, IconTrash } from '@/components/icons'
+import { IconClose, IconPlus, IconTrash } from '@/components/icons'
 import { summarizeEntry } from '@/lib/metrics'
 import { workoutVolumeKg } from '@/lib/dataFormat'
 import { fmtWeight, fmtWeightValue, weightLabel } from '@/lib/units'
@@ -98,7 +98,19 @@ export function Calendar() {
 
   return (
     <div>
-      <PageHeader title="Kalender" subtitle="Tag antippen für Details" />
+      <PageHeader
+        title="Kalender"
+        subtitle="Tag antippen für Details"
+        action={
+          <button
+            onClick={() => navigate('/')}
+            className="grid h-10 w-10 place-items-center rounded-xl bg-[var(--color-surface-2)] text-[var(--color-ink-muted)] hover:text-[var(--color-ink)]"
+            aria-label="Kalender schließen"
+          >
+            <IconClose width={18} height={18} />
+          </button>
+        }
+      />
 
       {/* Monatsnavigation */}
       <div className="mb-3 flex items-center justify-between">
