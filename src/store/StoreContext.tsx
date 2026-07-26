@@ -8,7 +8,7 @@ import {
   useState,
   type ReactNode,
 } from 'react'
-import type { AppData, BodyMetric, Exercise, Plan, Workout } from '@/lib/types'
+import type { AppData, BodyMetric, Exercise, Plan, Settings, Workout } from '@/lib/types'
 import { loadAppData, newId, saveAppData } from '@/lib/storage'
 import { SEED_EXERCISES } from '@/data/exercises'
 
@@ -41,6 +41,8 @@ interface StoreValue {
   deletePlan: (id: string) => void
   /** Plan als „aktiv" (Startseite) markieren. */
   setActivePlan: (id: string) => void
+  /** Einstellungen aktualisieren (z. B. Einheit kg/lbs). */
+  updateSettings: (patch: Partial<Settings>) => void
   /** Transiente Vorgabe für den Workout-Editor (z. B. aus einem Plan-Tag). */
   pendingStart: PendingStart | null
   startWorkoutFrom: (exerciseIds: string[], name?: string) => void
@@ -147,6 +149,10 @@ export function StoreProvider({ children }: { children: ReactNode }) {
     })
   }, [])
 
+  const updateSettings = useCallback<StoreValue['updateSettings']>((patch) => {
+    setData((prev) => ({ ...prev, settings: { ...prev.settings, ...patch } }))
+  }, [])
+
   const [pendingStart, setPendingStart] = useState<PendingStart | null>(null)
   const startWorkoutFrom = useCallback((exerciseIds: string[], name?: string) => {
     setPendingStart({ exerciseIds, name })
@@ -186,6 +192,7 @@ export function StoreProvider({ children }: { children: ReactNode }) {
       updatePlan,
       deletePlan,
       setActivePlan,
+      updateSettings,
       pendingStart,
       startWorkoutFrom,
       clearPendingStart,
@@ -207,6 +214,7 @@ export function StoreProvider({ children }: { children: ReactNode }) {
       updatePlan,
       deletePlan,
       setActivePlan,
+      updateSettings,
       pendingStart,
       startWorkoutFrom,
       clearPendingStart,

@@ -4,6 +4,7 @@ import { PageHeader } from '@/components/layout/AppShell'
 import { IconChevron, IconDumbbell, IconPlus, IconScale } from '@/components/icons'
 import { ExerciseThumb } from '@/components/ExerciseThumb'
 import { WeekStrip } from '@/components/WeekStrip'
+import { fmtWeight } from '@/lib/units'
 import { SEED_EXERCISES } from '@/data/exercises'
 import type { Plan, PlanDay } from '@/lib/types'
 
@@ -177,7 +178,7 @@ export function Dashboard() {
         <StatCard label="Workouts" value={String(data.workouts.length)} hint="getrackt" />
         <StatCard
           label="Körpergewicht"
-          value={latestWeight?.weightKg != null ? `${latestWeight.weightKg} kg` : '–'}
+          value={latestWeight?.weightKg != null ? fmtWeight(latestWeight.weightKg, data.settings.unit) : '–'}
           hint={latestWeight ? `Stand ${formatDate(latestWeight.date)}` : 'noch kein Eintrag'}
         />
         <StatCard

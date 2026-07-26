@@ -6,6 +6,7 @@ import { IconChevron, IconPlus, IconTrash } from '@/components/icons'
 import { ExerciseThumb } from '@/components/ExerciseThumb'
 import { RestTimer } from '@/components/RestTimer'
 import { epley1RM, exerciseStats, summarizeEntry } from '@/lib/metrics'
+import { fromKg, toKg, weightLabel } from '@/lib/units'
 import type { Workout, WorkoutEntry, WorkoutSet } from '@/lib/types'
 
 interface Draft {
@@ -40,6 +41,7 @@ export function WorkoutEditor({
   initialName?: string
 }) {
   const { data, exerciseById, addWorkout } = useStore()
+  const unit = data.settings.unit
 
   // Progression: letzte Werte dieser Übung vorbelegen (nicht abgeschlossen).
   const seedEntry = (exerciseId: string): WorkoutEntry => {
@@ -307,8 +309,9 @@ export function WorkoutEditor({
                   {stats?.lastEntry && (
                     <p className="mt-1 text-xs text-[var(--color-ink-faint)]">
                       Letztes Mal ({stats.lastEntry.date.split('-').reverse().join('.')}):{' '}
-                      {summarizeEntry({ exerciseId: entry.exerciseId, sets: stats.lastEntry.sets })}
-                      {stats.best1RMKg > 0 && ` · 1RM≈${Math.round(stats.best1RMKg)} kg`}
+                      {summarizeEntry({ exerciseId: entry.exerciseId, sets: stats.lastEntry.sets }, unit)}
+                      {stats.best1RMKg > 0 &&
+                        ` · 1RM≈${Math.round(fromKg(stats.best1RMKg, unit))} ${weightLabel(unit)}`}
                     </p>
                   )}
                   </div>
@@ -325,14 +328,17 @@ export function WorkoutEditor({
               <div className="mb-1 grid grid-cols-[1.3rem_1fr_1fr_2.6rem_2rem] items-center gap-2 px-1 text-[11px] font-semibold uppercase tracking-wide text-[var(--color-ink-faint)]">
                 <span>#</span>
                 <span>Wdh</span>
-                <span>kg</span>
+                <span>{weightLabel(unit)}</span>
                 <span className="text-center">1RM</span>
                 <span className="text-center">✓</span>
               </div>
 
               <div className="flex flex-col gap-1.5">
                 {entry.sets.map((s, si) => {
-                  const est = s.reps > 0 && s.weightKg > 0 ? Math.round(epley1RM(s.weightKg, s.reps)) : null
+                  const est =
+                    s.reps > 0 && s.weightKg > 0
+                      ? Math.round(fromKg(epley1RM(s.weightKg, s.reps), unit))
+                      : null
                   return (
                   <div
                     key={si}
@@ -357,8 +363,10 @@ export function WorkoutEditor({
                       min={0}
                       step={0.5}
                       className="input !px-2 !py-1.5 text-center"
-                      value={s.weightKg || ''}
-                      onChange={(e) => updateSet(active, si, { weightKg: Number(e.target.value) || 0 })}
+                      value={s.weightKg ? fromKg(s.weightKg, unit) : ''}
+                      onChange={(e) =>
+                        updateSet(active, si, { weightKg: toKg(Number(e.target.value) || 0, unit) })
+                      }
                       onFocus={(e) => e.target.select()}
                     />
                     <span className="text-center text-xs font-medium text-[var(--color-ink-muted)]">

@@ -5,7 +5,8 @@ import { Sheet } from '@/components/Sheet'
 import { BodyForm } from './body/BodyForm'
 import { IconPlus, IconScale, IconTrash } from '@/components/icons'
 import { MEASUREMENT_LABELS } from '@/data/measurements'
-import type { BodyMetric } from '@/lib/types'
+import { fmtWeight, fromKg, weightLabel } from '@/lib/units'
+import type { BodyMetric, Settings } from '@/lib/types'
 
 function formatDate(iso: string): string {
   const [y, m, d] = iso.split('-')
@@ -19,6 +20,7 @@ function fmt(n: number): string {
 
 export function Body() {
   const { data, addBodyMetric, deleteBodyMetric } = useStore()
+  const unit = data.settings.unit
   const [adding, setAdding] = useState(false)
 
   const sorted = useMemo(
@@ -76,7 +78,7 @@ export function Body() {
                 Aktuelles Gewicht
               </p>
               <p className="mt-1 text-2xl font-bold">
-                {latest?.weightKg != null ? `${fmt(latest.weightKg)} kg` : '–'}
+                {latest?.weightKg != null ? fmtWeight(latest.weightKg, unit) : '–'}
               </p>
               {delta != null ? (
                 <p
@@ -89,7 +91,8 @@ export function Body() {
                         : 'text-[var(--color-ink-muted)]',
                   ].join(' ')}
                 >
-                  {delta > 0 ? '▲' : delta < 0 ? '▼' : '■'} {fmt(Math.abs(delta))} kg seit letztem
+                  {delta > 0 ? '▲' : delta < 0 ? '▼' : '■'} {fmt(fromKg(Math.abs(delta), unit))}{' '}
+                  {weightLabel(unit)} seit letztem
                 </p>
               ) : (
                 latest && (
@@ -118,7 +121,7 @@ export function Body() {
           </h2>
           <div className="flex flex-col gap-2">
             {sorted.map((m) => (
-              <BodyRow key={m.id} m={m} onDelete={deleteBodyMetric} />
+              <BodyRow key={m.id} m={m} unit={unit} onDelete={deleteBodyMetric} />
             ))}
           </div>
         </>
@@ -126,6 +129,7 @@ export function Body() {
 
       <Sheet open={adding} onClose={() => setAdding(false)} title="Körper-Eintrag">
         <BodyForm
+          unit={unit}
           onSubmit={(m) => {
             addBodyMetric(m)
             setAdding(false)
@@ -136,7 +140,15 @@ export function Body() {
   )
 }
 
-function BodyRow({ m, onDelete }: { m: BodyMetric; onDelete: (id: string) => void }) {
+function BodyRow({
+  m,
+  unit,
+  onDelete,
+}: {
+  m: BodyMetric
+  unit: Settings['unit']
+  onDelete: (id: string) => void
+}) {
   const measures = m.measurementsCm ? Object.entries(m.measurementsCm) : []
   return (
     <div className="card px-4 py-3">
@@ -154,7 +166,7 @@ function BodyRow({ m, onDelete }: { m: BodyMetric; onDelete: (id: string) => voi
       </div>
       <div className="mt-1 flex flex-wrap gap-1.5">
         {m.weightKg != null && (
-          <span className="chip text-[var(--color-ink)]">{fmt(m.weightKg)} kg</span>
+          <span className="chip text-[var(--color-ink)]">{fmtWeight(m.weightKg, unit)}</span>
         )}
         {m.bodyFatPct != null && <span className="chip">{fmt(m.bodyFatPct)} % KFA</span>}
         {measures.map(([k, v]) => (

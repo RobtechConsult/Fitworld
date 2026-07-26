@@ -5,6 +5,7 @@ import { PageHeader } from '@/components/layout/AppShell'
 import { IconPlus, IconTrash } from '@/components/icons'
 import { summarizeEntry } from '@/lib/metrics'
 import { workoutVolumeKg } from '@/lib/dataFormat'
+import { fmtWeight, fmtWeightValue, weightLabel } from '@/lib/units'
 import type { Workout } from '@/lib/types'
 
 const WEEKDAYS = ['Mo', 'Di', 'Mi', 'Do', 'Fr', 'Sa', 'So']
@@ -30,6 +31,7 @@ function longLabel(iso: string): string {
 
 export function Calendar() {
   const { data, exerciseById, deleteWorkout, startWorkoutFrom } = useStore()
+  const unit = data.settings.unit
   const navigate = useNavigate()
   const location = useLocation()
 
@@ -197,7 +199,8 @@ export function Calendar() {
                 <div className="mb-2 flex items-center justify-between gap-2">
                   <span className="font-semibold">{w.name || 'Training'}</span>
                   <span className="chip text-[var(--color-brand-2)]">
-                    {workoutVolumeKg(w).toLocaleString('de-DE')} kg
+                    {fmtWeightValue(workoutVolumeKg(w), unit, { maximumFractionDigits: 0 })}{' '}
+                    {weightLabel(unit)}
                   </span>
                 </div>
                 <div className="flex flex-col gap-1.5">
@@ -207,7 +210,7 @@ export function Calendar() {
                         {exerciseById(entry.exerciseId)?.name ?? 'Übung'}
                       </span>
                       <span className="shrink-0 text-[var(--color-ink-muted)]">
-                        {summarizeEntry(entry)}
+                        {summarizeEntry(entry, unit)}
                       </span>
                     </div>
                   ))}
@@ -237,7 +240,9 @@ export function Calendar() {
                 </p>
                 <div className="mt-1 flex flex-wrap gap-1.5">
                   {selectedBody.weightKg != null && (
-                    <span className="chip text-[var(--color-ink)]">{selectedBody.weightKg} kg</span>
+                    <span className="chip text-[var(--color-ink)]">
+                      {fmtWeight(selectedBody.weightKg, unit)}
+                    </span>
                   )}
                   {selectedBody.bodyFatPct != null && (
                     <span className="chip">{selectedBody.bodyFatPct} % KFA</span>
