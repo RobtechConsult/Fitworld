@@ -1,6 +1,7 @@
 import { useMemo, useState } from 'react'
 import { useStore } from '@/store/StoreContext'
 import { IconSearch } from '@/components/icons'
+import { ExerciseThumb } from '@/components/ExerciseThumb'
 import { MUSCLE_LABELS, MUSCLE_ORDER, EQUIPMENT_LABELS } from '@/data/muscleGroups'
 import type { MuscleGroup } from '@/lib/types'
 
@@ -63,12 +64,15 @@ export function ExercisePicker({ onPick }: { onPick: (exerciseId: string) => voi
             <button
               key={ex.id}
               onClick={() => onPick(ex.id)}
-              className="card card-hover px-4 py-3 text-left"
+              className="card card-hover flex items-center gap-3 px-4 py-3 text-left"
             >
-              <span className="block font-semibold">{ex.name}</span>
-              <span className="block truncate text-sm text-[var(--color-ink-muted)]">
-                {ex.primaryMuscles.map((m) => MUSCLE_LABELS[m]).join(', ')} ·{' '}
-                {EQUIPMENT_LABELS[ex.equipment]}
+              <ExerciseThumb exerciseId={ex.id} size={44} />
+              <span className="min-w-0 flex-1">
+                <span className="block truncate font-semibold">{ex.name}</span>
+                <span className="block truncate text-sm text-[var(--color-ink-muted)]">
+                  {ex.primaryMuscles.map((m) => MUSCLE_LABELS[m]).join(', ')} ·{' '}
+                  {EQUIPMENT_LABELS[ex.equipment]}
+                </span>
               </span>
             </button>
           ))

@@ -4,6 +4,8 @@ import { PageHeader } from '@/components/layout/AppShell'
 import { Sheet } from '@/components/Sheet'
 import { ExerciseForm } from './ExerciseForm'
 import { IconPlus, IconSearch, IconTrash } from '@/components/icons'
+import { ExerciseThumb } from '@/components/ExerciseThumb'
+import { exerciseImages } from '@/data/exerciseImages'
 import {
   CATEGORY_LABELS,
   EQUIPMENT_LABELS,
@@ -24,6 +26,7 @@ function ExerciseCard({
       onClick={() => onOpen(ex)}
       className="card card-hover flex w-full items-center gap-3 px-4 py-3 text-left"
     >
+      <ExerciseThumb exerciseId={ex.id} size={48} />
       <span className="min-w-0 flex-1">
         <span className="flex items-center gap-2">
           <span className="truncate font-semibold">{ex.name}</span>
@@ -48,8 +51,22 @@ function ExerciseDetail({
   ex: Exercise
   onDelete?: (id: string) => void
 }) {
+  const images = exerciseImages(ex.id)
   return (
     <div className="flex flex-col gap-4">
+      {images.length > 0 && (
+        <div className="grid grid-cols-2 gap-2">
+          {images.map((src, i) => (
+            <img
+              key={src}
+              src={src}
+              alt={`${ex.name} – ${i === 0 ? 'Start' : 'Ende'}`}
+              loading="lazy"
+              className="aspect-[4/3] w-full rounded-xl border border-[var(--color-border)] object-cover"
+            />
+          ))}
+        </div>
+      )}
       <div className="flex flex-wrap gap-1.5">
         <span className="chip">{CATEGORY_LABELS[ex.category]}</span>
         <span className="chip">{EQUIPMENT_LABELS[ex.equipment]}</span>

@@ -2,6 +2,7 @@ import { Link, useNavigate } from 'react-router-dom'
 import { useStore } from '@/store/StoreContext'
 import { PageHeader } from '@/components/layout/AppShell'
 import { IconChevron, IconDumbbell, IconPlus, IconScale } from '@/components/icons'
+import { ExerciseThumb } from '@/components/ExerciseThumb'
 import { SEED_EXERCISES } from '@/data/exercises'
 import type { Plan, PlanDay } from '@/lib/types'
 
@@ -80,9 +81,13 @@ function ActivePlanCard({ plan }: { plan: Plan }) {
                 disabled={day.exercises.length === 0}
                 className="flex items-center gap-3 border-t border-[var(--color-border)] px-4 py-3 text-left transition-colors hover:bg-[var(--color-surface-2)]/70 disabled:opacity-50"
               >
-                <span className="grid h-9 w-9 shrink-0 place-items-center rounded-xl brand-gradient text-white">
-                  <IconPlus width={18} height={18} />
-                </span>
+                {day.exercises[0] ? (
+                  <ExerciseThumb exerciseId={day.exercises[0].exerciseId} size={40} />
+                ) : (
+                  <span className="grid h-10 w-10 shrink-0 place-items-center rounded-xl bg-[var(--color-surface-2)] text-[var(--color-ink-faint)]">
+                    <IconPlus width={18} height={18} />
+                  </span>
+                )}
                 <span className="min-w-0 flex-1">
                   <span className="block font-semibold">{day.name}</span>
                   <span className="block truncate text-xs text-[var(--color-ink-muted)]">

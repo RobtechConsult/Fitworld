@@ -119,9 +119,17 @@ Referenz: AP macht es übersichtlicher (plan-zentrierte Startseite, Übungswechs
 - Pläne als **eigener Tab** (statt unter „Mehr"); aktiver Plan mit **Tagen als Zeilen** (AP-Stil),
   je Tag „Tag starten". Später: Wochen-Kalender/Häkchen wie AP.
 
-### Briefing #008 — Übungsbilder (Free Exercise DB)  ⏳
-- Public-Domain-Fotos (Start/End) den Übungen zuordnen; Thumbnails in Listen + Detail.
-- Nur die Bilder unserer Übungen bündeln (Repo schlank); Lizenzhinweis im Repo.
+### Briefing #008 — Übungsbilder (Free Exercise DB)  ✅ *umgesetzt*
+- 28 Übungen auf Free-Exercise-DB gemappt; je Übung Start/End-Foto **lokal gebündelt**
+  (`public/exercise-images/`, 55 Bilder, ~3,5 MB) — Public Domain, Lizenzhinweis in `CREDITS.md`.
+- Mapping in `src/data/exerciseImages.ts`; `ExerciseThumb`-Komponente mit Fallback.
+- Bilder in: Übungsliste, Übungs-Detail (Start/Ende groß), Übungs-Picker, Trainings-Screen,
+  Startseiten-Plan-Zeilen (AP-Look).
+- Service-Worker **Runtime-Cache** (CacheFirst) für `/exercise-images/` → offline nach erstem Ansehen.
+
+### Später
+- Ziel-Linien in Graphen (Schema-Bump) · Einheiten kg/lbs · Backend + echte Hub-Brücke.
+- Optional: Animationen (lizenzierte Quelle) statt/ergänzend zu Fotos.
 
 ### Später
 - Ziel-Linien in Graphen (Schema-Bump) · Einheiten kg/lbs · Backend + echte Hub-Brücke.

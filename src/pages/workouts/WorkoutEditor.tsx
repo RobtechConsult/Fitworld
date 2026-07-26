@@ -3,6 +3,7 @@ import { useStore } from '@/store/StoreContext'
 import { Sheet } from '@/components/Sheet'
 import { ExercisePicker } from './ExercisePicker'
 import { IconChevron, IconPlus, IconTrash } from '@/components/icons'
+import { ExerciseThumb } from '@/components/ExerciseThumb'
 import { exerciseStats, summarizeEntry } from '@/lib/metrics'
 import type { Workout, WorkoutEntry, WorkoutSet } from '@/lib/types'
 
@@ -286,7 +287,9 @@ export function WorkoutEditor({
           {entry && (
             <div className="card px-4 py-4" onTouchStart={onTouchStart} onTouchEnd={onTouchEnd}>
               <div className="mb-3 flex items-start justify-between gap-2">
-                <div className="min-w-0">
+                <div className="flex min-w-0 items-start gap-3">
+                  <ExerciseThumb exerciseId={entry.exerciseId} size={52} />
+                  <div className="min-w-0">
                   <p className="text-lg font-semibold leading-tight">
                     {ex?.name ?? 'Unbekannte Übung'}
                   </p>
@@ -297,6 +300,7 @@ export function WorkoutEditor({
                       {stats.best1RMKg > 0 && ` · 1RM≈${Math.round(stats.best1RMKg)} kg`}
                     </p>
                   )}
+                  </div>
                 </div>
                 <button
                   onClick={() => removeExercise(active)}
