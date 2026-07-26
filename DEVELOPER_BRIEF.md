@@ -127,9 +127,16 @@ Referenz: AP macht es übersichtlicher (plan-zentrierte Startseite, Übungswechs
   Startseiten-Plan-Zeilen (AP-Look).
 - Service-Worker **Runtime-Cache** (CacheFirst) für `/exercise-images/` → offline nach erstem Ansehen.
 
+### Briefing #009 — AP-Politur (mehrere Iterationen)  ✅ *umgesetzt & live*
+- **Bilder-Streifen** im Training statt Text-Pills (aktive Übung hervorgehoben).
+- **Wochenkalender** auf der Startseite (`WeekStrip`): Trainingstage als grüne Punkte, heute markiert.
+- **Pausen-Timer** (`RestTimer`): startet beim Abschließen eines Satzes, zählt hoch, schwebender Pill.
+- **Live-1RM-Spalte** je Satz in der Trainings-Tabelle (Epley, `epley1RM`).
+
 ### Später
 - Ziel-Linien in Graphen (Schema-Bump) · Einheiten kg/lbs · Backend + echte Hub-Brücke.
 - Optional: Animationen (lizenzierte Quelle) statt/ergänzend zu Fotos.
+- Optional (AP): Warmup-Satz-Markierung, konfigurierbarer Timer-Countdown.
 
 ### Später
 - Ziel-Linien in Graphen (Schema-Bump) · Einheiten kg/lbs · Backend + echte Hub-Brücke.
