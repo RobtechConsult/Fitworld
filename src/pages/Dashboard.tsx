@@ -157,7 +157,11 @@ export function Dashboard() {
       <PageHeader title="ForgeFit" subtitle="Dein Training. Deine Daten. Dein Fortschritt." />
 
       {/* Wochenkalender */}
-      <WeekStrip workouts={data.workouts} onSelectDate={() => navigate('/workouts')} />
+      <WeekStrip
+        workouts={data.workouts}
+        onSelectDate={() => navigate('/workouts')}
+        onOpenCalendar={() => navigate('/calendar')}
+      />
 
       {/* Plan-Hub */}
       {activePlan ? <ActivePlanCard plan={activePlan} /> : <NoPlanCard />}

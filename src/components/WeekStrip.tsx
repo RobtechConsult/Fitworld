@@ -27,9 +27,11 @@ function startOfWeek(base: Date): Date {
 export function WeekStrip({
   workouts,
   onSelectDate,
+  onOpenCalendar,
 }: {
   workouts: Workout[]
   onSelectDate?: (isoDate: string) => void
+  onOpenCalendar?: () => void
 }) {
   const [offset, setOffset] = useState(0) // Wochen relativ zu heute
 
@@ -60,7 +62,16 @@ export function WeekStrip({
         >
           <IconChevron width={16} height={16} className="rotate-180" />
         </button>
-        <span className="text-sm font-semibold">{monthLabel}</span>
+        <button
+          onClick={onOpenCalendar}
+          disabled={!onOpenCalendar}
+          className="flex items-center gap-1 rounded-lg px-2 py-1 text-sm font-semibold hover:bg-[var(--color-surface-2)] disabled:hover:bg-transparent"
+        >
+          {monthLabel}
+          {onOpenCalendar && (
+            <IconChevron width={14} height={14} className="rotate-90 text-[var(--color-ink-faint)]" />
+          )}
+        </button>
         <button
           onClick={() => setOffset((o) => o + 1)}
           className="grid h-7 w-7 place-items-center rounded-lg text-[var(--color-ink-faint)] hover:bg-[var(--color-surface-2)]"

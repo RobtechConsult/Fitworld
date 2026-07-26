@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 import { useStore } from '@/store/StoreContext'
 import type { PendingStart } from '@/store/StoreContext'
 import { PageHeader } from '@/components/layout/AppShell'
@@ -20,7 +21,9 @@ function plural(n: number, one: string, many: string): string {
 }
 
 export function Workouts() {
-  const { data, exerciseById, deleteWorkout, pendingStart, clearPendingStart } = useStore()
+  const { data, exerciseById, deleteWorkout, startWorkoutFrom, pendingStart, clearPendingStart } =
+    useStore()
+  const navigate = useNavigate()
   const [mode, setMode] = useState<'list' | 'edit'>('list')
   const [selected, setSelected] = useState<Workout | null>(null)
   const [initial, setInitial] = useState<PendingStart | null>(null)
@@ -155,6 +158,21 @@ export function Workouts() {
               </p>
             )}
 
+            <button
+              className="btn-primary"
+              onClick={() => {
+                startWorkoutFrom(
+                  selected.entries.map((e) => e.exerciseId),
+                  selected.name || 'Wiederholung',
+                )
+                navigate('/workouts')
+                setSelected(null)
+                setMode('list')
+              }}
+            >
+              <IconPlus width={18} height={18} />
+              Training wiederholen
+            </button>
             <button
               onClick={() => {
                 if (confirm('Diese Einheit löschen?')) {
