@@ -3,6 +3,7 @@ import { useStore } from '@/store/StoreContext'
 import { PageHeader } from '@/components/layout/AppShell'
 import { IconChevron, IconDumbbell, IconPlus, IconScale } from '@/components/icons'
 import { ExerciseThumb } from '@/components/ExerciseThumb'
+import { WeekStrip } from '@/components/WeekStrip'
 import { SEED_EXERCISES } from '@/data/exercises'
 import type { Plan, PlanDay } from '@/lib/types'
 
@@ -154,6 +155,9 @@ export function Dashboard() {
   return (
     <div>
       <PageHeader title="ForgeFit" subtitle="Dein Training. Deine Daten. Dein Fortschritt." />
+
+      {/* Wochenkalender */}
+      <WeekStrip workouts={data.workouts} onSelectDate={() => navigate('/workouts')} />
 
       {/* Plan-Hub */}
       {activePlan ? <ActivePlanCard plan={activePlan} /> : <NoPlanCard />}
