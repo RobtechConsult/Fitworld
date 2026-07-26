@@ -146,8 +146,13 @@ Referenz: AP macht es übersichtlicher (plan-zentrierte Startseite, Übungswechs
 - Durchgezogen: Trainings-Editor (Eingabe/Spalte/1RM), Verlauf & Kalender (Volumen/Summary),
   Körper-Metriken (Karte/Trend/Verlauf/Formular), Dashboard, Fortschritts-Graphen.
 
+### Briefing #012 — Ziel-Linien in Graphen + Kalender schließen  ✅ *umgesetzt & live*
+- Einstellungen: Zielgewicht & Ziel-KFA (`settings.goalWeightKg`/`goalBodyFatPct`, additiv, kein Schema-Bump).
+- Fortschritt: gestrichelte `ReferenceLine` im Gewichts- & KFA-Graph; Y-Achse erweitert den Zielwert einzuschließen.
+- Kalender: Schließen-X (oben rechts) → zurück zur Startseite.
+
 ### Später
-- Ziel-Linien in Graphen (Schema-Bump) · Backend + echte Hub-Brücke.
+- Backend + echte Hub-Brücke.
 - Optional: Animationen (lizenzierte Quelle) statt/ergänzend zu Fotos.
 - Optional (AP): Warmup-Satz-Markierung, konfigurierbarer Timer-Countdown.
 

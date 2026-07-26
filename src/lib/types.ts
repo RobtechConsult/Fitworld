@@ -123,6 +123,10 @@ export interface Settings {
   displayName?: string
   /** aktuell auf der Startseite hervorgehobener Plan. */
   activePlanId?: ID
+  /** Ziel-Körpergewicht (immer in kg gespeichert) für Graph-Ziel-Linien. */
+  goalWeightKg?: number
+  /** Ziel-Körperfettanteil in %. */
+  goalBodyFatPct?: number
 }
 
 /** Kompletter App-Zustand (persistiert in localStorage). */
