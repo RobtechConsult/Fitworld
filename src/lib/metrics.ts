@@ -114,6 +114,44 @@ export function exercisesInWorkouts(workouts: Workout[]): Array<{ id: string; se
     .sort((a, b) => b.sessions - a.sessions)
 }
 
+/** Vergangene Einheiten mit einer bestimmten Übung (neueste zuerst). */
+export interface ExerciseSession {
+  date: string
+  name?: string
+  sets: WorkoutSet[]
+}
+export function exerciseSessionHistory(
+  workouts: Workout[],
+  exerciseId: string,
+): ExerciseSession[] {
+  return workouts
+    .filter((w) => w.entries.some((e) => e.exerciseId === exerciseId))
+    .map((w) => {
+      const entry = w.entries.find((e) => e.exerciseId === exerciseId)!
+      return { date: w.date, name: w.name, sets: entry.sets }
+    })
+    .sort((a, b) => b.date.localeCompare(a.date))
+}
+
+/**
+ * Einfache Progressionsempfehlung fürs nächste Training:
+ * - viele Wdh geschafft (≥ 10) → Gewicht +2,5 kg, Wdh etwas runter
+ * - sonst → gleiches Gewicht, eine Wdh mehr.
+ */
+export function progressionSuggestion(
+  workouts: Workout[],
+  exerciseId: string,
+): { weightKg: number; reps: number } | null {
+  const last = exerciseStats(workouts, exerciseId).lastEntry
+  if (!last) return null
+  const pool = last.sets.filter((s) => s.weightKg > 0)
+  if (!pool.length) return null
+  const top = pool.reduce((a, b) => (b.weightKg > a.weightKg ? b : a))
+  const reps = top.reps || 8
+  if (reps >= 10) return { weightKg: Math.round((top.weightKg + 2.5) * 10) / 10, reps: Math.max(6, reps - 2) }
+  return { weightKg: top.weightKg, reps: reps + 1 }
+}
+
 /** Kompakte Zusammenfassung eines Eintrags, z. B. "3×8 · 80 kg". */
 export function summarizeEntry(entry: WorkoutEntry, unit: Unit = 'metric'): string {
   const done = entry.sets.filter((s) => s.completed)

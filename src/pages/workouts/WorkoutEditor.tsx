@@ -2,10 +2,11 @@ import { useRef, useState } from 'react'
 import { useStore } from '@/store/StoreContext'
 import { Sheet } from '@/components/Sheet'
 import { ExercisePicker } from './ExercisePicker'
-import { IconChevron, IconPlus, IconTrash } from '@/components/icons'
+import { IconChart, IconChevron, IconPlus, IconTrash } from '@/components/icons'
 import { ExerciseThumb } from '@/components/ExerciseThumb'
 import { RestTimer } from '@/components/RestTimer'
-import { epley1RM, exerciseStats, summarizeEntry } from '@/lib/metrics'
+import { ExerciseHistory } from '@/components/ExerciseHistory'
+import { epley1RM, exerciseStats, progressionSuggestion, summarizeEntry } from '@/lib/metrics'
 import { fromKg, toKg, weightLabel } from '@/lib/units'
 import { todayIso } from '@/lib/date'
 import type { Workout, WorkoutEntry, WorkoutSet } from '@/lib/types'
@@ -68,6 +69,18 @@ export function WorkoutEditor({
   const [showMeta, setShowMeta] = useState(false)
   const [showNotes, setShowNotes] = useState(false)
   const [restStart, setRestStart] = useState<number | null>(null)
+  const [historyFor, setHistoryFor] = useState<string | null>(null)
+
+  // Ersten Satz einer Übung mit einem Vorschlag füllen.
+  const applySuggestion = (ei: number, s: { weightKg: number; reps: number }) => {
+    patchEntries(
+      draft.entries.map((entry, i) => {
+        if (i !== ei) return entry
+        const rest = entry.sets.slice(1)
+        return { ...entry, sets: [{ reps: s.reps, weightKg: s.weightKg, completed: false }, ...rest] }
+      }),
+    )
+  }
 
   // Satz abschließen/öffnen; beim Abschließen den Pausen-Timer starten.
   const toggleComplete = (ei: number, si: number) => {
@@ -313,14 +326,46 @@ export function WorkoutEditor({
                   )}
                   </div>
                 </div>
-                <button
-                  onClick={() => removeExercise(active)}
-                  className="shrink-0 rounded-lg p-1.5 text-[var(--color-ink-faint)] hover:text-[var(--color-danger)]"
-                  aria-label="Übung entfernen"
-                >
-                  <IconTrash width={18} height={18} />
-                </button>
+                <div className="flex shrink-0 items-center gap-1">
+                  <button
+                    onClick={() => setHistoryFor(entry.exerciseId)}
+                    className="rounded-lg p-1.5 text-[var(--color-ink-faint)] hover:text-[var(--color-brand-2)]"
+                    aria-label="Verlauf ansehen"
+                  >
+                    <IconChart width={18} height={18} />
+                  </button>
+                  <button
+                    onClick={() => removeExercise(active)}
+                    className="rounded-lg p-1.5 text-[var(--color-ink-faint)] hover:text-[var(--color-danger)]"
+                    aria-label="Übung entfernen"
+                  >
+                    <IconTrash width={18} height={18} />
+                  </button>
+                </div>
               </div>
+
+              {(() => {
+                const suggest = progressionSuggestion(data.workouts, entry.exerciseId)
+                if (!suggest) return null
+                return (
+                  <button
+                    onClick={() => applySuggestion(active, suggest)}
+                    className="mb-3 flex w-full items-center gap-2 rounded-xl border border-[var(--color-brand)]/40 bg-[var(--color-brand)]/10 px-3 py-2 text-left"
+                  >
+                    <span className="grid h-6 w-6 shrink-0 place-items-center rounded-full brand-gradient text-white text-xs">
+                      ↑
+                    </span>
+                    <span className="min-w-0 flex-1 text-sm">
+                      <span className="font-semibold text-[var(--color-brand-2)]">Vorschlag: </span>
+                      {fromKg(suggest.weightKg, unit).toLocaleString('de-DE', { maximumFractionDigits: 1 })}{' '}
+                      {weightLabel(unit)} × {suggest.reps} Wdh
+                    </span>
+                    <span className="shrink-0 text-xs font-semibold text-[var(--color-brand-2)]">
+                      Übernehmen
+                    </span>
+                  </button>
+                )
+              })()}
 
               <div className="mb-1 grid grid-cols-[1.3rem_1fr_1fr_2.6rem_2rem] items-center gap-2 px-1 text-[11px] font-semibold uppercase tracking-wide text-[var(--color-ink-faint)]">
                 <span>#</span>
@@ -467,6 +512,14 @@ export function WorkoutEditor({
 
       <Sheet open={picking} onClose={() => setPicking(false)} title="Übung wählen">
         <ExercisePicker onPick={addExercise} />
+      </Sheet>
+
+      <Sheet
+        open={historyFor !== null}
+        onClose={() => setHistoryFor(null)}
+        title={historyFor ? (exerciseById(historyFor)?.name ?? 'Verlauf') : ''}
+      >
+        {historyFor && <ExerciseHistory exerciseId={historyFor} />}
       </Sheet>
 
       <RestTimer startedAt={restStart} onDismiss={() => setRestStart(null)} />
