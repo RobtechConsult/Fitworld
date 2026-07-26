@@ -94,8 +94,10 @@
   }
 
   .input {
+    /* Schriftgröße 16px verhindert das automatische Reinzoomen von iOS Safari
+       beim Fokussieren von Eingabefeldern. */
     @apply w-full rounded-xl border border-[var(--color-border)] bg-[var(--color-surface-2)] px-3.5 py-2.5
-      text-sm text-[var(--color-ink)] placeholder:text-[var(--color-ink-faint)]
+      text-base text-[var(--color-ink)] placeholder:text-[var(--color-ink-faint)]
       focus:border-[var(--color-brand)] focus:outline-none focus:ring-2 focus:ring-[var(--color-brand)]/30;
   }
 }
