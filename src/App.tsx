@@ -10,6 +10,7 @@ import { Body } from '@/pages/Body'
 import { Plans } from '@/pages/Plans'
 import { Calendar } from '@/pages/Calendar'
 import { Settings } from '@/pages/Settings'
+import { ExerciseDetailPage } from '@/pages/ExerciseDetailPage'
 import { DataPage } from '@/pages/DataPage'
 
 // Recharts ist groß -> Fortschritts-Graphen erst beim Öffnen laden (Code-Splitting).
@@ -46,6 +47,7 @@ export default function App() {
             <Route path="plans" element={<Plans />} />
             <Route path="calendar" element={<Calendar />} />
             <Route path="settings" element={<Settings />} />
+            <Route path="exercise/:id" element={<ExerciseDetailPage />} />
             <Route path="data" element={<DataPage />} />
             <Route path="*" element={<Navigate to="/" replace />} />
           </Route>

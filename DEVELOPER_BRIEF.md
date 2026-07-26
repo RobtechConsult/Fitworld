@@ -151,6 +151,14 @@ Referenz: AP macht es übersichtlicher (plan-zentrierte Startseite, Übungswechs
 - Fortschritt: gestrichelte `ReferenceLine` im Gewichts- & KFA-Graph; Y-Achse erweitert den Zielwert einzuschließen.
 - Kalender: Schließen-X (oben rechts) → zurück zur Startseite.
 
+### Briefing #013 — Übungs-Historie & Progression  ✅ *umgesetzt & live*
+- **Vorbefüllung** der letzten Werte beim Training (bestand schon via `seedEntry`) + „Letztes Mal"-Referenz.
+- **Progressionsvorschlag** je Übung (`progressionSuggestion`) mit „Übernehmen"-Button im Editor.
+- **Übungs-Historie** (`ExerciseHistory`): Bestwerte, 1-RM-Sparkline (`Sparkline`, ohne Recharts),
+  vergangene Sätze (#/Wdh/kg/1RM). Erreichbar als Sheet im Training (verliert Draft nicht) und als
+  Seite `/exercise/:id` (aus der Übungs-DB, „Verlauf & Statistik").
+- `metrics.ts`: `exerciseSessionHistory`, `progressionSuggestion`.
+
 ### Später
 - Backend + echte Hub-Brücke.
 - Optional: Animationen (lizenzierte Quelle) statt/ergänzend zu Fotos.

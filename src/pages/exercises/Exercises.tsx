@@ -1,9 +1,10 @@
 import { useMemo, useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 import { useStore } from '@/store/StoreContext'
 import { PageHeader } from '@/components/layout/AppShell'
 import { Sheet } from '@/components/Sheet'
 import { ExerciseForm } from './ExerciseForm'
-import { IconPlus, IconSearch, IconTrash } from '@/components/icons'
+import { IconChart, IconPlus, IconSearch, IconTrash } from '@/components/icons'
 import { ExerciseThumb } from '@/components/ExerciseThumb'
 import { exerciseImages } from '@/data/exerciseImages'
 import {
@@ -52,6 +53,7 @@ function ExerciseDetail({
   onDelete?: (id: string) => void
 }) {
   const images = exerciseImages(ex.id)
+  const navigate = useNavigate()
   return (
     <div className="flex flex-col gap-4">
       {images.length > 0 && (
@@ -109,6 +111,11 @@ function ExerciseDetail({
           <p className="text-sm leading-relaxed text-[var(--color-ink-muted)]">{ex.instructions}</p>
         </div>
       )}
+
+      <button className="btn-ghost" onClick={() => navigate(`/exercise/${ex.id}`)}>
+        <IconChart width={18} height={18} />
+        Verlauf & Statistik
+      </button>
 
       {ex.isCustom && onDelete && (
         <button
