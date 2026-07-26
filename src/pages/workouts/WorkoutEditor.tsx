@@ -241,8 +241,8 @@ export function WorkoutEditor({
         </div>
       ) : (
         <>
-          {/* Übungs-Leiste: antippbar, zeigt alle Übungen + „+“ */}
-          <div className="-mx-4 mb-3 flex gap-1.5 overflow-x-auto px-4 pb-1 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+          {/* Übungs-Streifen: Bild-Thumbnails, aktive Übung größer/hervorgehoben */}
+          <div className="-mx-4 mb-3 flex items-center gap-2 overflow-x-auto px-4 pb-1 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
             {draft.entries.map((e, i) => {
               const name = exerciseById(e.exerciseId)?.name ?? 'Übung'
               const done = entryDone(e)
@@ -251,35 +251,37 @@ export function WorkoutEditor({
                 <button
                   key={e.exerciseId}
                   onClick={() => setRawIdx(i)}
-                  className={[
-                    'flex shrink-0 items-center gap-1.5 rounded-full border px-3 py-1.5 text-xs font-medium transition-colors',
-                    isActive
-                      ? 'brand-gradient border-transparent text-white'
-                      : 'border-[var(--color-border)] bg-[var(--color-surface-2)] text-[var(--color-ink-muted)]',
-                  ].join(' ')}
+                  aria-label={name}
+                  className="relative shrink-0 transition-transform"
                 >
+                  <ExerciseThumb
+                    exerciseId={e.exerciseId}
+                    size={isActive ? 60 : 50}
+                    className={
+                      isActive
+                        ? 'ring-2 ring-[var(--color-brand)] ring-offset-2 ring-offset-[var(--color-bg)]'
+                        : 'opacity-55'
+                    }
+                  />
                   <span
                     className={[
-                      'grid h-4 w-4 place-items-center rounded-full text-[10px]',
+                      'absolute -right-1 -top-1 grid h-4 w-4 place-items-center rounded-full text-[9px] font-bold',
                       done
                         ? 'bg-[var(--color-positive)] text-black'
-                        : isActive
-                          ? 'bg-white/25'
-                          : 'bg-[var(--color-border)]',
+                        : 'border border-[var(--color-border)] bg-[var(--color-surface)] text-[var(--color-ink-muted)]',
                     ].join(' ')}
                   >
                     {done ? '✓' : i + 1}
                   </span>
-                  <span className="max-w-[7.5rem] truncate">{name}</span>
                 </button>
               )
             })}
             <button
               onClick={() => setPicking(true)}
-              className="flex shrink-0 items-center gap-1 rounded-full border border-dashed border-[var(--color-border)] px-3 py-1.5 text-xs font-medium text-[var(--color-ink-muted)]"
+              aria-label="Übung hinzufügen"
+              className="grid h-[50px] w-[50px] shrink-0 place-items-center rounded-xl border border-dashed border-[var(--color-border)] text-[var(--color-ink-muted)]"
             >
-              <IconPlus width={14} height={14} />
-              Übung
+              <IconPlus width={18} height={18} />
             </button>
           </div>
 
