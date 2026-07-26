@@ -98,12 +98,33 @@ getestet (E2E) · Screenshots. ✔️
 
 ---
 
-## Phase 1 abgeschlossen ✅ — mögliche Folge-Briefings
+## Phase 1 abgeschlossen ✅ · Live auf GitHub Pages
 
-- **#006 Ziel-Linien in Graphen**: Zielgewicht/Ziel-KFA im Datenmodell (`Settings` oder eigenes
-  `goals`), Reference-Linie in Recharts. Braucht `schemaVersion`-Bump + Logbuch.
-- **#007 Einheiten kg/lbs**: `Settings.unit` respektieren (Anzeige-Konvertierung, intern kg bleibt).
-- **#008 Backend-Anbindung**: CF Workers + D1 (oder Supabase), echte App-übergreifende Hub-Brücke.
+---
+
+## AlphaProgression-inspirierte Verbesserungen (CEO-Feedback)
+
+Referenz: AP macht es übersichtlicher (plan-zentrierte Startseite, Übungswechsel im Training,
+Übungsbilder). CEO-Entscheidung: Bilder via **Free Exercise DB** (Public Domain); Umsetzung
+„der Reihe nach" mit Screenshot-Freigabe je Schritt.
+
+### Briefing #006 — Übungswechsel im Training  ✅ *umgesetzt*
+- `WorkoutEditor` komplett umgebaut: **eine Übung pro Screen** statt langer Liste.
+- Antippbare **Übungs-Leiste** (Pills mit Nummer/✓-Status), **Weiter/Zurück**-Buttons,
+  **Wisch-Gesten** (links/rechts), Fortschritt „Übung X/Y" + Punkt-Indikator.
+- Meta (Datum/Name) und Notiz **einklappbar**, damit die aktive Übung im Fokus steht.
+- Vorbefüllung aus Plan-Tag & Progression-Hinweise bleiben erhalten.
+
+### Briefing #007 — Plan-zentrierte Startseite  ⏳ *als Nächstes*
+- Pläne als **eigener Tab** (statt unter „Mehr"); aktiver Plan mit **Tagen als Zeilen** (AP-Stil),
+  je Tag „Tag starten". Später: Wochen-Kalender/Häkchen wie AP.
+
+### Briefing #008 — Übungsbilder (Free Exercise DB)  ⏳
+- Public-Domain-Fotos (Start/End) den Übungen zuordnen; Thumbnails in Listen + Detail.
+- Nur die Bilder unserer Übungen bündeln (Repo schlank); Lizenzhinweis im Repo.
+
+### Später
+- Ziel-Linien in Graphen (Schema-Bump) · Einheiten kg/lbs · Backend + echte Hub-Brücke.
 
 ---
 

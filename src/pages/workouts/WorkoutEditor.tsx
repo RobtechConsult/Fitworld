@@ -1,8 +1,8 @@
-import { useState } from 'react'
+import { useRef, useState } from 'react'
 import { useStore } from '@/store/StoreContext'
 import { Sheet } from '@/components/Sheet'
 import { ExercisePicker } from './ExercisePicker'
-import { IconPlus, IconTrash } from '@/components/icons'
+import { IconChevron, IconPlus, IconTrash } from '@/components/icons'
 import { exerciseStats, summarizeEntry } from '@/lib/metrics'
 import type { Workout, WorkoutEntry, WorkoutSet } from '@/lib/types'
 
@@ -19,6 +19,10 @@ function today(): string {
 
 function emptySet(): WorkoutSet {
   return { reps: 8, weightKg: 0, completed: false }
+}
+
+function entryDone(e: WorkoutEntry): boolean {
+  return e.sets.length > 0 && e.sets.every((s) => s.completed)
 }
 
 export function WorkoutEditor({
@@ -59,46 +63,63 @@ export function WorkoutEditor({
     }
   })
   const [picking, setPicking] = useState(false)
+  const [rawIdx, setRawIdx] = useState(0)
+  const [showMeta, setShowMeta] = useState(true)
+  const [showNotes, setShowNotes] = useState(false)
+
+  // aktiver Index sicher in Range halten
+  const count = draft.entries.length
+  const active = count === 0 ? 0 : Math.min(rawIdx, count - 1)
 
   const patchDraft = (p: Partial<Draft>) => setDraft((d) => ({ ...d, ...p }))
   const patchEntries = (entries: WorkoutEntry[]) => patchDraft({ entries })
 
   const addExercise = (exerciseId: string) => {
     setPicking(false)
-    if (draft.entries.some((e) => e.exerciseId === exerciseId)) return
+    if (draft.entries.some((e) => e.exerciseId === exerciseId)) {
+      // schon vorhanden -> dorthin springen
+      setRawIdx(draft.entries.findIndex((e) => e.exerciseId === exerciseId))
+      return
+    }
     patchEntries([...draft.entries, seedEntry(exerciseId)])
+    setRawIdx(draft.entries.length) // neue Übung = letzter Index
   }
 
   const updateSet = (ei: number, si: number, p: Partial<WorkoutSet>) => {
-    const entries = draft.entries.map((entry, i) => {
-      if (i !== ei) return entry
-      return { ...entry, sets: entry.sets.map((s, j) => (j === si ? { ...s, ...p } : s)) }
-    })
-    patchEntries(entries)
+    patchEntries(
+      draft.entries.map((entry, i) =>
+        i !== ei
+          ? entry
+          : { ...entry, sets: entry.sets.map((s, j) => (j === si ? { ...s, ...p } : s)) },
+      ),
+    )
   }
 
   const addSet = (ei: number) => {
-    const entries = draft.entries.map((entry, i) => {
-      if (i !== ei) return entry
-      const last = entry.sets[entry.sets.length - 1]
-      const next: WorkoutSet = last
-        ? { reps: last.reps, weightKg: last.weightKg, rpe: last.rpe, completed: false }
-        : emptySet()
-      return { ...entry, sets: [...entry.sets, next] }
-    })
-    patchEntries(entries)
+    patchEntries(
+      draft.entries.map((entry, i) => {
+        if (i !== ei) return entry
+        const last = entry.sets[entry.sets.length - 1]
+        const next: WorkoutSet = last
+          ? { reps: last.reps, weightKg: last.weightKg, rpe: last.rpe, completed: false }
+          : emptySet()
+        return { ...entry, sets: [...entry.sets, next] }
+      }),
+    )
   }
 
   const removeSet = (ei: number, si: number) => {
-    const entries = draft.entries
-      .map((entry, i) =>
+    patchEntries(
+      draft.entries.map((entry, i) =>
         i === ei ? { ...entry, sets: entry.sets.filter((_, j) => j !== si) } : entry,
-      )
-      .filter((entry) => entry.sets.length > 0)
-    patchEntries(entries)
+      ),
+    )
   }
 
-  const removeExercise = (ei: number) => patchEntries(draft.entries.filter((_, i) => i !== ei))
+  const removeExercise = (ei: number) => {
+    patchEntries(draft.entries.filter((_, i) => i !== ei))
+    setRawIdx((idx) => Math.max(0, Math.min(idx, count - 2)))
+  }
 
   const completedSets = draft.entries.reduce(
     (n, e) => n + e.sets.filter((s) => s.completed).length,
@@ -108,7 +129,6 @@ export function WorkoutEditor({
 
   const save = () => {
     if (!canSave) return
-    // leere Sätze (0 Wdh und 0 Gewicht, nicht abgeschlossen) verwerfen
     const entries = draft.entries
       .map((e) => ({
         ...e,
@@ -125,64 +145,161 @@ export function WorkoutEditor({
     onDone(created)
   }
 
+  // Wisch-Gesten zum Übungswechsel
+  const touchX = useRef<number | null>(null)
+  const onTouchStart = (e: React.TouchEvent) => {
+    touchX.current = e.changedTouches[0]?.clientX ?? null
+  }
+  const onTouchEnd = (e: React.TouchEvent) => {
+    if (touchX.current == null) return
+    const dx = (e.changedTouches[0]?.clientX ?? 0) - touchX.current
+    if (Math.abs(dx) > 50) {
+      if (dx < 0 && active < count - 1) setRawIdx(active + 1)
+      if (dx > 0 && active > 0) setRawIdx(active - 1)
+    }
+    touchX.current = null
+  }
+
+  const entry = draft.entries[active]
+  const ex = entry ? exerciseById(entry.exerciseId) : undefined
+  const stats = entry ? exerciseStats(data.workouts, entry.exerciseId) : undefined
+
   return (
     <div>
-      <div className="mb-4 flex items-center justify-between gap-3">
+      {/* Kopf: Abbrechen · Fortschritt · Speichern */}
+      <div className="mb-3 flex items-center justify-between gap-3">
         <button className="btn-ghost !px-3 !py-2" onClick={onCancel}>
           Abbrechen
         </button>
+        {count > 0 && (
+          <span className="text-sm font-medium text-[var(--color-ink-muted)]">
+            Übung {active + 1}/{count}
+          </span>
+        )}
         <button className="btn-primary" onClick={save} disabled={!canSave}>
           Speichern
         </button>
       </div>
 
-      <div className="card mb-4 flex flex-col gap-3 px-4 py-4">
-        <label className="block">
-          <span className="mb-1 block text-sm font-medium text-[var(--color-ink-muted)]">Datum</span>
-          <input
-            type="date"
-            className="input"
-            value={draft.date}
-            onChange={(e) => patchDraft({ date: e.target.value })}
-          />
-        </label>
-        <label className="block">
-          <span className="mb-1 block text-sm font-medium text-[var(--color-ink-muted)]">
-            Name (optional)
+      {/* Meta (Datum/Name) – einklappbar, um Platz für die Übung zu schaffen */}
+      <div className="card mb-3 px-4 py-3">
+        <button
+          className="flex w-full items-center justify-between text-left"
+          onClick={() => setShowMeta((v) => !v)}
+        >
+          <span className="text-sm font-medium text-[var(--color-ink-muted)]">
+            {draft.name.trim() || 'Einheit'} · {draft.date.split('-').reverse().join('.')}
           </span>
-          <input
-            className="input"
-            placeholder="z. B. Push A"
-            value={draft.name}
-            onChange={(e) => patchDraft({ name: e.target.value })}
+          <IconChevron
+            width={18}
+            height={18}
+            className={[
+              'text-[var(--color-ink-faint)] transition-transform',
+              showMeta ? 'rotate-90' : '',
+            ].join(' ')}
           />
-        </label>
+        </button>
+        {showMeta && (
+          <div className="mt-3 grid grid-cols-2 gap-3">
+            <label className="block">
+              <span className="mb-1 block text-xs font-medium text-[var(--color-ink-muted)]">
+                Datum
+              </span>
+              <input
+                type="date"
+                className="input !py-2"
+                value={draft.date}
+                onChange={(e) => patchDraft({ date: e.target.value })}
+              />
+            </label>
+            <label className="block">
+              <span className="mb-1 block text-xs font-medium text-[var(--color-ink-muted)]">
+                Name
+              </span>
+              <input
+                className="input !py-2"
+                placeholder="z. B. Push A"
+                value={draft.name}
+                onChange={(e) => patchDraft({ name: e.target.value })}
+              />
+            </label>
+          </div>
+        )}
       </div>
 
-      {draft.entries.length === 0 && (
-        <p className="mb-4 text-center text-sm text-[var(--color-ink-muted)]">
-          Noch keine Übung. Füge unten die erste hinzu.
-        </p>
-      )}
+      {count === 0 ? (
+        <div className="card mt-2 flex flex-col items-center gap-3 px-6 py-12 text-center">
+          <h2 className="text-lg font-semibold">Erste Übung hinzufügen</h2>
+          <p className="max-w-sm text-sm text-[var(--color-ink-muted)]">
+            Wähle Übungen aus deiner Datenbank. Danach wischst du im Training bequem zwischen ihnen.
+          </p>
+          <button className="btn-primary mt-1" onClick={() => setPicking(true)}>
+            <IconPlus width={18} height={18} />
+            Übung wählen
+          </button>
+        </div>
+      ) : (
+        <>
+          {/* Übungs-Leiste: antippbar, zeigt alle Übungen + „+“ */}
+          <div className="-mx-4 mb-3 flex gap-1.5 overflow-x-auto px-4 pb-1 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+            {draft.entries.map((e, i) => {
+              const name = exerciseById(e.exerciseId)?.name ?? 'Übung'
+              const done = entryDone(e)
+              const isActive = i === active
+              return (
+                <button
+                  key={e.exerciseId}
+                  onClick={() => setRawIdx(i)}
+                  className={[
+                    'flex shrink-0 items-center gap-1.5 rounded-full border px-3 py-1.5 text-xs font-medium transition-colors',
+                    isActive
+                      ? 'brand-gradient border-transparent text-white'
+                      : 'border-[var(--color-border)] bg-[var(--color-surface-2)] text-[var(--color-ink-muted)]',
+                  ].join(' ')}
+                >
+                  <span
+                    className={[
+                      'grid h-4 w-4 place-items-center rounded-full text-[10px]',
+                      done
+                        ? 'bg-[var(--color-positive)] text-black'
+                        : isActive
+                          ? 'bg-white/25'
+                          : 'bg-[var(--color-border)]',
+                    ].join(' ')}
+                  >
+                    {done ? '✓' : i + 1}
+                  </span>
+                  <span className="max-w-[7.5rem] truncate">{name}</span>
+                </button>
+              )
+            })}
+            <button
+              onClick={() => setPicking(true)}
+              className="flex shrink-0 items-center gap-1 rounded-full border border-dashed border-[var(--color-border)] px-3 py-1.5 text-xs font-medium text-[var(--color-ink-muted)]"
+            >
+              <IconPlus width={14} height={14} />
+              Übung
+            </button>
+          </div>
 
-      <div className="flex flex-col gap-3">
-        {draft.entries.map((entry, ei) => {
-          const ex = exerciseById(entry.exerciseId)
-          const stats = exerciseStats(data.workouts, entry.exerciseId)
-          return (
-            <div key={entry.exerciseId} className="card px-4 py-3.5">
-              <div className="mb-2 flex items-start justify-between gap-2">
+          {/* Aktive Übung */}
+          {entry && (
+            <div className="card px-4 py-4" onTouchStart={onTouchStart} onTouchEnd={onTouchEnd}>
+              <div className="mb-3 flex items-start justify-between gap-2">
                 <div className="min-w-0">
-                  <p className="truncate font-semibold">{ex?.name ?? 'Unbekannte Übung'}</p>
-                  {stats.lastEntry && (
-                    <p className="mt-0.5 text-xs text-[var(--color-ink-faint)]">
-                      Letztes Mal ({stats.lastEntry.date}): {summarizeEntry({ exerciseId: entry.exerciseId, sets: stats.lastEntry.sets })}
+                  <p className="text-lg font-semibold leading-tight">
+                    {ex?.name ?? 'Unbekannte Übung'}
+                  </p>
+                  {stats?.lastEntry && (
+                    <p className="mt-1 text-xs text-[var(--color-ink-faint)]">
+                      Letztes Mal ({stats.lastEntry.date.split('-').reverse().join('.')}):{' '}
+                      {summarizeEntry({ exerciseId: entry.exerciseId, sets: stats.lastEntry.sets })}
                       {stats.best1RMKg > 0 && ` · 1RM≈${Math.round(stats.best1RMKg)} kg`}
                     </p>
                   )}
                 </div>
                 <button
-                  onClick={() => removeExercise(ei)}
+                  onClick={() => removeExercise(active)}
                   className="shrink-0 rounded-lg p-1.5 text-[var(--color-ink-faint)] hover:text-[var(--color-danger)]"
                   aria-label="Übung entfernen"
                 >
@@ -206,16 +323,14 @@ export function WorkoutEditor({
                       s.completed ? 'bg-[var(--color-positive)]/10' : '',
                     ].join(' ')}
                   >
-                    <span className="text-center text-sm text-[var(--color-ink-muted)]">
-                      {si + 1}
-                    </span>
+                    <span className="text-center text-sm text-[var(--color-ink-muted)]">{si + 1}</span>
                     <input
                       type="number"
                       inputMode="numeric"
                       min={0}
                       className="input !px-2 !py-1.5 text-center"
                       value={s.reps || ''}
-                      onChange={(e) => updateSet(ei, si, { reps: Number(e.target.value) || 0 })}
+                      onChange={(e) => updateSet(active, si, { reps: Number(e.target.value) || 0 })}
                       onFocus={(e) => e.target.select()}
                     />
                     <input
@@ -225,11 +340,11 @@ export function WorkoutEditor({
                       step={0.5}
                       className="input !px-2 !py-1.5 text-center"
                       value={s.weightKg || ''}
-                      onChange={(e) => updateSet(ei, si, { weightKg: Number(e.target.value) || 0 })}
+                      onChange={(e) => updateSet(active, si, { weightKg: Number(e.target.value) || 0 })}
                       onFocus={(e) => e.target.select()}
                     />
                     <button
-                      onClick={() => updateSet(ei, si, { completed: !s.completed })}
+                      onClick={() => updateSet(active, si, { completed: !s.completed })}
                       aria-label="Satz abschließen"
                       className={[
                         'mx-auto grid h-8 w-8 place-items-center rounded-lg border text-sm font-bold transition-colors',
@@ -245,41 +360,78 @@ export function WorkoutEditor({
               </div>
 
               <div className="mt-2 flex gap-2">
-                <button className="btn-ghost !py-1.5 !text-xs" onClick={() => addSet(ei)}>
+                <button className="btn-ghost !py-1.5 !text-xs" onClick={() => addSet(active)}>
                   <IconPlus width={14} height={14} />
                   Satz
                 </button>
                 {entry.sets.length > 1 && (
                   <button
                     className="btn-ghost !py-1.5 !text-xs text-[var(--color-ink-muted)]"
-                    onClick={() => removeSet(ei, entry.sets.length - 1)}
+                    onClick={() => removeSet(active, entry.sets.length - 1)}
                   >
                     Letzten Satz entfernen
                   </button>
                 )}
               </div>
             </div>
-          )
-        })}
-      </div>
+          )}
 
-      <button className="btn-ghost mt-3 w-full" onClick={() => setPicking(true)}>
-        <IconPlus width={18} height={18} />
-        Übung hinzufügen
-      </button>
+          {/* Weiter / Zurück */}
+          <div className="mt-3 flex items-center justify-between gap-3">
+            <button
+              className="btn-ghost !px-3 disabled:opacity-40"
+              onClick={() => setRawIdx(active - 1)}
+              disabled={active === 0}
+            >
+              <IconChevron width={18} height={18} className="rotate-180" />
+              Zurück
+            </button>
 
-      <div className="card mt-4 px-4 py-4">
-        <label className="block">
-          <span className="mb-1 block text-sm font-medium text-[var(--color-ink-muted)]">
-            Notizen (optional)
-          </span>
+            <div className="flex items-center gap-1.5">
+              {draft.entries.map((_, i) => (
+                <span
+                  key={i}
+                  className={[
+                    'h-1.5 rounded-full transition-all',
+                    i === active ? 'w-5 bg-[var(--color-brand)]' : 'w-1.5 bg-[var(--color-border)]',
+                  ].join(' ')}
+                />
+              ))}
+            </div>
+
+            <button
+              className="btn-ghost !px-3 disabled:opacity-40"
+              onClick={() => setRawIdx(active + 1)}
+              disabled={active >= count - 1}
+            >
+              Weiter
+              <IconChevron width={18} height={18} />
+            </button>
+          </div>
+        </>
+      )}
+
+      {/* Notiz zur Einheit – einklappbar */}
+      <div className="card mt-4 px-4 py-3">
+        <button
+          className="flex w-full items-center justify-between text-left text-sm font-medium text-[var(--color-ink-muted)]"
+          onClick={() => setShowNotes((v) => !v)}
+        >
+          Notiz zur Einheit {draft.notes.trim() ? '• ausgefüllt' : '(optional)'}
+          <IconChevron
+            width={18}
+            height={18}
+            className={['text-[var(--color-ink-faint)] transition-transform', showNotes ? 'rotate-90' : ''].join(' ')}
+          />
+        </button>
+        {showNotes && (
           <textarea
-            className="input min-h-[64px] resize-y"
+            className="input mt-3 min-h-[64px] resize-y"
             placeholder="Wie lief die Einheit?"
             value={draft.notes}
             onChange={(e) => patchDraft({ notes: e.target.value })}
           />
-        </label>
+        )}
       </div>
 
       <p className="mt-3 text-center text-xs text-[var(--color-ink-faint)]">
