@@ -35,10 +35,12 @@ interface StoreValue {
   /** Körper-Metrik anlegen; erzeugt id + createdAt. */
   addBodyMetric: (m: Omit<BodyMetric, 'id' | 'createdAt'>) => BodyMetric
   deleteBodyMetric: (id: string) => void
-  /** Trainingsplan anlegen; erzeugt id + createdAt. */
+  /** Trainingsplan anlegen; erzeugt id + createdAt. Erster Plan wird automatisch aktiv. */
   addPlan: (p: Omit<Plan, 'id' | 'createdAt'>) => Plan
   updatePlan: (id: string, patch: Partial<Omit<Plan, 'id'>>) => void
   deletePlan: (id: string) => void
+  /** Plan als „aktiv" (Startseite) markieren. */
+  setActivePlan: (id: string) => void
   /** Transiente Vorgabe für den Workout-Editor (z. B. aus einem Plan-Tag). */
   pendingStart: PendingStart | null
   startWorkoutFrom: (exerciseIds: string[], name?: string) => void
@@ -114,8 +116,19 @@ export function StoreProvider({ children }: { children: ReactNode }) {
 
   const addPlan = useCallback<StoreValue['addPlan']>((p) => {
     const created: Plan = { ...p, id: newId('pl'), createdAt: new Date().toISOString() }
-    setData((prev) => ({ ...prev, plans: [created, ...prev.plans] }))
+    setData((prev) => ({
+      ...prev,
+      plans: [created, ...prev.plans],
+      // erster Plan wird automatisch der aktive
+      settings: prev.settings.activePlanId
+        ? prev.settings
+        : { ...prev.settings, activePlanId: created.id },
+    }))
     return created
+  }, [])
+
+  const setActivePlan = useCallback((id: string) => {
+    setData((prev) => ({ ...prev, settings: { ...prev.settings, activePlanId: id } }))
   }, [])
 
   const updatePlan = useCallback<StoreValue['updatePlan']>((id, patch) => {
@@ -126,7 +139,12 @@ export function StoreProvider({ children }: { children: ReactNode }) {
   }, [])
 
   const deletePlan = useCallback((id: string) => {
-    setData((prev) => ({ ...prev, plans: prev.plans.filter((p) => p.id !== id) }))
+    setData((prev) => {
+      const plans = prev.plans.filter((p) => p.id !== id)
+      const activePlanId =
+        prev.settings.activePlanId === id ? plans[0]?.id : prev.settings.activePlanId
+      return { ...prev, plans, settings: { ...prev.settings, activePlanId } }
+    })
   }, [])
 
   const [pendingStart, setPendingStart] = useState<PendingStart | null>(null)
@@ -167,6 +185,7 @@ export function StoreProvider({ children }: { children: ReactNode }) {
       addPlan,
       updatePlan,
       deletePlan,
+      setActivePlan,
       pendingStart,
       startWorkoutFrom,
       clearPendingStart,
@@ -187,6 +206,7 @@ export function StoreProvider({ children }: { children: ReactNode }) {
       addPlan,
       updatePlan,
       deletePlan,
+      setActivePlan,
       pendingStart,
       startWorkoutFrom,
       clearPendingStart,
