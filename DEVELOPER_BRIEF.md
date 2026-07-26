@@ -133,6 +133,13 @@ Referenz: AP macht es übersichtlicher (plan-zentrierte Startseite, Übungswechs
 - **Pausen-Timer** (`RestTimer`): startet beim Abschließen eines Satzes, zählt hoch, schwebender Pill.
 - **Live-1RM-Spalte** je Satz in der Trainings-Tabelle (Epley, `epley1RM`).
 
+### Briefing #010 — Voller Monatskalender  ✅ *umgesetzt & live*
+- `/calendar`: Monatsansicht (Mo–So), Trainingstage grün, Körper-Einträge grau, heute markiert;
+  Monat vor/zurück, Summary „X Workouts · Y/Woche".
+- Aus der Wochenleiste (`WeekStrip`) per Monats-Label erreichbar (`onOpenCalendar`).
+- Tag antippen → Detail-Sheet mit Einheiten (Übungen, Volumen) + **„Training wiederholen"**
+  (`startWorkoutFrom` → vorbefüllter Editor). Wiederholen auch im Trainings-Verlauf.
+
 ### Später
 - Ziel-Linien in Graphen (Schema-Bump) · Einheiten kg/lbs · Backend + echte Hub-Brücke.
 - Optional: Animationen (lizenzierte Quelle) statt/ergänzend zu Fotos.
