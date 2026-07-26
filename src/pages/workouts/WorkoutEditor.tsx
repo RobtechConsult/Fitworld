@@ -4,7 +4,8 @@ import { Sheet } from '@/components/Sheet'
 import { ExercisePicker } from './ExercisePicker'
 import { IconChevron, IconPlus, IconTrash } from '@/components/icons'
 import { ExerciseThumb } from '@/components/ExerciseThumb'
-import { exerciseStats, summarizeEntry } from '@/lib/metrics'
+import { RestTimer } from '@/components/RestTimer'
+import { epley1RM, exerciseStats, summarizeEntry } from '@/lib/metrics'
 import type { Workout, WorkoutEntry, WorkoutSet } from '@/lib/types'
 
 interface Draft {
@@ -67,6 +68,14 @@ export function WorkoutEditor({
   const [rawIdx, setRawIdx] = useState(0)
   const [showMeta, setShowMeta] = useState(true)
   const [showNotes, setShowNotes] = useState(false)
+  const [restStart, setRestStart] = useState<number | null>(null)
+
+  // Satz abschließen/öffnen; beim Abschließen den Pausen-Timer starten.
+  const toggleComplete = (ei: number, si: number) => {
+    const willComplete = !draft.entries[ei]?.sets[si]?.completed
+    updateSet(ei, si, { completed: willComplete })
+    if (willComplete) setRestStart(Date.now())
+  }
 
   // aktiver Index sicher in Range halten
   const count = draft.entries.length
@@ -313,19 +322,22 @@ export function WorkoutEditor({
                 </button>
               </div>
 
-              <div className="mb-1 grid grid-cols-[1.6rem_1fr_1fr_2.2rem] items-center gap-2 px-1 text-[11px] font-semibold uppercase tracking-wide text-[var(--color-ink-faint)]">
+              <div className="mb-1 grid grid-cols-[1.3rem_1fr_1fr_2.6rem_2rem] items-center gap-2 px-1 text-[11px] font-semibold uppercase tracking-wide text-[var(--color-ink-faint)]">
                 <span>#</span>
                 <span>Wdh</span>
                 <span>kg</span>
+                <span className="text-center">1RM</span>
                 <span className="text-center">✓</span>
               </div>
 
               <div className="flex flex-col gap-1.5">
-                {entry.sets.map((s, si) => (
+                {entry.sets.map((s, si) => {
+                  const est = s.reps > 0 && s.weightKg > 0 ? Math.round(epley1RM(s.weightKg, s.reps)) : null
+                  return (
                   <div
                     key={si}
                     className={[
-                      'grid grid-cols-[1.6rem_1fr_1fr_2.2rem] items-center gap-2 rounded-xl px-1 py-1 transition-colors',
+                      'grid grid-cols-[1.3rem_1fr_1fr_2.6rem_2rem] items-center gap-2 rounded-xl px-1 py-1 transition-colors',
                       s.completed ? 'bg-[var(--color-positive)]/10' : '',
                     ].join(' ')}
                   >
@@ -349,8 +361,11 @@ export function WorkoutEditor({
                       onChange={(e) => updateSet(active, si, { weightKg: Number(e.target.value) || 0 })}
                       onFocus={(e) => e.target.select()}
                     />
+                    <span className="text-center text-xs font-medium text-[var(--color-ink-muted)]">
+                      {est != null ? est : '–'}
+                    </span>
                     <button
-                      onClick={() => updateSet(active, si, { completed: !s.completed })}
+                      onClick={() => toggleComplete(active, si)}
                       aria-label="Satz abschließen"
                       className={[
                         'mx-auto grid h-8 w-8 place-items-center rounded-lg border text-sm font-bold transition-colors',
@@ -362,7 +377,8 @@ export function WorkoutEditor({
                       ✓
                     </button>
                   </div>
-                ))}
+                  )
+                })}
               </div>
 
               <div className="mt-2 flex gap-2">
@@ -447,6 +463,8 @@ export function WorkoutEditor({
       <Sheet open={picking} onClose={() => setPicking(false)} title="Übung wählen">
         <ExercisePicker onPick={addExercise} />
       </Sheet>
+
+      <RestTimer startedAt={restStart} onDismiss={() => setRestStart(null)} />
     </div>
   )
 }
