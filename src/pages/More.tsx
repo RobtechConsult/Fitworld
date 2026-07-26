@@ -1,10 +1,11 @@
 import { Link } from 'react-router-dom'
 import { PageHeader } from '@/components/layout/AppShell'
-import { IconCalendar, IconChevron, IconDownload, IconScale } from '@/components/icons'
+import { IconCalendar, IconChevron, IconDownload, IconGear, IconScale } from '@/components/icons'
 
 const LINKS = [
   { to: '/body', title: 'Körper-Metriken', desc: 'Gewicht, KFA & Umfänge', Icon: IconScale },
   { to: '/plans', title: 'Trainingspläne', desc: 'Splits & Routinen', Icon: IconCalendar },
+  { to: '/settings', title: 'Einstellungen', desc: 'Einheit (kg/lbs) & mehr', Icon: IconGear },
   { to: '/data', title: 'Daten & Backup', desc: 'Export / Import · Hub-Brücke', Icon: IconDownload },
 ]
 

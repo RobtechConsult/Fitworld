@@ -1,5 +1,6 @@
 import type { BodyMetric, Workout, WorkoutEntry, WorkoutSet } from './types'
 import { workoutVolumeKg } from './dataFormat'
+import { fromKg, weightLabel, type Unit } from './units'
 
 /** Geschätztes 1-RM (Epley-Formel). Nur für completed Sätze sinnvoll. */
 export function epley1RM(weightKg: number, reps: number): number {
@@ -114,15 +115,19 @@ export function exercisesInWorkouts(workouts: Workout[]): Array<{ id: string; se
 }
 
 /** Kompakte Zusammenfassung eines Eintrags, z. B. "3×8 · 80 kg". */
-export function summarizeEntry(entry: WorkoutEntry): string {
+export function summarizeEntry(entry: WorkoutEntry, unit: Unit = 'metric'): string {
   const done = entry.sets.filter((s) => s.completed)
   const list = done.length ? done : entry.sets
   if (!list.length) return '—'
-  const weights = [...new Set(list.map((s) => s.weightKg))]
+  const fmt = (n: number) => n.toLocaleString('de-DE', { maximumFractionDigits: 1 })
+  const weights = [...new Set(list.map((s) => fromKg(s.weightKg, unit)))]
   const repsList = list.map((s) => s.reps)
   const sameReps = new Set(repsList).size === 1
   const repsPart = sameReps ? `${list.length}×${repsList[0]}` : `${list.length} Sätze`
+  const label = weightLabel(unit)
   const weightPart =
-    weights.length === 1 ? `${weights[0]} kg` : `${Math.min(...weights)}–${Math.max(...weights)} kg`
+    weights.length === 1
+      ? `${fmt(weights[0])} ${label}`
+      : `${fmt(Math.min(...weights))}–${fmt(Math.max(...weights))} ${label}`
   return `${repsPart} · ${weightPart}`
 }

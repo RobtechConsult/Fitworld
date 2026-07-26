@@ -8,6 +8,7 @@ import { WorkoutEditor } from './workouts/WorkoutEditor'
 import { IconPlus, IconTrash } from '@/components/icons'
 import { summarizeEntry } from '@/lib/metrics'
 import { workoutVolumeKg } from '@/lib/dataFormat'
+import { fmtWeightValue, weightLabel } from '@/lib/units'
 import type { Workout } from '@/lib/types'
 
 function formatDate(iso: string): string {
@@ -23,6 +24,7 @@ function plural(n: number, one: string, many: string): string {
 export function Workouts() {
   const { data, exerciseById, deleteWorkout, startWorkoutFrom, pendingStart, clearPendingStart } =
     useStore()
+  const unit = data.settings.unit
   const navigate = useNavigate()
   const [mode, setMode] = useState<'list' | 'edit'>('list')
   const [selected, setSelected] = useState<Workout | null>(null)
@@ -115,7 +117,8 @@ export function Workouts() {
                   <span className="chip">{plural(w.entries.length, 'Übung', 'Übungen')}</span>
                   <span className="chip">{plural(totalSets, 'Satz', 'Sätze')}</span>
                   <span className="chip text-[var(--color-brand-2)]">
-                    {workoutVolumeKg(w).toLocaleString('de-DE')} kg Volumen
+                    {fmtWeightValue(workoutVolumeKg(w), unit, { maximumFractionDigits: 0 })}{' '}
+                    {weightLabel(unit)} Volumen
                   </span>
                 </div>
               </button>
@@ -135,7 +138,8 @@ export function Workouts() {
               <span className="chip">{formatDate(selected.date)}</span>
               <span className="chip">{plural(selected.entries.length, 'Übung', 'Übungen')}</span>
               <span className="chip text-[var(--color-brand-2)]">
-                {workoutVolumeKg(selected).toLocaleString('de-DE')} kg Volumen
+                {fmtWeightValue(workoutVolumeKg(selected), unit, { maximumFractionDigits: 0 })}{' '}
+                {weightLabel(unit)} Volumen
               </span>
             </div>
 
@@ -146,7 +150,7 @@ export function Workouts() {
                     {exerciseById(entry.exerciseId)?.name ?? 'Unbekannte Übung'}
                   </p>
                   <p className="mt-0.5 text-sm text-[var(--color-ink-muted)]">
-                    {summarizeEntry(entry)}
+                    {summarizeEntry(entry, unit)}
                   </p>
                 </div>
               ))}

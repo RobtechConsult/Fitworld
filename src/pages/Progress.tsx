@@ -23,6 +23,7 @@ import {
   weightSeries,
   type SeriesPoint,
 } from '@/lib/metrics'
+import { fromKg, weightLabel } from '@/lib/units'
 
 // Design-Token-Farben (Recharts braucht konkrete Werte).
 const C = {
@@ -127,32 +128,41 @@ const axisProps = {
 
 export function Progress() {
   const { data, allExercises, exerciseById } = useStore()
+  const unit = data.settings.unit
+  const wLabel = weightLabel(unit)
   const [range, setRange] = useState<Range>('3m')
   const [active, setActive] = useState(0)
   const trackRef = useRef<HTMLDivElement>(null)
+
+  // kg-Serie in aktive Einheit umrechnen (für Anzeige).
+  const convW = (pts: ReturnType<typeof toChartData>) =>
+    pts.map((p) => ({ ...p, value: fromKg(p.value, unit) }))
 
   const usedExercises = useMemo(() => exercisesInWorkouts(data.workouts), [data.workouts])
   const [exerciseId, setExerciseId] = useState<string>('')
   const selectedExId = exerciseId || usedExercises[0]?.id || ''
 
   const weight = useMemo(
-    () => toChartData(filterRange(weightSeries(data.bodyMetrics), range)),
-    [data.bodyMetrics, range],
+    () => convW(toChartData(filterRange(weightSeries(data.bodyMetrics), range))),
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [data.bodyMetrics, range, unit],
   )
   const fat = useMemo(
     () => toChartData(filterRange(bodyFatSeries(data.bodyMetrics), range)),
     [data.bodyMetrics, range],
   )
   const volume = useMemo(
-    () => toChartData(filterRange(volumeSeries(data.workouts), range)),
-    [data.workouts, range],
+    () => convW(toChartData(filterRange(volumeSeries(data.workouts), range))),
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [data.workouts, range, unit],
   )
   const orm = useMemo(
     () =>
       selectedExId
-        ? toChartData(filterRange(oneRMSeries(data.workouts, selectedExId), range))
+        ? convW(toChartData(filterRange(oneRMSeries(data.workouts, selectedExId), range)))
         : [],
-    [data.workouts, selectedExId, range],
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [data.workouts, selectedExId, range, unit],
   )
 
   const nothingYet = data.bodyMetrics.length === 0 && data.workouts.length === 0
@@ -211,7 +221,7 @@ export function Progress() {
         <ChartCard
           title="Körpergewicht"
           subtitle="Verlauf deines Körpergewichts"
-          unit="kg"
+          unit={wLabel}
           hasData={weight.length > 0}
         >
           <ResponsiveContainer width="100%" height="100%">
@@ -225,7 +235,7 @@ export function Progress() {
               <CartesianGrid stroke={C.grid} strokeDasharray="3 3" vertical={false} />
               <XAxis dataKey="label" {...axisProps} interval="preserveStartEnd" minTickGap={24} />
               <YAxis {...axisProps} domain={['dataMin - 1', 'dataMax + 1']} width={44} />
-              <Tooltip content={<CustomTooltip unit="kg" />} />
+              <Tooltip content={<CustomTooltip unit={wLabel} />} />
               <Area
                 type="monotone"
                 dataKey="value"
@@ -240,8 +250,8 @@ export function Progress() {
 
         <ChartCard
           title="Trainingsvolumen"
-          subtitle="Gesamtgewicht (Wdh × kg) je Einheit"
-          unit="kg"
+          subtitle={`Gesamtgewicht (Wdh × ${wLabel}) je Einheit`}
+          unit={wLabel}
           hasData={volume.length > 0}
         >
           <ResponsiveContainer width="100%" height="100%">
@@ -255,7 +265,7 @@ export function Progress() {
                   v >= 1000 ? `${(v / 1000).toLocaleString('de-DE', { maximumFractionDigits: 1 })}k` : String(v)
                 }
               />
-              <Tooltip content={<CustomTooltip unit="kg" />} cursor={{ fill: 'rgba(124,92,255,0.08)' }} />
+              <Tooltip content={<CustomTooltip unit={wLabel} />} cursor={{ fill: 'rgba(124,92,255,0.08)' }} />
               <Bar dataKey="value" fill={C.brand2} radius={[4, 4, 0, 0]} maxBarSize={38} />
             </BarChart>
           </ResponsiveContainer>
@@ -264,7 +274,7 @@ export function Progress() {
         <ChartCard
           title="Kraft (geschätztes 1-RM)"
           subtitle={exerciseById(selectedExId)?.name ?? 'Übung wählen'}
-          unit="kg"
+          unit={wLabel}
           hasData={orm.length > 0}
         >
           <ResponsiveContainer width="100%" height="100%">
@@ -272,7 +282,7 @@ export function Progress() {
               <CartesianGrid stroke={C.grid} strokeDasharray="3 3" vertical={false} />
               <XAxis dataKey="label" {...axisProps} interval="preserveStartEnd" minTickGap={24} />
               <YAxis {...axisProps} domain={['dataMin - 2', 'dataMax + 2']} width={44} />
-              <Tooltip content={<CustomTooltip unit="kg" />} />
+              <Tooltip content={<CustomTooltip unit={wLabel} />} />
               <Line
                 type="monotone"
                 dataKey="value"

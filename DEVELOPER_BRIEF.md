@@ -140,13 +140,16 @@ Referenz: AP macht es übersichtlicher (plan-zentrierte Startseite, Übungswechs
 - Tag antippen → Detail-Sheet mit Einheiten (Übungen, Volumen) + **„Training wiederholen"**
   (`startWorkoutFrom` → vorbefüllter Editor). Wiederholen auch im Trainings-Verlauf.
 
-### Später
-- Ziel-Linien in Graphen (Schema-Bump) · Einheiten kg/lbs · Backend + echte Hub-Brücke.
-- Optional: Animationen (lizenzierte Quelle) statt/ergänzend zu Fotos.
-- Optional (AP): Warmup-Satz-Markierung, konfigurierbarer Timer-Countdown.
+### Briefing #011 — Einheiten kg/lbs  ✅ *umgesetzt & live*
+- Einstellungen-Seite (`/settings`, unter „Mehr") mit kg/lbs-Umschalter (`settings.unit`).
+- Umrechnungs-Helfer `src/lib/units.ts` (intern immer kg; Anzeige/Eingabe umgerechnet).
+- Durchgezogen: Trainings-Editor (Eingabe/Spalte/1RM), Verlauf & Kalender (Volumen/Summary),
+  Körper-Metriken (Karte/Trend/Verlauf/Formular), Dashboard, Fortschritts-Graphen.
 
 ### Später
-- Ziel-Linien in Graphen (Schema-Bump) · Einheiten kg/lbs · Backend + echte Hub-Brücke.
+- Ziel-Linien in Graphen (Schema-Bump) · Backend + echte Hub-Brücke.
+- Optional: Animationen (lizenzierte Quelle) statt/ergänzend zu Fotos.
+- Optional (AP): Warmup-Satz-Markierung, konfigurierbarer Timer-Countdown.
 
 ---
 

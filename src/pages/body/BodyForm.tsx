@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { MEASUREMENTS } from '@/data/measurements'
-import type { BodyMetric } from '@/lib/types'
+import { toKg, weightLabel } from '@/lib/units'
+import type { BodyMetric, Settings } from '@/lib/types'
 
 type NewMetric = Omit<BodyMetric, 'id' | 'createdAt'>
 
@@ -16,7 +17,13 @@ function num(v: string): number | undefined {
   return Number.isFinite(n) ? n : undefined
 }
 
-export function BodyForm({ onSubmit }: { onSubmit: (m: NewMetric) => void }) {
+export function BodyForm({
+  unit,
+  onSubmit,
+}: {
+  unit: Settings['unit']
+  onSubmit: (m: NewMetric) => void
+}) {
   const [date, setDate] = useState(today())
   const [weight, setWeight] = useState('')
   const [bodyFat, setBodyFat] = useState('')
@@ -24,7 +31,8 @@ export function BodyForm({ onSubmit }: { onSubmit: (m: NewMetric) => void }) {
   const [showMeasures, setShowMeasures] = useState(false)
   const [measures, setMeasures] = useState<Record<string, string>>({})
 
-  const weightKg = num(weight)
+  const weightInput = num(weight)
+  const weightKg = weightInput != null ? toKg(weightInput, unit) : undefined
   const bodyFatPct = num(bodyFat)
   const measurementsCm = Object.fromEntries(
     Object.entries(measures)
@@ -58,12 +66,12 @@ export function BodyForm({ onSubmit }: { onSubmit: (m: NewMetric) => void }) {
       <div className="grid grid-cols-2 gap-3">
         <label className="block">
           <span className="mb-1 block text-sm font-medium text-[var(--color-ink-muted)]">
-            Gewicht (kg)
+            Gewicht ({weightLabel(unit)})
           </span>
           <input
             inputMode="decimal"
             className="input"
-            placeholder="z. B. 82,5"
+            placeholder={unit === 'imperial' ? 'z. B. 182' : 'z. B. 82,5'}
             value={weight}
             onChange={(e) => setWeight(e.target.value)}
             autoFocus
