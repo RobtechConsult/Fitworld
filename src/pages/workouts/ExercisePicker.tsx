@@ -38,7 +38,6 @@ export function ExercisePicker({ onPick }: { onPick: (exerciseId: string) => voi
           placeholder="Übung suchen …"
           value={query}
           onChange={(e) => setQuery(e.target.value)}
-          autoFocus
         />
       </div>
 

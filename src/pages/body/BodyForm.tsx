@@ -1,13 +1,10 @@
 import { useState } from 'react'
 import { MEASUREMENTS } from '@/data/measurements'
 import { toKg, weightLabel } from '@/lib/units'
+import { todayIso } from '@/lib/date'
 import type { BodyMetric, Settings } from '@/lib/types'
 
 type NewMetric = Omit<BodyMetric, 'id' | 'createdAt'>
-
-function today(): string {
-  return new Date().toISOString().slice(0, 10)
-}
 
 /** Zahl aus Eingabe (Komma erlaubt) oder undefined. */
 function num(v: string): number | undefined {
@@ -24,7 +21,7 @@ export function BodyForm({
   unit: Settings['unit']
   onSubmit: (m: NewMetric) => void
 }) {
-  const [date, setDate] = useState(today())
+  const [date, setDate] = useState(todayIso())
   const [weight, setWeight] = useState('')
   const [bodyFat, setBodyFat] = useState('')
   const [note, setNote] = useState('')
