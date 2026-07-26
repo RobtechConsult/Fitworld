@@ -26,12 +26,11 @@ function startOfWeek(base: Date): Date {
 /** Wochenkalender: zeigt Trainingstage der Woche (grüne Punkte), heute hervorgehoben. */
 export function WeekStrip({
   workouts,
-  onSelectDate,
   onOpenCalendar,
 }: {
   workouts: Workout[]
-  onSelectDate?: (isoDate: string) => void
-  onOpenCalendar?: () => void
+  /** Öffnet den vollen Kalender, optional mit vorausgewähltem Tag. */
+  onOpenCalendar?: (isoDate?: string) => void
 }) {
   const [offset, setOffset] = useState(0) // Wochen relativ zu heute
 
@@ -63,7 +62,7 @@ export function WeekStrip({
           <IconChevron width={16} height={16} className="rotate-180" />
         </button>
         <button
-          onClick={onOpenCalendar}
+          onClick={() => onOpenCalendar?.()}
           disabled={!onOpenCalendar}
           className="flex items-center gap-1 rounded-lg px-2 py-1 text-sm font-semibold hover:bg-[var(--color-surface-2)] disabled:hover:bg-transparent"
         >
@@ -86,16 +85,12 @@ export function WeekStrip({
           const iso = isoLocal(d)
           const trained = trainedDates.has(iso)
           const isToday = iso === todayIso
-          const clickable = trained && onSelectDate
           return (
             <button
               key={iso}
-              disabled={!clickable}
-              onClick={() => clickable && onSelectDate(iso)}
-              className={[
-                'flex flex-1 flex-col items-center gap-1 rounded-xl py-1.5 transition-colors',
-                clickable ? 'hover:bg-[var(--color-surface-2)]' : '',
-              ].join(' ')}
+              onClick={() => onOpenCalendar?.(iso)}
+              disabled={!onOpenCalendar}
+              className="flex flex-1 flex-col items-center gap-1 rounded-xl py-1.5 transition-colors hover:bg-[var(--color-surface-2)]"
             >
               <span className="text-[10px] font-medium uppercase text-[var(--color-ink-faint)]">
                 {WEEKDAYS[i]}

@@ -159,8 +159,9 @@ export function Dashboard() {
       {/* Wochenkalender */}
       <WeekStrip
         workouts={data.workouts}
-        onSelectDate={() => navigate('/workouts')}
-        onOpenCalendar={() => navigate('/calendar')}
+        onOpenCalendar={(iso) =>
+          navigate('/calendar', iso ? { state: { date: iso } } : undefined)
+        }
       />
 
       {/* Plan-Hub */}
