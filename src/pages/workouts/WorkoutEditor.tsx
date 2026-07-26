@@ -7,6 +7,7 @@ import { ExerciseThumb } from '@/components/ExerciseThumb'
 import { RestTimer } from '@/components/RestTimer'
 import { epley1RM, exerciseStats, summarizeEntry } from '@/lib/metrics'
 import { fromKg, toKg, weightLabel } from '@/lib/units'
+import { todayIso } from '@/lib/date'
 import type { Workout, WorkoutEntry, WorkoutSet } from '@/lib/types'
 
 interface Draft {
@@ -14,10 +15,6 @@ interface Draft {
   name: string
   entries: WorkoutEntry[]
   notes: string
-}
-
-function today(): string {
-  return new Date().toISOString().slice(0, 10)
 }
 
 function emptySet(): WorkoutSet {
@@ -60,7 +57,7 @@ export function WorkoutEditor({
   const [draft, setDraft] = useState<Draft>(() => {
     const seededIds = [...new Set(initialExerciseIds ?? [])]
     return {
-      date: today(),
+      date: todayIso(),
       name: initialName ?? '',
       entries: seededIds.map(seedEntry),
       notes: '',
@@ -68,7 +65,7 @@ export function WorkoutEditor({
   })
   const [picking, setPicking] = useState(false)
   const [rawIdx, setRawIdx] = useState(0)
-  const [showMeta, setShowMeta] = useState(true)
+  const [showMeta, setShowMeta] = useState(false)
   const [showNotes, setShowNotes] = useState(false)
   const [restStart, setRestStart] = useState<number | null>(null)
 
