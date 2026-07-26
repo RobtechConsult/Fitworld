@@ -44,6 +44,7 @@ export function Plans() {
         <div className="flex flex-col gap-3">
           {data.plans.map((p) => {
             const exCount = p.days.reduce((n, d) => n + d.exercises.length, 0)
+            const isActive = p.id === data.settings.activePlanId
             return (
               <button
                 key={p.id}
@@ -51,7 +52,14 @@ export function Plans() {
                 className="card card-hover flex items-center gap-3 px-4 py-3.5 text-left"
               >
                 <span className="min-w-0 flex-1">
-                  <span className="block font-semibold">{p.name}</span>
+                  <span className="flex items-center gap-2">
+                    <span className="truncate font-semibold">{p.name}</span>
+                    {isActive && (
+                      <span className="shrink-0 rounded-full bg-[var(--color-brand)]/20 px-2 py-0.5 text-[10px] font-semibold text-[var(--color-brand-2)]">
+                        AKTIV
+                      </span>
+                    )}
+                  </span>
                   <span className="mt-0.5 block truncate text-sm text-[var(--color-ink-muted)]">
                     {plural(p.days.length, 'Tag', 'Tage')} · {plural(exCount, 'Übung', 'Übungen')}
                     {p.description ? ` · ${p.description}` : ''}

@@ -9,8 +9,9 @@ import type { Plan, PlanDay } from '@/lib/types'
 
 /** Detailansicht eines Plans: Tage & Übungen verwalten, Workout starten. */
 export function PlanDetail({ plan, onBack }: { plan: Plan; onBack: () => void }) {
-  const { exerciseById, updatePlan, deletePlan, startWorkoutFrom } = useStore()
+  const { data, exerciseById, updatePlan, deletePlan, startWorkoutFrom, setActivePlan } = useStore()
   const navigate = useNavigate()
+  const isActive = data.settings.activePlanId === plan.id
   const [newDayName, setNewDayName] = useState('')
   const [pickForDay, setPickForDay] = useState<string | null>(null)
 
@@ -98,9 +99,21 @@ export function PlanDetail({ plan, onBack }: { plan: Plan; onBack: () => void })
         </button>
       </div>
 
-      <h1 className="text-2xl font-bold tracking-tight">{plan.name}</h1>
+      <div className="flex items-center gap-2">
+        <h1 className="text-2xl font-bold tracking-tight">{plan.name}</h1>
+        {isActive && (
+          <span className="rounded-full bg-[var(--color-brand)]/20 px-2 py-0.5 text-[10px] font-semibold text-[var(--color-brand-2)]">
+            AKTIV
+          </span>
+        )}
+      </div>
       {plan.description && (
         <p className="mt-1 text-sm text-[var(--color-ink-muted)]">{plan.description}</p>
+      )}
+      {!isActive && (
+        <button className="btn-ghost mt-3 !py-2 !text-sm" onClick={() => setActivePlan(plan.id)}>
+          Als aktiven Plan setzen
+        </button>
       )}
 
       <div className="mt-5 flex flex-col gap-4">

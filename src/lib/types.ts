@@ -121,6 +121,8 @@ export interface BodyMetric {
 export interface Settings {
   unit: 'metric' | 'imperial'
   displayName?: string
+  /** aktuell auf der Startseite hervorgehobener Plan. */
+  activePlanId?: ID
 }
 
 /** Kompletter App-Zustand (persistiert in localStorage). */

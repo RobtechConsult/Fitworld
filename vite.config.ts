@@ -44,6 +44,18 @@ export default defineConfig({
       },
       workbox: {
         globPatterns: ['**/*.{js,css,html,svg,png,woff2}'],
+        // Übungsfotos (jpg) nicht vorab bündeln (zu groß), sondern beim
+        // ersten Ansehen cachen -> danach offline verfügbar.
+        runtimeCaching: [
+          {
+            urlPattern: ({ url }) => url.pathname.includes('/exercise-images/'),
+            handler: 'CacheFirst',
+            options: {
+              cacheName: 'forgefit-exercise-images',
+              expiration: { maxEntries: 120, maxAgeSeconds: 60 * 60 * 24 * 90 },
+            },
+          },
+        ],
       },
     }),
   ],

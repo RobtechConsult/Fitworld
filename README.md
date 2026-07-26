@@ -16,6 +16,7 @@ fließen später nahtlos in das Schwester-Cockpit **Status Hub**.
 - ✅ Körper-Metriken (Gewicht, KFA, Umfänge, Trend)
 - ✅ Fortschritts-Graphen (swipebar: Gewicht, Volumen, 1-RM, KFA)
 - ✅ Trainingspläne (Splits mit Tagen, Workout aus Plan-Tag starten)
+- ✅ Plan-zentrierte Startseite, Übungswechsel im Training, Übungsbilder (Free Exercise DB)
 - ✅ Hub-Brücke: gemeinsames JSON-Format + Export/Import
 
 ## Tech-Stack
