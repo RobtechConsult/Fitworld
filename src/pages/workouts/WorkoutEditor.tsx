@@ -1,4 +1,4 @@
-import { useRef, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { useStore } from '@/store/StoreContext'
 import { Sheet } from '@/components/Sheet'
 import { ExercisePicker } from './ExercisePicker'
@@ -187,6 +187,13 @@ export function WorkoutEditor({
     touchX.current = null
   }
 
+  // Richtung des Übungswechsels für die Slide-Animation (weicher, wie bei Alpha).
+  const prevActiveRef = useRef(active)
+  const slideDir = active > prevActiveRef.current ? 'next' : active < prevActiveRef.current ? 'prev' : 'next'
+  useEffect(() => {
+    prevActiveRef.current = active
+  }, [active])
+
   const entry = draft.entries[active]
   const ex = entry ? exerciseById(entry.exerciseId) : undefined
   const stats = entry ? exerciseStats(data.workouts, entry.exerciseId) : undefined
@@ -313,7 +320,12 @@ export function WorkoutEditor({
 
           {/* Aktive Übung */}
           {entry && (
-            <div className="card px-4 py-4" onTouchStart={onTouchStart} onTouchEnd={onTouchEnd}>
+            <div
+              key={active}
+              className={`card px-4 py-4 ${slideDir === 'next' ? 'animate-slide-next' : 'animate-slide-prev'}`}
+              onTouchStart={onTouchStart}
+              onTouchEnd={onTouchEnd}
+            >
               <div className="mb-3 flex items-start justify-between gap-2">
                 <div className="flex min-w-0 items-start gap-3">
                   <ExerciseThumb exerciseId={entry.exerciseId} size={52} />
