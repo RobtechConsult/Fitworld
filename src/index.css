@@ -124,6 +124,24 @@
   padding-top: env(safe-area-inset-top);
 }
 
+/* Bottom-Sheet: unten sicherer Abstand, damit der Bestätigen-Button
+   nie hinter dem iOS-Home-Indikator verschwindet. */
+.sheet-panel {
+  padding-bottom: calc(env(safe-area-inset-bottom) + 1.5rem);
+}
+
+/* Untere Navigation sanft ausblenden, wenn ein Sheet offen ist. */
+.app-bottom-nav {
+  transition:
+    transform 0.28s cubic-bezier(0.22, 1, 0.36, 1),
+    opacity 0.2s ease;
+}
+body.sheet-open .app-bottom-nav {
+  transform: translateY(100%);
+  opacity: 0;
+  pointer-events: none;
+}
+
 /* ------------------------------------------------------------------ *
  * Sanfte Animationen (weiches Gefühl statt harter Wechsel).
  * ------------------------------------------------------------------ */

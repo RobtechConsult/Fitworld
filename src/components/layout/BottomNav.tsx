@@ -19,7 +19,7 @@ const ITEMS: NavItem[] = [
 
 export function BottomNav() {
   return (
-    <nav className="pb-safe fixed inset-x-0 bottom-0 z-40 border-t border-[var(--color-border)] bg-[var(--color-bg)]/85 backdrop-blur-lg">
+    <nav className="app-bottom-nav pb-safe fixed inset-x-0 bottom-0 z-40 border-t border-[var(--color-border)] bg-[var(--color-bg)]/85 backdrop-blur-lg">
       <div className="mx-auto flex max-w-2xl items-stretch justify-around px-2">
         {ITEMS.map(({ to, label, Icon, end }) => (
           <NavLink
