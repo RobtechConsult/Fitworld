@@ -71,13 +71,16 @@ export function WorkoutEditor({
   const [restStart, setRestStart] = useState<number | null>(null)
   const [historyFor, setHistoryFor] = useState<string | null>(null)
 
-  // Ersten Satz einer Übung mit einem Vorschlag füllen.
+  // Vorschlag auf ALLE Sätze der Übung übernehmen (Gewicht + Wdh).
   const applySuggestion = (ei: number, s: { weightKg: number; reps: number }) => {
     patchEntries(
       draft.entries.map((entry, i) => {
         if (i !== ei) return entry
-        const rest = entry.sets.slice(1)
-        return { ...entry, sets: [{ reps: s.reps, weightKg: s.weightKg, completed: false }, ...rest] }
+        const sets =
+          entry.sets.length > 0
+            ? entry.sets.map((set) => ({ ...set, reps: s.reps, weightKg: s.weightKg }))
+            : [{ reps: s.reps, weightKg: s.weightKg, completed: false }]
+        return { ...entry, sets }
       }),
     )
   }
