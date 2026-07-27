@@ -7,7 +7,8 @@ import { ExerciseThumb } from '@/components/ExerciseThumb'
 import { RestTimer } from '@/components/RestTimer'
 import { ExerciseHistory } from '@/components/ExerciseHistory'
 import { epley1RM, exerciseStats, progressionSuggestion, summarizeEntry } from '@/lib/metrics'
-import { fromKg, toKg, weightLabel } from '@/lib/units'
+import { fmtWeightValue, fromKg, weightLabel } from '@/lib/units'
+import { WeightPicker } from '@/components/WeightPicker'
 import { todayIso } from '@/lib/date'
 import type { Workout, WorkoutEntry, WorkoutSet } from '@/lib/types'
 
@@ -70,6 +71,7 @@ export function WorkoutEditor({
   const [showNotes, setShowNotes] = useState(false)
   const [restStart, setRestStart] = useState<number | null>(null)
   const [historyFor, setHistoryFor] = useState<string | null>(null)
+  const [weightPickerSi, setWeightPickerSi] = useState<number | null>(null)
 
   // Vorschlag auf ALLE Sätze der Übung übernehmen (Gewicht + Wdh).
   const applySuggestion = (ei: number, s: { weightKg: number; reps: number }) => {
@@ -402,18 +404,12 @@ export function WorkoutEditor({
                       onChange={(e) => updateSet(active, si, { reps: Number(e.target.value) || 0 })}
                       onFocus={(e) => e.target.select()}
                     />
-                    <input
-                      type="number"
-                      inputMode="decimal"
-                      min={0}
-                      step={0.5}
-                      className="input !px-2 !py-1.5 text-center"
-                      value={s.weightKg ? fromKg(s.weightKg, unit) : ''}
-                      onChange={(e) =>
-                        updateSet(active, si, { weightKg: toKg(Number(e.target.value) || 0, unit) })
-                      }
-                      onFocus={(e) => e.target.select()}
-                    />
+                    <button
+                      onClick={() => setWeightPickerSi(si)}
+                      className="input !px-2 !py-1.5 text-center font-medium"
+                    >
+                      {s.weightKg ? fmtWeightValue(s.weightKg, unit) : '–'}
+                    </button>
                     <span className="text-center text-xs font-medium text-[var(--color-ink-muted)]">
                       {est != null ? est : '–'}
                     </span>
@@ -523,6 +519,19 @@ export function WorkoutEditor({
         title={historyFor ? (exerciseById(historyFor)?.name ?? 'Verlauf') : ''}
       >
         {historyFor && <ExerciseHistory exerciseId={historyFor} />}
+      </Sheet>
+
+      <Sheet open={weightPickerSi !== null} onClose={() => setWeightPickerSi(null)} title="Gewicht">
+        {weightPickerSi !== null && entry && (
+          <WeightPicker
+            exerciseId={entry.exerciseId}
+            initialKg={entry.sets[weightPickerSi]?.weightKg ?? 0}
+            onConfirm={(kg) => {
+              updateSet(active, weightPickerSi, { weightKg: kg })
+              setWeightPickerSi(null)
+            }}
+          />
+        )}
       </Sheet>
 
       <RestTimer startedAt={restStart} onDismiss={() => setRestStart(null)} />

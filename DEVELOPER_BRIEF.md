@@ -159,8 +159,16 @@ Referenz: AP macht es übersichtlicher (plan-zentrierte Startseite, Übungswechs
   Seite `/exercise/:id` (aus der Übungs-DB, „Verlauf & Statistik").
 - `metrics.ts`: `exerciseSessionHistory`, `progressionSuggestion`.
 
+### Briefing #014 — Gewichts-Picker mit Scheiben-Visualisierung  ✅ *umgesetzt & live*
+- Tippen aufs Gewichtsfeld öffnet `WeightPicker` (Sheet): großer Wert, −/+ Stepper (Schrittweite),
+  manuelle Eingabe, **Scheiben-Grafik** (farbcodiert, je Seite) + „Übernehmen".
+- `src/lib/plates.ts`: Scheiben-Zerlegung (kg/lbs-Sets), Farben, Default-Stange/Schritt.
+- Pro-Übung-Optionen (Schritt, Stange, Scheiben an/aus): `settings.exerciseConfig` + `setExerciseConfig` (additiv).
+- Respektiert kg/lbs.
+
 ### Später
 - Backend + echte Hub-Brücke.
+- Optional: pro-Übung Min/Max-Bereich, „auf alle Langhantel-Übungen anwenden"-Scope (AP).
 - Optional: Animationen (lizenzierte Quelle) statt/ergänzend zu Fotos.
 - Optional (AP): Warmup-Satz-Markierung, konfigurierbarer Timer-Countdown.
 

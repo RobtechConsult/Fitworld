@@ -43,6 +43,8 @@ interface StoreValue {
   setActivePlan: (id: string) => void
   /** Einstellungen aktualisieren (z. B. Einheit kg/lbs). */
   updateSettings: (patch: Partial<Settings>) => void
+  /** Gewichts-Picker-Konfiguration einer Übung setzen. */
+  setExerciseConfig: (exerciseId: string, patch: Partial<import('@/lib/types').ExerciseConfig>) => void
   /** Transiente Vorgabe für den Workout-Editor (z. B. aus einem Plan-Tag). */
   pendingStart: PendingStart | null
   startWorkoutFrom: (exerciseIds: string[], name?: string) => void
@@ -153,6 +155,19 @@ export function StoreProvider({ children }: { children: ReactNode }) {
     setData((prev) => ({ ...prev, settings: { ...prev.settings, ...patch } }))
   }, [])
 
+  const setExerciseConfig = useCallback<StoreValue['setExerciseConfig']>((exerciseId, patch) => {
+    setData((prev) => {
+      const current = prev.settings.exerciseConfig ?? {}
+      return {
+        ...prev,
+        settings: {
+          ...prev.settings,
+          exerciseConfig: { ...current, [exerciseId]: { ...current[exerciseId], ...patch } },
+        },
+      }
+    })
+  }, [])
+
   const [pendingStart, setPendingStart] = useState<PendingStart | null>(null)
   const startWorkoutFrom = useCallback((exerciseIds: string[], name?: string) => {
     setPendingStart({ exerciseIds, name })
@@ -193,6 +208,7 @@ export function StoreProvider({ children }: { children: ReactNode }) {
       deletePlan,
       setActivePlan,
       updateSettings,
+      setExerciseConfig,
       pendingStart,
       startWorkoutFrom,
       clearPendingStart,
@@ -215,6 +231,7 @@ export function StoreProvider({ children }: { children: ReactNode }) {
       deletePlan,
       setActivePlan,
       updateSettings,
+      setExerciseConfig,
       pendingStart,
       startWorkoutFrom,
       clearPendingStart,
