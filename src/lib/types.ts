@@ -117,6 +117,16 @@ export interface BodyMetric {
   createdAt: string
 }
 
+/** Pro-Übung-Einstellungen für den Gewichts-Picker (Werte in kg gespeichert). */
+export interface ExerciseConfig {
+  /** Stangengewicht in kg (z. B. 20). */
+  barKg?: number
+  /** Schrittweite in kg (z. B. 2.5). */
+  stepKg?: number
+  /** Scheiben-Visualisierung anzeigen (Langhantel-Übungen). */
+  usePlates?: boolean
+}
+
 /** Nutzereinstellungen. */
 export interface Settings {
   unit: 'metric' | 'imperial'
@@ -127,6 +137,8 @@ export interface Settings {
   goalWeightKg?: number
   /** Ziel-Körperfettanteil in %. */
   goalBodyFatPct?: number
+  /** Gewichts-Picker-Konfiguration je Übung. */
+  exerciseConfig?: Record<ID, ExerciseConfig>
 }
 
 /** Kompletter App-Zustand (persistiert in localStorage). */
