@@ -31,7 +31,7 @@ export function RestTimer({
     <div className="pointer-events-none fixed inset-x-0 bottom-24 z-40 flex justify-center px-4">
       <button
         onClick={onDismiss}
-        className="pointer-events-auto inline-flex items-center gap-2 rounded-full bg-[var(--color-positive)] px-4 py-2.5 text-sm font-bold text-black shadow-lg shadow-black/30"
+        className="animate-rise pointer-events-auto inline-flex items-center gap-2 rounded-full bg-[var(--color-positive)] px-4 py-2.5 text-sm font-bold text-black shadow-lg shadow-black/30"
       >
         <IconClock width={18} height={18} />
         Pause {mm}:{ss}
