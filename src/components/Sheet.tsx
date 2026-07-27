@@ -18,9 +18,13 @@ export function Sheet({
     const onKey = (e: KeyboardEvent) => e.key === 'Escape' && onClose()
     document.addEventListener('keydown', onKey)
     document.body.style.overflow = 'hidden'
+    // Untere Navigation ausblenden, solange das Sheet offen ist,
+    // damit der Bestätigen-Button unten nicht verdeckt wird.
+    document.body.classList.add('sheet-open')
     return () => {
       document.removeEventListener('keydown', onKey)
       document.body.style.overflow = ''
+      document.body.classList.remove('sheet-open')
     }
   }, [open, onClose])
 
@@ -33,7 +37,7 @@ export function Sheet({
         onClick={onClose}
         aria-hidden
       />
-      <div className="animate-sheet relative z-10 max-h-[88vh] w-full max-w-lg overflow-y-auto rounded-t-3xl border border-[var(--color-border)] bg-[var(--color-surface)] p-5 shadow-2xl sm:rounded-3xl">
+      <div className="animate-sheet sheet-panel relative z-10 max-h-[88vh] w-full max-w-lg overflow-y-auto rounded-t-3xl border border-[var(--color-border)] bg-[var(--color-surface)] px-5 pt-5 shadow-2xl sm:rounded-3xl">
         <div className="mb-4 flex items-center justify-between">
           <h2 className="text-lg font-semibold">{title}</h2>
           <button
