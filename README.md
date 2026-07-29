@@ -1,6 +1,6 @@
 # ForgeFit *(Arbeitstitel — Repo: Fitworld)*
 
-Eine eigene, schöne **Trainings-App** (im Stil von AlphaProgression): Training planen & tracken,
+Eine eigene, schöne **Trainings-App**: Training planen & tracken,
 Körper-Metriken erfassen, Fortschritt sehen — **local-first**, mit voller Datenhoheit. Die Daten
 fließen später nahtlos in das Schwester-Cockpit **Status Hub**.
 
