@@ -102,11 +102,12 @@ getestet (E2E) · Screenshots. ✔️
 
 ---
 
-## AlphaProgression-inspirierte Verbesserungen (CEO-Feedback)
+## UX-Verbesserungen (CEO-Feedback)
 
-Referenz: AP macht es übersichtlicher (plan-zentrierte Startseite, Übungswechsel im Training,
-Übungsbilder). CEO-Entscheidung: Bilder via **Free Exercise DB** (Public Domain); Umsetzung
-„der Reihe nach" mit Screenshot-Freigabe je Schritt.
+Ziel: übersichtlichere Bedienung (plan-zentrierte Startseite, Übungswechsel im Training,
+Übungsbilder). CEO-Entscheidung: Bilder-Quelle wird auf sauber lizenziertes Material
+umgestellt (Lizenzkette in Prüfung — siehe `docs/legal/`); Umsetzung „der Reihe nach"
+mit Screenshot-Freigabe je Schritt.
 
 ### Briefing #006 — Übungswechsel im Training  ✅ *umgesetzt*
 - `WorkoutEditor` komplett umgebaut: **eine Übung pro Screen** statt langer Liste.
@@ -116,18 +117,19 @@ Referenz: AP macht es übersichtlicher (plan-zentrierte Startseite, Übungswechs
 - Vorbefüllung aus Plan-Tag & Progression-Hinweise bleiben erhalten.
 
 ### Briefing #007 — Plan-zentrierte Startseite  ⏳ *als Nächstes*
-- Pläne als **eigener Tab** (statt unter „Mehr"); aktiver Plan mit **Tagen als Zeilen** (AP-Stil),
-  je Tag „Tag starten". Später: Wochen-Kalender/Häkchen wie AP.
+- Pläne als **eigener Tab** (statt unter „Mehr"); aktiver Plan mit **Tagen als Zeilen**,
+  je Tag „Tag starten". Später: Wochen-Kalender/Häkchen.
 
 ### Briefing #008 — Übungsbilder (Free Exercise DB)  ✅ *umgesetzt*
-- 28 Übungen auf Free-Exercise-DB gemappt; je Übung Start/End-Foto **lokal gebündelt**
-  (`public/exercise-images/`, 55 Bilder, ~3,5 MB) — Public Domain, Lizenzhinweis in `CREDITS.md`.
+- 28 Übungen auf eine externe Bild-Quelle gemappt; je Übung Start/End-Bild **lokal gebündelt**
+  (`public/exercise-images/`, 55 Bilder, ~3,5 MB). ⚠️ Lizenzkette in Prüfung, Quelle wird
+  ersetzt — siehe `docs/legal/rechtspruefung-01.md` (R-01).
 - Mapping in `src/data/exerciseImages.ts`; `ExerciseThumb`-Komponente mit Fallback.
 - Bilder in: Übungsliste, Übungs-Detail (Start/Ende groß), Übungs-Picker, Trainings-Screen,
-  Startseiten-Plan-Zeilen (AP-Look).
+  Startseiten-Plan-Zeilen.
 - Service-Worker **Runtime-Cache** (CacheFirst) für `/exercise-images/` → offline nach erstem Ansehen.
 
-### Briefing #009 — AP-Politur (mehrere Iterationen)  ✅ *umgesetzt & live*
+### Briefing #009 — UX-Politur (mehrere Iterationen)  ✅ *umgesetzt & live*
 - **Bilder-Streifen** im Training statt Text-Pills (aktive Übung hervorgehoben).
 - **Wochenkalender** auf der Startseite (`WeekStrip`): Trainingstage als grüne Punkte, heute markiert.
 - **Pausen-Timer** (`RestTimer`): startet beim Abschließen eines Satzes, zählt hoch, schwebender Pill.

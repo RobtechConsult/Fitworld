@@ -187,7 +187,7 @@ export function WorkoutEditor({
     touchX.current = null
   }
 
-  // Richtung des Übungswechsels für die Slide-Animation (weicher, wie bei Alpha).
+  // Richtung des Übungswechsels für die Slide-Animation (weiche Übergänge).
   const prevActiveRef = useRef(active)
   const slideDir = active > prevActiveRef.current ? 'next' : active < prevActiveRef.current ? 'prev' : 'next'
   useEffect(() => {

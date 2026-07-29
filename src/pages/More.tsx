@@ -28,7 +28,16 @@ export function More() {
         ))}
       </div>
 
-      <p className="mt-6 text-center text-xs text-[var(--color-ink-faint)]">
+      <div className="mt-6 flex items-center justify-center gap-4 text-xs text-[var(--color-ink-faint)]">
+        <Link to="/impressum" className="hover:text-[var(--color-ink-muted)]">
+          Impressum
+        </Link>
+        <span aria-hidden>·</span>
+        <Link to="/datenschutz" className="hover:text-[var(--color-ink-muted)]">
+          Datenschutz
+        </Link>
+      </div>
+      <p className="mt-2 text-center text-xs text-[var(--color-ink-faint)]">
         ForgeFit · Phase 1 · local-first
       </p>
     </div>

@@ -13,7 +13,7 @@ nahtlos in das **Status-Hub-Cockpit** übergehen.
 
 ## 2. Warum es die App gibt
 
-- Unabhängigkeit von Drittanbieter-Apps (AlphaProgression, YAZIO …) → **volle Datenhoheit**.
+- Unabhängigkeit von Drittanbieter-Fitness-Apps → **volle Datenhoheit**.
 - Schwester-App **Status Hub** ist das persönliche Lebens-Cockpit (Training, Beziehung,
   Finanzen …), gebaut als PWA (React + TS + Vite + Tailwind), dark & modern, local-first.
 - ForgeFit liefert die Trainings- & Körperdaten, die später **automatisch** in den Hub fließen.

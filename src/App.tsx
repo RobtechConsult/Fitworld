@@ -12,6 +12,8 @@ import { Calendar } from '@/pages/Calendar'
 import { Settings } from '@/pages/Settings'
 import { ExerciseDetailPage } from '@/pages/ExerciseDetailPage'
 import { DataPage } from '@/pages/DataPage'
+import { Impressum } from '@/pages/Impressum'
+import { Datenschutz } from '@/pages/Datenschutz'
 
 // Recharts ist groß -> Fortschritts-Graphen erst beim Öffnen laden (Code-Splitting).
 const Progress = lazy(() => import('@/pages/Progress').then((m) => ({ default: m.Progress })))
@@ -49,6 +51,8 @@ export default function App() {
             <Route path="settings" element={<Settings />} />
             <Route path="exercise/:id" element={<ExerciseDetailPage />} />
             <Route path="data" element={<DataPage />} />
+            <Route path="impressum" element={<Impressum />} />
+            <Route path="datenschutz" element={<Datenschutz />} />
             <Route path="*" element={<Navigate to="/" replace />} />
           </Route>
         </Routes>
