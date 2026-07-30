@@ -1,10 +1,18 @@
 # Übungsbilder — Quelle & Lizenz
 
-Die Bilder in diesem Ordner stammen aus der **Free Exercise DB**:
+**Status: in Umstellung.**
 
-- Projekt: https://github.com/yuhonas/free-exercise-db
-- Lizenz: **The Unlicense** (Public Domain / gemeinfrei)
+Die früheren Übungsfotos wurden **entfernt** (Risiko R-01, siehe
+`docs/legal/rechtspruefung-01.md`): Es handelte sich um Fotografien realer,
+identifizierbarer Personen, deren Rechtekette (Fotografen-Urheberrecht +
+Recht am eigenen Bild) **nicht belegt** war. Die zuvor behauptete
+„Unlicense"-Angabe über die Free Exercise DB war nicht gesichert.
 
-Die Bilder wurden den ForgeFit-Seed-Übungen zugeordnet und lokal im Repo abgelegt,
-damit die App offline funktioniert. Dateibenennung: `<übungs-key>-<index>.jpg`
-(Index 0 = Startposition, 1 = Endposition), gemappt in `src/data/exerciseImages.ts`.
+## Neue Bildquelle (geplant)
+
+Personenfreie, anatomische **Muskelfiguren**, **frisch generiert** (nicht aus
+den alten Fotos abgeleitet). Details, Style-Prompt und Namensschema:
+`docs/exercise-figures-spec.md`.
+
+Für jedes eingesetzte Bild wird hier die tatsächliche Quelle, das verwendete
+Werkzeug und die Nutzungslizenz dokumentiert, bevor es veröffentlicht wird.
