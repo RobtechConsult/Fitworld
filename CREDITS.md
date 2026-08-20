@@ -138,3 +138,13 @@
 - **Prompt pattern:** `Minimal matte medical illustration, NOT a glossy 3D render. A full-body abstract anatomical muscle mannequin, non-human and made only of visible red musculature with a smooth featureless head, performing {cardio keyframe} on a compact neutral unbranded {machine}. Render with subdued matte anatomical reds, restrained diffuse shading, and an elegant printed anatomy-plate feel. No muscle highlight, violet color, glow, aura, rim light, bloom, shiny or plastic material rendering. Scene/backdrop: fully transparent background; no floor or cast shadow. Light front-side three-quarter view, full figure centered with compact consistent zoom. Constraints: no skin, face, hair, real person, text, watermark, logo, or branding. 1024 × 1024 PNG with alpha transparency.`
 - **Prompt substitutions:** `calm walking keyframe / treadmill`; `seated cardio keyframe with handle forward, taut cable and flexed knees / indoor rower`.
 - **Transparency processing:** Both final outputs were validated as 1024 × 1024 RGBA PNGs with transparent corners.
+
+## ForgeFit exercise figures — intake 2026-08-20 (incline dumbbell press)
+
+- **Assets:** `public/exercise-images/incline-db-press-0.png`, `public/exercise-images/incline-db-press-1.png`
+- **Tool:** OpenAI built-in image generation (`gpt-image-2`), with native PNG alpha transparency and local 1024 × 1024 downscaling.
+- **Date:** 2026-08-20
+- **Source inputs:** None. Both assets were generated fresh; no prior exercise photos or third-party image inputs were used.
+- **Prompt pattern:** `Clean minimal medical illustration of a stylized full-body abstract anatomical muscle mannequin, a non-human educational model made only of visible red musculature with a smooth featureless head, demonstrating {position} of an inclined dumbbell press against a compact neutral unbranded 45-degree exercise backrest. Soft diffuse lighting, muted anatomical red tones. Highlight the upper pectoral chest muscles subtly brighter with a soft violet glow #7c5cff. Light side-front three-quarter view, full figure centered with compact consistent zoom. Scene/backdrop: fully transparent background; no floor, no shadow. Constraints: no skin, face, hair, real person, text, watermark, logo, branding, or equipment branding. 1024 × 1024 PNG with alpha transparency.`
+- **Prompt substitutions:** `starting / elbows flexed and dumbbells at upper-chest level`; `contracted ending / dumbbells above the upper chest, forearms vertical, elbows nearly straight`.
+- **Transparency processing:** Both final outputs were validated as 1024 × 1024 RGBA PNGs with transparent corners.
