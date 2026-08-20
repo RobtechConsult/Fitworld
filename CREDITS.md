@@ -158,3 +158,13 @@
 - **Prompt pattern:** `Minimal clinical exercise diagram showing a full-body abstract anatomical muscle mannequin with a smooth featureless head and visible red musculature only, seated upright in a compact neutral unbranded angled lower-body resistance machine. Depict {position}. Soft diffuse lighting, muted anatomical red tones. Highlight the quadriceps muscles subtly brighter with a delicate violet #7c5cff glow. Light side-front three-quarter view, full figure centered with compact consistent zoom. Scene/backdrop: fully transparent background; no floor, no shadow. Constraints: educational non-human anatomy model only; no skin, face, hair, real person, text, watermark, logo, or branding. 1024 × 1024 PNG with alpha transparency.`
 - **Prompt substitutions:** `starting / feet on raised footplate with knees flexed comfortably`; `contracted ending / feet remain on footplate while lower limbs extend forward with a slight safe knee bend`.
 - **Transparency processing:** Both final outputs were validated as 1024 × 1024 RGBA PNGs with transparent corners.
+
+## ForgeFit exercise figures — intake 2026-08-20 (deadlift)
+
+- **Assets:** `public/exercise-images/deadlift-0.png`, `public/exercise-images/deadlift-1.png`
+- **Tool:** OpenAI built-in image generation (`gpt-image-2`), with native PNG alpha transparency and local 1024 × 1024 downscaling.
+- **Date:** 2026-08-20
+- **Source inputs:** None. Both assets were generated fresh; no prior exercise photos or third-party image inputs were used.
+- **Prompt pattern:** `Minimal clinical exercise diagram showing a full-body abstract anatomical muscle mannequin with a smooth featureless head and visible red musculature only, demonstrating {position} of a neutral straight-bar lifting exercise with a simple unbranded weighted straight bar. Soft diffuse lighting, muted anatomical red tones. Highlight the posterior chain muscles subtly brighter with a delicate violet #7c5cff glow. Light side-front three-quarter view, full figure centered with compact consistent zoom. Scene/backdrop: fully transparent background; no floor, no shadow. Constraints: educational non-human anatomy model only; no skin, face, hair, real person, text, watermark, logo, or branding. 1024 × 1024 PNG with alpha transparency.`
+- **Prompt substitutions:** `starting / upright posture with bar in front of the thighs`; `ending / athletic squat-hinge stance, long neutral spine, and bar near the lower shins`.
+- **Transparency processing:** Both final outputs were validated as 1024 × 1024 RGBA PNGs with transparent corners.
