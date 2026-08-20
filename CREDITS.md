@@ -29,6 +29,16 @@
 - **Prompt substitutions:** `back squat / lowered, contracted position with knees bent and hips lowered; plain unbranded barbell across upper back / quadriceps and glutes`; `flat barbell bench press / completed top position with elbows nearly straight and bar vertically above chest; plain unbranded bench and barbell / pectoral chest muscles`.
 - **Transparency processing:** Both final outputs were validated as 1024 × 1024 RGBA PNGs with transparent corners.
 
+## ForgeFit exercise figures — intake 2026-08-20 (pull-up)
+
+- **Assets:** `public/exercise-images/pullup-0.png`, `public/exercise-images/pullup-1.png`
+- **Tool:** OpenAI built-in image generation (`gpt-image-2`), with native PNG alpha transparency and local 1024 × 1024 downscaling.
+- **Date:** 2026-08-20
+- **Source inputs:** None. Both assets were generated fresh; no prior exercise photos or third-party image inputs were used.
+- **Prompt pattern:** `Clean minimal medical illustration of a stylized full-body anatomical muscle mannequin, an abstract non-human educational model made only of visible red musculature with a featureless head, executing {position} of a pull-up on a simple neutral unbranded horizontal bar. Soft diffuse lighting, muted anatomical red tones. Highlight only the latissimus dorsi muscles subtly brighter with a soft violet #7c5cff glow. Light front-side three-quarter view, full figure centered with compact consistent zoom. Scene/backdrop: fully transparent background; no floor, no shadow. Constraints: no skin, face, hair, real person, text, watermark, logo, branding, or equipment branding. 1024 × 1024 PNG with alpha transparency.`
+- **Prompt substitutions:** `starting / arms fully extended`; `contracted ending / elbows bent and upper torso raised toward the bar`.
+- **Transparency processing:** Both final outputs were validated as 1024 × 1024 RGBA PNGs with transparent corners.
+
 ## ForgeFit exercise figures — intake 2026-08-20 (shoulders)
 
 - **Assets:** `public/exercise-images/overhead-press-0.png`, `public/exercise-images/overhead-press-1.png`, `public/exercise-images/lateral-raise-0.png`, `public/exercise-images/lateral-raise-1.png`
