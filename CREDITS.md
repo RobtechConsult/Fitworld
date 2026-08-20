@@ -128,3 +128,13 @@
 - **Prompt pattern:** `Minimal clinical exercise diagram showing a full-body abstract anatomical muscle mannequin with a smooth featureless head and visible red musculature only, demonstrating {position} of a horizontal upper-body support drill. Soft diffuse lighting, muted anatomical red tones. Highlight the pectoral and triceps muscle groups subtly brighter with a soft violet #7c5cff glow. Light side-front three-quarter view, full figure centered with compact consistent zoom. Scene/backdrop: fully transparent background; no floor, no shadow. Constraints: educational non-human anatomy model only; no skin, face, hair, real person, text, watermark, logo, or branding. 1024 × 1024 PNG with alpha transparency.`
 - **Prompt substitutions:** `starting / straight arms, hands below shoulders, body as a rigid horizontal line`; `contracted ending / elbows approximately at a right angle with torso lower while body stays straight`.
 - **Transparency processing:** Both final outputs were validated as 1024 × 1024 RGBA PNGs with transparent corners.
+
+## ForgeFit exercise figures — cardio style correction 2026-08-20
+
+- **Replaced assets:** `public/exercise-images/treadmill-0.png`, `public/exercise-images/rowing-machine-0.png`
+- **Tool:** OpenAI built-in image generation (`gpt-image-2`), with native PNG alpha transparency and local 1024 × 1024 downscaling.
+- **Date:** 2026-08-20
+- **Source inputs:** None. Both replacements were generated fresh; no prior exercise images, photos, or third-party image inputs were used.
+- **Prompt pattern:** `Minimal matte medical illustration, NOT a glossy 3D render. A full-body abstract anatomical muscle mannequin, non-human and made only of visible red musculature with a smooth featureless head, performing {cardio keyframe} on a compact neutral unbranded {machine}. Render with subdued matte anatomical reds, restrained diffuse shading, and an elegant printed anatomy-plate feel. No muscle highlight, violet color, glow, aura, rim light, bloom, shiny or plastic material rendering. Scene/backdrop: fully transparent background; no floor or cast shadow. Light front-side three-quarter view, full figure centered with compact consistent zoom. Constraints: no skin, face, hair, real person, text, watermark, logo, or branding. 1024 × 1024 PNG with alpha transparency.`
+- **Prompt substitutions:** `calm walking keyframe / treadmill`; `seated cardio keyframe with handle forward, taut cable and flexed knees / indoor rower`.
+- **Transparency processing:** Both final outputs were validated as 1024 × 1024 RGBA PNGs with transparent corners.
