@@ -10,5 +10,6 @@ als transparente PNGs. Der trainierte Zielmuskel ist violett hervorgehoben.
 - **Stil-Spec & Namensschema:** `docs/exercise-figures-spec.md`.
 
 Die früheren Übungsfotos (reale Personen, ungeklärte Rechtekette) wurden
-entfernt. Noch offen (folgt von Vinci): Brust-Varianten, Beine, Core sowie ein
-Restyle der beiden Cardio-Figuren im gedämpften Stil.
+entfernt. Aktuell mit Figur versehen: 18 Übungen (inkl. der neu gestylten
+Cardio-Figuren). Noch offen (folgt von Vinci): die übrigen Katalog-Übungen —
+u. a. weitere Schulter-/Arm-/Bein-/Core-Übungen und die neuen Gym-Ergänzungen.
