@@ -68,3 +68,13 @@
 - **Prompt pattern:** `Clean minimal medical illustration of a stylized full-body anatomical muscle mannequin, an abstract non-human educational model made only of visible musculature with a featureless head, executing {position} of a seated cable row on a compact neutral unbranded cable rowing station. Soft diffuse lighting, muted anatomical red tones. Highlight the latissimus dorsi and middle back muscles subtly brighter with a soft violet #7c5cff glow. Light front-side three-quarter view, full figure centered with compact consistent zoom. Scene/backdrop: fully transparent background; no floor, no shadow. Constraints: no skin, face, hair, real person, text, watermark, logo, branding, or equipment branding. 1024 × 1024 PNG with alpha transparency.`
 - **Prompt substitutions:** `starting / arms fully extended holding a straight handle`; `contracted ending / elbows bent behind the torso and handle drawn toward the lower ribs`.
 - **Transparency processing:** Both final outputs were validated as 1024 × 1024 RGBA PNGs with transparent corners.
+
+## ForgeFit exercise figures — intake 2026-08-20 (face pull)
+
+- **Assets:** `public/exercise-images/face-pull-0.png`, `public/exercise-images/face-pull-1.png`
+- **Tool:** OpenAI built-in image generation (`gpt-image-2`), with native PNG alpha transparency and local 1024 × 1024 downscaling.
+- **Date:** 2026-08-20
+- **Source inputs:** None. Both assets were generated fresh; no prior exercise photos or third-party image inputs were used.
+- **Prompt pattern:** `Clean minimal medical illustration of a stylized full-body anatomical muscle mannequin, an abstract non-human educational model made only of visible musculature with a featureless head, executing {position} of a standing cable face pull at a compact neutral unbranded cable station. Soft diffuse lighting, muted anatomical red tones. Highlight the rear deltoids and upper back muscles subtly brighter with a soft violet #7c5cff glow. Light front-side three-quarter view, full figure centered with compact consistent zoom. Scene/backdrop: fully transparent background; no floor, no shadow. Constraints: no skin, face, hair, real person, text, watermark, logo, branding, or equipment branding. 1024 × 1024 PNG with alpha transparency.`
+- **Prompt substitutions:** `starting / arms extended forward holding a rope attachment at upper-chest height`; `contracted ending / elbows flared and rope drawn beside the upper face`.
+- **Transparency processing:** Both final outputs were validated as 1024 × 1024 RGBA PNGs with transparent corners.
