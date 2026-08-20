@@ -178,3 +178,13 @@
 - **Prompt pattern:** `Elegant scientific anatomy plate of a full-body ecorché museum study figure, an explicitly non-human educational sculpture made solely from muted red muscle fibers with a featureless oval head, demonstrating {static plank keyframe}. Soft diffuse medical lighting with no glossy rendering; abdominal wall only slightly brighter with a delicate violet #7c5cff emphasis. Light side-front three-quarter view, full figure centered with compact consistent zoom. Scene/backdrop: fully transparent background; no floor or cast shadow. Constraints: no skin, person, facial features, hair, text, watermark, logo, or branding. 1024 × 1024 PNG with alpha transparency.`
 - **Prompt substitutions:** `start / high-plank hold, level body line, hands below shoulders and toes behind`; `sustained ending / same high-plank isometric hold in a stable maintained position`.
 - **Transparency processing:** Both final outputs were validated as 1024 × 1024 RGBA PNGs with transparent corners.
+
+## ForgeFit exercise figures — intake 2026-08-20 (cable crunch)
+
+- **Assets:** `public/exercise-images/cable-crunch-0.png`, `public/exercise-images/cable-crunch-1.png`
+- **Tool:** OpenAI built-in image generation (`gpt-image-2`), with native PNG alpha transparency and local 1024 × 1024 downscaling.
+- **Date:** 2026-08-20
+- **Source inputs:** None. Both assets were generated fresh; no prior exercise photos or third-party image inputs were used.
+- **Prompt pattern:** `Elegant scientific anatomy plate of a full-body ecorché museum study figure, an explicitly non-human educational sculpture made solely from muted red muscle fibers with a featureless oval head, seated at a compact neutral unbranded cable abdominal machine in {position}. Soft diffuse medical lighting with no glossy rendering; abdominal wall only slightly brighter with a delicate violet #7c5cff emphasis. Light front-side three-quarter view, full figure centered with compact consistent zoom. Scene/backdrop: fully transparent background; no floor or cast shadow. Constraints: no skin, person, facial features, hair, text, watermark, logo, or branding. 1024 × 1024 PNG with alpha transparency.`
+- **Prompt substitutions:** `starting / torso tall with rope attachment above shoulders`; `contracted ending / controlled forward spinal curve with rope attachment beside the head`.
+- **Transparency processing:** Both final outputs were validated as 1024 × 1024 RGBA PNGs with transparent corners.
