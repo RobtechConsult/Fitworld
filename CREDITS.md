@@ -108,3 +108,13 @@
 - **Prompt pattern:** `Clean minimal medical illustration of a stylized full-body abstract anatomical muscle mannequin, a non-human educational model made only of visible red musculature with a smooth featureless head, demonstrating {position} of a standing barbell row with an unbranded straight weighted bar. Soft diffuse lighting, muted anatomical red tones. Highlight the latissimus dorsi and middle-back muscles subtly brighter with a soft violet #7c5cff glow. Light side-front three-quarter view, full figure centered with compact consistent zoom. Scene/backdrop: fully transparent background; no floor, no shadow. Constraints: no skin, face, hair, real person, text, watermark, logo, branding, or equipment branding. 1024 × 1024 PNG with alpha transparency.`
 - **Prompt substitutions:** `starting / shallow forward incline, flat back, arms long under the shoulders`; `contracted ending / bar adjacent to the lower ribcage and upper arms drawn back along the torso`.
 - **Transparency processing:** Both final outputs were validated as 1024 × 1024 RGBA PNGs with transparent corners.
+
+## ForgeFit exercise figures — intake 2026-08-20 (dumbbell curl)
+
+- **Assets:** `public/exercise-images/db-curl-0.png`, `public/exercise-images/db-curl-1.png`
+- **Tool:** OpenAI built-in image generation (`gpt-image-2`), with native PNG alpha transparency and local 1024 × 1024 downscaling.
+- **Date:** 2026-08-20
+- **Source inputs:** None. Both assets were generated fresh; no prior exercise photos or third-party image inputs were used.
+- **Prompt pattern:** `Clean minimal medical illustration of a stylized full-body abstract anatomical muscle mannequin, a non-human educational model made only of visible red musculature with a smooth featureless head, demonstrating {position} of a standing dumbbell curl with simple neutral unbranded dumbbells. Soft diffuse lighting, muted anatomical red tones. Highlight the biceps muscles subtly brighter with a soft violet #7c5cff glow. Light front-side three-quarter view, full figure centered with compact consistent zoom. Scene/backdrop: fully transparent background; no floor, no shadow. Constraints: no skin, face, hair, real person, text, watermark, logo, branding, or equipment branding. 1024 × 1024 PNG with alpha transparency.`
+- **Prompt substitutions:** `starting / arms extended comfortably at the sides`; `contracted ending / upper arms vertical beside the torso, forearms upright and weights in front of the shoulders`.
+- **Transparency processing:** Both final outputs were validated as 1024 × 1024 RGBA PNGs with transparent corners.
