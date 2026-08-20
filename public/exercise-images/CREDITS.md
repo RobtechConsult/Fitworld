@@ -1,18 +1,14 @@
 # Übungsbilder — Quelle & Lizenz
 
-**Status: in Umstellung.**
+Personenfreie, anatomische **Muskelfiguren** (Écorché), **frisch generiert**
+(nicht aus früheren Fotos abgeleitet) von „Vinci" mit OpenAI `gpt-image-2`,
+als transparente PNGs. Der trainierte Zielmuskel ist violett hervorgehoben.
 
-Die früheren Übungsfotos wurden **entfernt** (Risiko R-01, siehe
-`docs/legal/rechtspruefung-01.md`): Es handelte sich um Fotografien realer,
-identifizierbarer Personen, deren Rechtekette (Fotografen-Urheberrecht +
-Recht am eigenen Bild) **nicht belegt** war. Die zuvor behauptete
-„Unlicense"-Angabe über die Free Exercise DB war nicht gesichert.
+- **Generierungs-/Lizenznachweis** (Tool, Datum, Prompts, „no source inputs"):
+  siehe `/CREDITS.md` im Repo-Root.
+- **Rechtslage / Hintergrund:** `docs/legal/rechtspruefung-01.md` (R-01).
+- **Stil-Spec & Namensschema:** `docs/exercise-figures-spec.md`.
 
-## Neue Bildquelle (geplant)
-
-Personenfreie, anatomische **Muskelfiguren**, **frisch generiert** (nicht aus
-den alten Fotos abgeleitet). Details, Style-Prompt und Namensschema:
-`docs/exercise-figures-spec.md`.
-
-Für jedes eingesetzte Bild wird hier die tatsächliche Quelle, das verwendete
-Werkzeug und die Nutzungslizenz dokumentiert, bevor es veröffentlicht wird.
+Die früheren Übungsfotos (reale Personen, ungeklärte Rechtekette) wurden
+entfernt. Noch offen (folgt von Vinci): Brust-Varianten, Beine, Core sowie ein
+Restyle der beiden Cardio-Figuren im gedämpften Stil.

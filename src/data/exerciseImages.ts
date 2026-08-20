@@ -1,17 +1,25 @@
 /**
  * Übungsbilder – Zuordnung Seed-Übung -> lokale Bilddateien (public/exercise-images/).
  *
- * HINWEIS (R-01): Die früheren Foto-Dateien (reale Personen, ungeklärte
- * Lizenzkette) wurden entfernt. Neue, personenfreie Muskelfiguren werden
- * frisch generiert und hier – mit denselben `seed:*`-Keys – wieder eingetragen.
- * Bis dahin ist die Zuordnung leer; die App zeigt den Fallback (Hantel-Icon).
- * Spec/Prompt: docs/exercise-figures-spec.md · Rechtslage: docs/legal/.
+ * Personenfreie, anatomische Muskelfiguren (Écorché), frisch generiert von
+ * „Vinci" (OpenAI gpt-image-2), transparente PNGs. Generierungs-/Lizenznachweis:
+ * /CREDITS.md · Rechtslage: docs/legal/. Zielmuskel je Figur violett hervorgehoben.
  *
- * Neues Namensschema (transparente PNGs):
- *   <übungs-key>-0.png = Startposition, <übungs-key>-1.png = Endposition
- * z. B. 'seed:bench-press': ['bench-press-0.png', 'bench-press-1.png']
+ * Namensschema: <übungs-key>-0.png = Start, <übungs-key>-1.png = Ende.
+ * Noch offen (folgt von Vinci): Brust-Varianten, Beine, Core, Cardio-Restyle.
  */
-const FILES: Record<string, string[]> = {}
+const FILES: Record<string, string[]> = {
+  'seed:bench-press': ['bench-press-0.png', 'bench-press-1.png'],
+  'seed:back-squat': ['back-squat-0.png', 'back-squat-1.png'],
+  'seed:barbell-curl': ['barbell-curl-0.png', 'barbell-curl-1.png'],
+  'seed:overhead-press': ['overhead-press-0.png', 'overhead-press-1.png'],
+  'seed:lateral-raise': ['lateral-raise-0.png', 'lateral-raise-1.png'],
+  'seed:pullup': ['pullup-0.png', 'pullup-1.png'],
+  'seed:seated-row': ['seated-row-0.png', 'seated-row-1.png'],
+  'seed:face-pull': ['face-pull-0.png', 'face-pull-1.png'],
+  'seed:triceps-pushdown': ['triceps-pushdown-0.png', 'triceps-pushdown-1.png'],
+  'seed:lat-pulldown': ['lat-pulldown-0.png', 'lat-pulldown-1.png'],
+}
 
 /** Vollständige Bild-URLs (mit Vite-Base) für eine Übung. */
 export function exerciseImages(id: string): string[] {
