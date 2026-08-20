@@ -216,6 +216,16 @@ export const SEED_EXERCISES: Exercise[] = [
     instructions: 'Vorgebeugt, Arme im Bogen seitlich nach hinten öffnen.',
   },
 
+  {
+    id: 'seed:upright-row',
+    name: 'Aufrechtes Rudern',
+    primaryMuscles: ['shoulders', 'traps'],
+    secondaryMuscles: ['biceps'],
+    category: 'compound',
+    equipment: 'barbell',
+    instructions: 'Hantel eng am Körper bis zur oberen Brust ziehen, Ellbogen führen.',
+  },
+
   // ---- Bizeps / Trizeps ----
   {
     id: 'seed:barbell-curl',
@@ -298,6 +308,16 @@ export const SEED_EXERCISES: Exercise[] = [
     category: 'compound',
     equipment: 'barbell',
     instructions: 'Engerer Griff, Ellbogen am Körper, kräftig drücken.',
+  },
+
+  {
+    id: 'seed:wrist-curl',
+    name: 'Handgelenk-Curls (Unterarme)',
+    primaryMuscles: ['forearms'],
+    secondaryMuscles: [],
+    category: 'isolation',
+    equipment: 'dumbbell',
+    instructions: 'Unterarme aufgelegt, Hanteln nur aus dem Handgelenk curlen.',
   },
 
   // ---- Beine ----
@@ -420,6 +440,52 @@ export const SEED_EXERCISES: Exercise[] = [
     instructions: 'Bein gestreckt kontrolliert nach hinten führen, oben anspannen.',
   },
 
+  {
+    id: 'seed:hack-squat',
+    name: 'Hack-Squat (Maschine)',
+    primaryMuscles: ['quads', 'glutes'],
+    secondaryMuscles: ['hamstrings'],
+    category: 'compound',
+    equipment: 'machine',
+    instructions: 'Rücken am Polster, kontrolliert tief beugen und drücken.',
+  },
+  {
+    id: 'seed:sumo-deadlift',
+    name: 'Sumo-Kreuzheben',
+    primaryMuscles: ['glutes', 'hamstrings'],
+    secondaryMuscles: ['quads', 'back'],
+    category: 'compound',
+    equipment: 'barbell',
+    instructions: 'Breiter Stand, Griff innen, Hüfte tief, mit Beinen und Hüfte strecken.',
+  },
+  {
+    id: 'seed:good-morning',
+    name: 'Good Morning',
+    primaryMuscles: ['hamstrings'],
+    secondaryMuscles: ['back', 'glutes'],
+    category: 'compound',
+    equipment: 'barbell',
+    instructions: 'Hantel im Nacken, Hüfte zurück, Oberkörper mit neutralem Rücken senken.',
+  },
+  {
+    id: 'seed:hip-abduction',
+    name: 'Abduktoren (Maschine)',
+    primaryMuscles: ['glutes'],
+    secondaryMuscles: [],
+    category: 'isolation',
+    equipment: 'machine',
+    instructions: 'Beine gegen den Widerstand nach außen drücken, oben anspannen.',
+  },
+  {
+    id: 'seed:step-up',
+    name: 'Step-Ups',
+    primaryMuscles: ['quads', 'glutes'],
+    secondaryMuscles: ['hamstrings'],
+    category: 'compound',
+    equipment: 'dumbbell',
+    instructions: 'Auf eine Box steigen, über die Ferse hochdrücken, kontrolliert absteigen.',
+  },
+
   // ---- Bauch / Core ----
   {
     id: 'seed:plank',
@@ -495,6 +561,25 @@ export const SEED_EXERCISES: Exercise[] = [
     instructions: 'Aus dem Knien nach vorne rollen, Rumpf fest, zurückziehen.',
   },
 
+  {
+    id: 'seed:mountain-climber',
+    name: 'Mountain Climbers',
+    primaryMuscles: ['abs'],
+    secondaryMuscles: ['cardio', 'shoulders'],
+    category: 'compound',
+    equipment: 'bodyweight',
+    instructions: 'Im Stütz die Knie abwechselnd zügig zur Brust ziehen.',
+  },
+  {
+    id: 'seed:cable-woodchop',
+    name: 'Holzhacker am Kabel (Woodchop)',
+    primaryMuscles: ['obliques'],
+    secondaryMuscles: ['abs'],
+    category: 'isolation',
+    equipment: 'cable',
+    instructions: 'Diagonal von oben nach unten (und umgekehrt) mit stabilem Rumpf ziehen.',
+  },
+
   // ---- Cardio ----
   {
     id: 'seed:rowing-machine',
@@ -558,6 +643,24 @@ export const SEED_EXERCISES: Exercise[] = [
     category: 'compound',
     equipment: 'kettlebell',
     instructions: 'Hüftschwung explosiv, Kettlebell bis Brusthöhe, Rücken neutral.',
+  },
+  {
+    id: 'seed:farmers-walk',
+    name: "Farmer's Walk",
+    primaryMuscles: ['forearms', 'traps'],
+    secondaryMuscles: ['glutes', 'back'],
+    category: 'compound',
+    equipment: 'dumbbell',
+    instructions: 'Schwere Hanteln greifen, aufrecht gehen, Schultern stabil, Rumpf fest.',
+  },
+  {
+    id: 'seed:burpee',
+    name: 'Burpees',
+    primaryMuscles: ['fullbody'],
+    secondaryMuscles: ['cardio', 'chest', 'quads'],
+    category: 'compound',
+    equipment: 'bodyweight',
+    instructions: 'Liegestütz, Beine anziehen, explosiv hochspringen, flüssig wiederholen.',
   },
 ]
 

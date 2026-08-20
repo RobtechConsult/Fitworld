@@ -19,6 +19,14 @@ const FILES: Record<string, string[]> = {
   'seed:face-pull': ['face-pull-0.png', 'face-pull-1.png'],
   'seed:triceps-pushdown': ['triceps-pushdown-0.png', 'triceps-pushdown-1.png'],
   'seed:lat-pulldown': ['lat-pulldown-0.png', 'lat-pulldown-1.png'],
+  'seed:barbell-row': ['barbell-row-0.png', 'barbell-row-1.png'],
+  'seed:db-curl': ['db-curl-0.png', 'db-curl-1.png'],
+  'seed:deadlift': ['deadlift-0.png', 'deadlift-1.png'],
+  'seed:incline-db-press': ['incline-db-press-0.png', 'incline-db-press-1.png'],
+  'seed:leg-press': ['leg-press-0.png', 'leg-press-1.png'],
+  'seed:pushup': ['pushup-0.png', 'pushup-1.png'],
+  'seed:rowing-machine': ['rowing-machine-0.png'],
+  'seed:treadmill': ['treadmill-0.png'],
 }
 
 /** Vollständige Bild-URLs (mit Vite-Base) für eine Übung. */
