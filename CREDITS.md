@@ -188,3 +188,13 @@
 - **Prompt pattern:** `Elegant scientific anatomy plate of a full-body ecorché museum study figure, an explicitly non-human educational sculpture made solely from muted red muscle fibers with a featureless oval head, seated at a compact neutral unbranded cable abdominal machine in {position}. Soft diffuse medical lighting with no glossy rendering; abdominal wall only slightly brighter with a delicate violet #7c5cff emphasis. Light front-side three-quarter view, full figure centered with compact consistent zoom. Scene/backdrop: fully transparent background; no floor or cast shadow. Constraints: no skin, person, facial features, hair, text, watermark, logo, or branding. 1024 × 1024 PNG with alpha transparency.`
 - **Prompt substitutions:** `starting / torso tall with rope attachment above shoulders`; `contracted ending / controlled forward spinal curve with rope attachment beside the head`.
 - **Transparency processing:** Both final outputs were validated as 1024 × 1024 RGBA PNGs with transparent corners.
+
+## ForgeFit exercise figures — intake 2026-08-21 (calf raise)
+
+- **Assets:** `public/exercise-images/calf-raise-0.png`, `public/exercise-images/calf-raise-1.png`
+- **Tool:** OpenAI built-in image generation (`gpt-image-2`), with native PNG alpha transparency and local 1024 × 1024 downscaling.
+- **Date:** 2026-08-21
+- **Source inputs:** None. Both assets were generated fresh; no prior exercise photos, images, or third-party inputs were used.
+- **Prompt pattern:** `Minimal clinical anatomy plate showing only a relevant lower-leg écorché study: a non-human museum teaching model from just below the knees to the feet, made entirely from muted anatomical red muscle fibers, tendons, and bones, with no torso or pelvis. The model is performing a standing calf raise on a compact neutral unbranded step. {keyframe}. Subtly brighten only the gastrocnemius and soleus muscles with a delicate violet #7c5cff emphasis. Fully transparent background, no floor, no shadow. Clean matte medical illustration, soft diffuse lighting, no glossy 3D render. Precise lower-leg crop, centered, consistent gentle three-quarter front-side view. Constraints: no skin, face, hair, real person, text, logos, branding, or watermark. 1024 × 1024 PNG with alpha transparency.`
+- **Prompt substitutions:** `starting / both ankle joints neutral and heel bones resting low while toes are supported at the edge`; `ending / both ankle joints extended, heel bones lifted high, and forefeet/toes supported on the step edge`.
+- **Transparency processing:** Both final outputs were validated as 1024 × 1024 RGBA PNGs with transparent corners.
