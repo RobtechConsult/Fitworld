@@ -191,6 +191,10 @@ export function Dashboard() {
         Freies Training starten
       </button>
 
+      <Link to="/code" className="btn-ghost mt-2 w-full text-[var(--color-ink-muted)]">
+        Plan-Code eingeben
+      </Link>
+
       {/* Stats */}
       <div className="mt-6 grid grid-cols-2 gap-3">
         <StatCard label="Workouts" value={String(data.workouts.length)} hint="getrackt" />
