@@ -12,10 +12,19 @@ import type { AppData, BodyMetric, Exercise, Plan, Settings, Workout } from '@/l
 import { loadAppData, newId, saveAppData } from '@/lib/storage'
 import { SEED_EXERCISES } from '@/data/exercises'
 
+/** Zielvorgabe je Übung (autoregulierte Progression) für den Editor. */
+export interface Prescription {
+  sets: number
+  reps: number
+  weightKg: number
+}
+
 /** Transiente Vorgabe, um den Workout-Editor vorbefüllt zu öffnen (nicht persistiert). */
 export interface PendingStart {
   exerciseIds: string[]
   name?: string
+  /** Optionale Zielwerte je Übung (z. B. aus der Tagesplan-Engine). */
+  prescriptions?: Record<string, Prescription>
 }
 
 interface StoreValue {
@@ -47,7 +56,11 @@ interface StoreValue {
   setExerciseConfig: (exerciseId: string, patch: Partial<import('@/lib/types').ExerciseConfig>) => void
   /** Transiente Vorgabe für den Workout-Editor (z. B. aus einem Plan-Tag). */
   pendingStart: PendingStart | null
-  startWorkoutFrom: (exerciseIds: string[], name?: string) => void
+  startWorkoutFrom: (
+    exerciseIds: string[],
+    name?: string,
+    prescriptions?: Record<string, Prescription>,
+  ) => void
   clearPendingStart: () => void
   replaceAll: (data: AppData) => void
 }
@@ -169,9 +182,12 @@ export function StoreProvider({ children }: { children: ReactNode }) {
   }, [])
 
   const [pendingStart, setPendingStart] = useState<PendingStart | null>(null)
-  const startWorkoutFrom = useCallback((exerciseIds: string[], name?: string) => {
-    setPendingStart({ exerciseIds, name })
-  }, [])
+  const startWorkoutFrom = useCallback<StoreValue['startWorkoutFrom']>(
+    (exerciseIds, name, prescriptions) => {
+      setPendingStart({ exerciseIds, name, prescriptions })
+    },
+    [],
+  )
   const clearPendingStart = useCallback(() => setPendingStart(null), [])
 
   const allExercises = useMemo(

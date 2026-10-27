@@ -32,18 +32,32 @@ export function WorkoutEditor({
   onCancel,
   initialExerciseIds,
   initialName,
+  initialPrescriptions,
 }: {
   onDone: (w: Workout) => void
   onCancel: () => void
   /** Übungen, mit denen der Editor vorbefüllt startet (z. B. aus einem Plan-Tag). */
   initialExerciseIds?: string[]
   initialName?: string
+  /** Autoregulierte Zielwerte je Übung (aus der Tagesplan-Engine). */
+  initialPrescriptions?: Record<string, { sets: number; reps: number; weightKg: number }>
 }) {
   const { data, exerciseById, addWorkout } = useStore()
   const unit = data.settings.unit
 
   // Progression: letzte Werte dieser Übung vorbelegen (nicht abgeschlossen).
   const seedEntry = (exerciseId: string): WorkoutEntry => {
+    // Zielvorgabe aus der Tagesplan-Engine hat Vorrang.
+    const p = initialPrescriptions?.[exerciseId]
+    if (p) {
+      const n = Math.max(1, p.sets)
+      const sets: WorkoutSet[] = Array.from({ length: n }, () => ({
+        reps: p.reps,
+        weightKg: p.weightKg,
+        completed: false,
+      }))
+      return { exerciseId, sets }
+    }
     const stats = exerciseStats(data.workouts, exerciseId)
     const sets: WorkoutSet[] = stats.lastEntry
       ? stats.lastEntry.sets.map((s) => ({

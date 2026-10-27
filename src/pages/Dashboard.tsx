@@ -4,6 +4,9 @@ import { PageHeader } from '@/components/layout/AppShell'
 import { IconChevron, IconDumbbell, IconPlus, IconScale } from '@/components/icons'
 import { ExerciseThumb } from '@/components/ExerciseThumb'
 import { WeekStrip } from '@/components/WeekStrip'
+import { TodayCard } from '@/components/TodayCard'
+import { VolumeCard } from '@/components/VolumeCard'
+import { deloadHint } from '@/lib/training'
 import { fmtWeight } from '@/lib/units'
 import { SEED_EXERCISES } from '@/data/exercises'
 import type { Plan, PlanDay } from '@/lib/types'
@@ -137,11 +140,12 @@ function NoPlanCard() {
 }
 
 export function Dashboard() {
-  const { data, allExercises, startWorkoutFrom } = useStore()
+  const { data, allExercises, exerciseById, startWorkoutFrom } = useStore()
   const navigate = useNavigate()
 
   const activePlan =
     data.plans.find((p) => p.id === data.settings.activePlanId) ?? data.plans[0]
+  const deload = deloadHint(data.workouts, exerciseById)
 
   const latestWeight = [...data.bodyMetrics]
     .filter((m) => m.weightKg != null)
@@ -165,7 +169,21 @@ export function Dashboard() {
         }
       />
 
-      {/* Plan-Hub */}
+      {/* Heute dran – Tagesplan-Engine (autoregulierte Zielwerte) */}
+      {activePlan && <TodayCard plan={activePlan} />}
+
+      {deload && (
+        <div className="card mb-3 border-[var(--color-warn)]/40 bg-[var(--color-warn)]/10 px-4 py-3">
+          <p className="text-sm font-semibold text-[var(--color-warn)]">Deload erwägen</p>
+          <p className="mt-0.5 text-xs text-[var(--color-ink-muted)]">
+            {deload.stalled.slice(0, 3).join(', ')} stagnier
+            {deload.stalled.length === 1 ? 't' : 'en'} – eine leichtere Woche (ca. −10 % Last)
+            kann den Fortschritt wieder anstoßen.
+          </p>
+        </div>
+      )}
+
+      {/* Plan-Hub (alle Tage zum freien Auswählen) */}
       {activePlan ? <ActivePlanCard plan={activePlan} /> : <NoPlanCard />}
 
       <button onClick={startFreeWorkout} className="btn-ghost mt-3 w-full">
@@ -187,6 +205,11 @@ export function Dashboard() {
           hint={customCount > 0 ? `${customCount} eigene` : 'Startkatalog'}
         />
         <StatCard label="Pläne" value={String(data.plans.length)} hint="Splits/Routinen" />
+      </div>
+
+      {/* Wochen-Volumen je Muskel */}
+      <div className="mt-6">
+        <VolumeCard />
       </div>
 
       {/* Schnellzugriff */}
