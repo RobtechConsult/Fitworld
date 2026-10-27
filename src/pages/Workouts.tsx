@@ -62,6 +62,7 @@ export function Workouts() {
         <WorkoutEditor
           initialExerciseIds={initial?.exerciseIds}
           initialName={initial?.name}
+          initialPrescriptions={initial?.prescriptions}
           onDone={closeEditor}
           onCancel={closeEditor}
         />
