@@ -44,15 +44,17 @@ export default defineConfig({
       },
       workbox: {
         globPatterns: ['**/*.{js,css,html,svg,png,woff2}'],
-        // Übungsfotos (jpg) nicht vorab bündeln (zu groß), sondern beim
-        // ersten Ansehen cachen -> danach offline verfügbar.
+        // Übungs-Muskelfiguren (PNG, ~40 MB) NICHT vorab in den Precache bündeln
+        // – sonst lädt die PWA beim Installieren/Update alles auf einmal.
+        // Stattdessen beim ersten Ansehen cachen (CacheFirst) -> danach offline.
+        globIgnores: ['**/exercise-images/**'],
         runtimeCaching: [
           {
             urlPattern: ({ url }) => url.pathname.includes('/exercise-images/'),
             handler: 'CacheFirst',
             options: {
               cacheName: 'forgefit-exercise-images',
-              expiration: { maxEntries: 120, maxAgeSeconds: 60 * 60 * 24 * 90 },
+              expiration: { maxEntries: 160, maxAgeSeconds: 60 * 60 * 24 * 90 },
             },
           },
         ],
