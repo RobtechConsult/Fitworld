@@ -1,6 +1,7 @@
 import { useMemo, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useStore } from '@/store/StoreContext'
+import { usePhotos } from '@/store/PhotosContext'
 import { PageHeader } from '@/components/layout/AppShell'
 import { Sheet } from '@/components/Sheet'
 import { ExerciseForm } from './ExerciseForm'
@@ -132,6 +133,7 @@ function ExerciseDetail({
 
 export function Exercises() {
   const { allExercises, addCustomExercise, deleteCustomExercise } = useStore()
+  const { setPhoto } = usePhotos()
   const [query, setQuery] = useState('')
   const [muscle, setMuscle] = useState<MuscleGroup | 'all'>('all')
   const [selected, setSelected] = useState<Exercise | null>(null)
@@ -200,8 +202,9 @@ export function Exercises() {
 
       <Sheet open={adding} onClose={() => setAdding(false)} title="Eigene Übung">
         <ExerciseForm
-          onSubmit={(ex) => {
-            addCustomExercise(ex)
+          onSubmit={(ex, photo) => {
+            const created = addCustomExercise(ex)
+            if (photo) setPhoto(created.id, photo)
             setAdding(false)
           }}
         />

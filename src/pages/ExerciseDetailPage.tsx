@@ -1,7 +1,9 @@
 import { useNavigate, useParams } from 'react-router-dom'
 import { useStore } from '@/store/StoreContext'
+import { usePhotos } from '@/store/PhotosContext'
 import { PageHeader } from '@/components/layout/AppShell'
 import { ExerciseHistory } from '@/components/ExerciseHistory'
+import { PhotoPicker } from '@/components/PhotoPicker'
 import { exerciseImages } from '@/data/exerciseImages'
 import { CATEGORY_LABELS, EQUIPMENT_LABELS, MUSCLE_LABELS } from '@/data/muscleGroups'
 import { IconClose } from '@/components/icons'
@@ -9,6 +11,7 @@ import { IconClose } from '@/components/icons'
 export function ExerciseDetailPage() {
   const { id = '' } = useParams()
   const { exerciseById } = useStore()
+  const { photos, setPhoto, removePhoto } = usePhotos()
   const navigate = useNavigate()
   const ex = exerciseById(id)
 
@@ -54,6 +57,17 @@ export function ExerciseDetailPage() {
           ))}
         </div>
       )}
+
+      <div className="card mb-4 px-4 py-3">
+        <span className="mb-2 block text-sm font-medium text-[var(--color-ink-muted)]">
+          Eigenes Foto
+        </span>
+        <PhotoPicker
+          value={photos[ex.id]}
+          onChange={(v) => (v ? setPhoto(ex.id, v) : removePhoto(ex.id))}
+          size={84}
+        />
+      </div>
 
       <div className="mb-4 flex flex-wrap gap-1.5">
         {ex.primaryMuscles.map((m) => (

@@ -1,15 +1,19 @@
 import { useMemo, useState } from 'react'
 import { useStore } from '@/store/StoreContext'
-import { IconSearch } from '@/components/icons'
+import { usePhotos } from '@/store/PhotosContext'
+import { IconPlus, IconSearch } from '@/components/icons'
 import { ExerciseThumb } from '@/components/ExerciseThumb'
+import { ExerciseForm } from '@/pages/exercises/ExerciseForm'
 import { MUSCLE_LABELS, MUSCLE_ORDER, EQUIPMENT_LABELS } from '@/data/muscleGroups'
 import type { MuscleGroup } from '@/lib/types'
 
 /** Auswahl-Liste (im Sheet) zum Hinzufügen einer Übung zu einer Einheit. */
 export function ExercisePicker({ onPick }: { onPick: (exerciseId: string) => void }) {
-  const { allExercises } = useStore()
+  const { allExercises, addCustomExercise } = useStore()
+  const { setPhoto } = usePhotos()
   const [query, setQuery] = useState('')
   const [muscle, setMuscle] = useState<MuscleGroup | 'all'>('all')
+  const [creating, setCreating] = useState(false)
 
   const filtered = useMemo(() => {
     const q = query.trim().toLowerCase()
@@ -24,6 +28,27 @@ export function ExercisePicker({ onPick }: { onPick: (exerciseId: string) => voi
       return true
     })
   }, [allExercises, query, muscle])
+
+  // Beim Trainieren direkt eine eigene Übung anlegen und auswählen.
+  if (creating) {
+    return (
+      <div>
+        <button
+          onClick={() => setCreating(false)}
+          className="mb-3 text-sm font-medium text-[var(--color-ink-muted)] hover:text-[var(--color-ink)]"
+        >
+          ← Zurück zur Auswahl
+        </button>
+        <ExerciseForm
+          onSubmit={(ex, photo) => {
+            const created = addCustomExercise(ex)
+            if (photo) setPhoto(created.id, photo)
+            onPick(created.id)
+          }}
+        />
+      </div>
+    )
+  }
 
   return (
     <div>
@@ -52,6 +77,14 @@ export function ExercisePicker({ onPick }: { onPick: (exerciseId: string) => voi
           />
         ))}
       </div>
+
+      <button
+        onClick={() => setCreating(true)}
+        className="btn-ghost mb-3 w-full !py-2.5 !text-sm"
+      >
+        <IconPlus width={16} height={16} />
+        Neue Übung erstellen
+      </button>
 
       <div className="flex max-h-[52vh] flex-col gap-2 overflow-y-auto">
         {filtered.length === 0 ? (
