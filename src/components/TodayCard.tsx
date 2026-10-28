@@ -2,6 +2,7 @@ import { useNavigate } from 'react-router-dom'
 import { useStore } from '@/store/StoreContext'
 import { ExerciseThumb } from '@/components/ExerciseThumb'
 import { nextPlanDay, prescribeDay } from '@/lib/training'
+import { workoutsForActiveGym } from '@/lib/gym'
 import { fromKg, weightLabel } from '@/lib/units'
 import type { Plan } from '@/lib/types'
 
@@ -17,7 +18,8 @@ export function TodayCard({ plan }: { plan: Plan }) {
   const day = nextPlanDay(plan, data.workouts)
   if (!day || day.exercises.length === 0) return null
 
-  const presc = prescribeDay(day, data.workouts, data.settings.exerciseConfig)
+  // Zielgewichte aus der Historie des aktiven Gyms (gym-spezifisch).
+  const presc = prescribeDay(day, workoutsForActiveGym(data), data.settings.exerciseConfig)
 
   const start = () => {
     startWorkoutFrom(

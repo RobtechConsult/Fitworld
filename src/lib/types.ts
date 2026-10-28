@@ -78,8 +78,17 @@ export interface Workout {
   entries: WorkoutEntry[]
   /** optional aus einem Plan-Tag erzeugt. */
   planId?: ID
+  /** Gym, in dem trainiert wurde (für gym-spezifische Gewichte). */
+  gymId?: ID
   durationSec?: number
   notes?: string
+  createdAt: string
+}
+
+/** Ein Gym/Studio (Gewichte werden je Gym getrennt geführt). */
+export interface Gym {
+  id: ID
+  name: string
   createdAt: string
 }
 
@@ -139,6 +148,10 @@ export interface Settings {
   goalBodyFatPct?: number
   /** Gewichts-Picker-Konfiguration je Übung. */
   exerciseConfig?: Record<ID, ExerciseConfig>
+  /** aktuell gewähltes Gym (gym-spezifische Gewichte). */
+  activeGymId?: ID
+  /** true = Gewichte/Historie über ALLE Gyms zusammen betrachten. */
+  showAllGyms?: boolean
 }
 
 /** Kompletter App-Zustand (persistiert in localStorage). */
@@ -148,6 +161,8 @@ export interface AppData {
   workouts: Workout[]
   plans: Plan[]
   bodyMetrics: BodyMetric[]
+  /** angelegte Gyms/Studios (optional – ältere Daten haben keine). */
+  gyms?: Gym[]
   settings: Settings
 }
 

@@ -17,8 +17,9 @@ function num(v: string): number | undefined {
 }
 
 export function Settings() {
-  const { data, updateSettings } = useStore()
-  const { unit, goalWeightKg, goalBodyFatPct } = data.settings
+  const { data, updateSettings, addGym, renameGym, deleteGym, setActiveGym } = useStore()
+  const { unit, goalWeightKg, goalBodyFatPct, activeGymId, showAllGyms } = data.settings
+  const gyms = data.gyms ?? []
 
   const goalWeightValue = goalWeightKg != null ? fromKg(goalWeightKg, unit) : ''
 
@@ -92,6 +93,96 @@ export function Settings() {
             />
           </label>
         </div>
+      </div>
+
+      {/* Gyms */}
+      <div className="card mt-4 px-4 py-4">
+        <h2 className="mb-1 font-semibold">Gyms</h2>
+        <p className="mb-3 text-sm text-[var(--color-ink-muted)]">
+          Jedes Gym führt eigene Gewichte (z. B. unterschiedliche Maschinen). Im Training werden
+          die Werte des aktiven Gyms vorbelegt.
+        </p>
+
+        <label className="mb-3 flex items-center justify-between">
+          <span className="text-sm text-[var(--color-ink-muted)]">
+            Alle Gyms zusammen betrachten
+          </span>
+          <button
+            onClick={() => updateSettings({ showAllGyms: !showAllGyms })}
+            className={[
+              'h-6 w-11 rounded-full p-0.5 transition-colors',
+              showAllGyms ? 'bg-[var(--color-brand)]' : 'bg-[var(--color-border)]',
+            ].join(' ')}
+            aria-label="Alle Gyms"
+          >
+            <span
+              className={[
+                'block h-5 w-5 rounded-full bg-white transition-transform',
+                showAllGyms ? 'translate-x-5' : '',
+              ].join(' ')}
+            />
+          </button>
+        </label>
+
+        {gyms.length === 0 ? (
+          <p className="text-sm text-[var(--color-ink-faint)]">Noch kein Gym angelegt.</p>
+        ) : (
+          <div className="flex flex-col gap-2">
+            {gyms.map((g) => {
+              const active = !showAllGyms && activeGymId === g.id
+              return (
+                <div
+                  key={g.id}
+                  className="flex items-center gap-2 rounded-xl bg-[var(--color-surface-2)] px-3 py-2"
+                >
+                  <button
+                    onClick={() => {
+                      setActiveGym(g.id)
+                      updateSettings({ showAllGyms: false })
+                    }}
+                    className="min-w-0 flex-1 text-left"
+                  >
+                    <span className="block truncate font-medium">{g.name}</span>
+                    <span className="text-xs text-[var(--color-ink-faint)]">
+                      {active ? 'aktiv' : 'antippen zum Aktivieren'}
+                    </span>
+                  </button>
+                  <button
+                    onClick={() => {
+                      const name = window.prompt('Gym umbenennen', g.name)?.trim()
+                      if (name) renameGym(g.id, name)
+                    }}
+                    className="chip"
+                  >
+                    Umbenennen
+                  </button>
+                  <button
+                    onClick={() => {
+                      if (window.confirm(`Gym „${g.name}" löschen? Einheiten bleiben erhalten.`))
+                        deleteGym(g.id)
+                    }}
+                    className="chip text-[var(--color-danger)]"
+                  >
+                    Löschen
+                  </button>
+                </div>
+              )
+            })}
+          </div>
+        )}
+
+        <button
+          onClick={() => {
+            const name = window.prompt('Name des neuen Gyms')?.trim()
+            if (!name) return
+            const created = addGym(name)
+            setActiveGym(created.id)
+            updateSettings({ showAllGyms: false })
+          }}
+          className="btn-ghost mt-3 w-full !py-2 !text-sm"
+        >
+          + Gym hinzufügen
+        </button>
       </div>
 
       <p className="mt-4 text-center text-xs text-[var(--color-ink-faint)]">

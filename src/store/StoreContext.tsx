@@ -8,7 +8,7 @@ import {
   useState,
   type ReactNode,
 } from 'react'
-import type { AppData, BodyMetric, Exercise, Plan, Settings, Workout } from '@/lib/types'
+import type { AppData, BodyMetric, Exercise, Gym, Plan, Settings, Workout } from '@/lib/types'
 import { loadAppData, newId, saveAppData } from '@/lib/storage'
 import { SEED_EXERCISES } from '@/data/exercises'
 
@@ -50,6 +50,12 @@ interface StoreValue {
   deletePlan: (id: string) => void
   /** Plan als „aktiv" (Startseite) markieren. */
   setActivePlan: (id: string) => void
+  /** Gym anlegen; erzeugt id + createdAt. Erstes Gym wird automatisch aktiv. */
+  addGym: (name: string) => Gym
+  renameGym: (id: string, name: string) => void
+  deleteGym: (id: string) => void
+  /** Aktives Gym setzen (undefined = keins). */
+  setActiveGym: (id?: string) => void
   /** Einstellungen aktualisieren (z. B. Einheit kg/lbs). */
   updateSettings: (patch: Partial<Settings>) => void
   /** Gewichts-Picker-Konfiguration einer Übung setzen. */
@@ -164,6 +170,41 @@ export function StoreProvider({ children }: { children: ReactNode }) {
     })
   }, [])
 
+  const addGym = useCallback<StoreValue['addGym']>((name) => {
+    const created: Gym = { id: newId('gym'), name: name.trim(), createdAt: new Date().toISOString() }
+    setData((prev) => {
+      const gyms = [...(prev.gyms ?? []), created]
+      return {
+        ...prev,
+        gyms,
+        settings: prev.settings.activeGymId
+          ? prev.settings
+          : { ...prev.settings, activeGymId: created.id },
+      }
+    })
+    return created
+  }, [])
+
+  const renameGym = useCallback<StoreValue['renameGym']>((id, name) => {
+    setData((prev) => ({
+      ...prev,
+      gyms: (prev.gyms ?? []).map((g) => (g.id === id ? { ...g, name: name.trim() } : g)),
+    }))
+  }, [])
+
+  const deleteGym = useCallback((id: string) => {
+    setData((prev) => {
+      const gyms = (prev.gyms ?? []).filter((g) => g.id !== id)
+      const activeGymId =
+        prev.settings.activeGymId === id ? gyms[0]?.id : prev.settings.activeGymId
+      return { ...prev, gyms, settings: { ...prev.settings, activeGymId } }
+    })
+  }, [])
+
+  const setActiveGym = useCallback((id?: string) => {
+    setData((prev) => ({ ...prev, settings: { ...prev.settings, activeGymId: id } }))
+  }, [])
+
   const updateSettings = useCallback<StoreValue['updateSettings']>((patch) => {
     setData((prev) => ({ ...prev, settings: { ...prev.settings, ...patch } }))
   }, [])
@@ -223,6 +264,10 @@ export function StoreProvider({ children }: { children: ReactNode }) {
       updatePlan,
       deletePlan,
       setActivePlan,
+      addGym,
+      renameGym,
+      deleteGym,
+      setActiveGym,
       updateSettings,
       setExerciseConfig,
       pendingStart,
@@ -246,6 +291,10 @@ export function StoreProvider({ children }: { children: ReactNode }) {
       updatePlan,
       deletePlan,
       setActivePlan,
+      addGym,
+      renameGym,
+      deleteGym,
+      setActiveGym,
       updateSettings,
       setExerciseConfig,
       pendingStart,
