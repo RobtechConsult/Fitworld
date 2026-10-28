@@ -6,6 +6,7 @@ import { ExerciseThumb } from '@/components/ExerciseThumb'
 import { WeekStrip } from '@/components/WeekStrip'
 import { TodayCard } from '@/components/TodayCard'
 import { VolumeCard } from '@/components/VolumeCard'
+import { GymBar } from '@/components/GymBar'
 import { deloadHint } from '@/lib/training'
 import { fmtWeight } from '@/lib/units'
 import { SEED_EXERCISES } from '@/data/exercises'
@@ -160,6 +161,9 @@ export function Dashboard() {
   return (
     <div>
       <PageHeader title="ForgeFit" subtitle="Dein Training. Deine Daten. Dein Fortschritt." />
+
+      {/* Gym-Auswahl (gym-spezifische Gewichte) */}
+      <GymBar />
 
       {/* Wochenkalender */}
       <WeekStrip

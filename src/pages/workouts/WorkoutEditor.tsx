@@ -10,6 +10,7 @@ import { epley1RM, exerciseStats, progressionSuggestion, summarizeEntry } from '
 import { fmtWeightValue, fromKg, weightLabel } from '@/lib/units'
 import { WeightPicker } from '@/components/WeightPicker'
 import { todayIso } from '@/lib/date'
+import { workoutsForActiveGym } from '@/lib/gym'
 import type { Workout, WorkoutEntry, WorkoutSet } from '@/lib/types'
 
 interface Draft {
@@ -44,6 +45,9 @@ export function WorkoutEditor({
 }) {
   const { data, exerciseById, addWorkout } = useStore()
   const unit = data.settings.unit
+  // Gym-spezifische Historie: Vorbefüllung/Progression nutzen nur das aktive Gym
+  // (oder alle, wenn „alle Gyms" aktiv bzw. kein Gym gewählt ist).
+  const gymWorkouts = workoutsForActiveGym(data)
 
   // Progression: letzte Werte dieser Übung vorbelegen (nicht abgeschlossen).
   const seedEntry = (exerciseId: string): WorkoutEntry => {
@@ -58,7 +62,7 @@ export function WorkoutEditor({
       }))
       return { exerciseId, sets }
     }
-    const stats = exerciseStats(data.workouts, exerciseId)
+    const stats = exerciseStats(gymWorkouts, exerciseId)
     const sets: WorkoutSet[] = stats.lastEntry
       ? stats.lastEntry.sets.map((s) => ({
           reps: s.reps,
@@ -182,6 +186,7 @@ export function WorkoutEditor({
       name: draft.name.trim() || undefined,
       entries,
       notes: draft.notes.trim() || undefined,
+      gymId: data.settings.activeGymId,
     })
     onDone(created)
   }
@@ -210,7 +215,7 @@ export function WorkoutEditor({
 
   const entry = draft.entries[active]
   const ex = entry ? exerciseById(entry.exerciseId) : undefined
-  const stats = entry ? exerciseStats(data.workouts, entry.exerciseId) : undefined
+  const stats = entry ? exerciseStats(gymWorkouts, entry.exerciseId) : undefined
 
   return (
     <div>
@@ -376,7 +381,7 @@ export function WorkoutEditor({
               </div>
 
               {(() => {
-                const suggest = progressionSuggestion(data.workouts, entry.exerciseId)
+                const suggest = progressionSuggestion(gymWorkouts, entry.exerciseId)
                 if (!suggest) return null
                 return (
                   <button
