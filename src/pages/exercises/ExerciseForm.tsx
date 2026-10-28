@@ -6,6 +6,7 @@ import type {
   MuscleGroup,
 } from '@/lib/types'
 import { CATEGORY_LABELS, EQUIPMENT_LABELS, MUSCLE_LABELS, MUSCLE_ORDER } from '@/data/muscleGroups'
+import { PhotoPicker } from '@/components/PhotoPicker'
 
 type NewExercise = Omit<Exercise, 'id' | 'isCustom' | 'createdAt'>
 
@@ -21,13 +22,18 @@ const EQUIPMENTS: Equipment[] = [
   'other',
 ]
 
-/** Formular zum Anlegen einer eigenen Übung. */
-export function ExerciseForm({ onSubmit }: { onSubmit: (ex: NewExercise) => void }) {
+/** Formular zum Anlegen einer eigenen Übung (optional mit eigenem Foto). */
+export function ExerciseForm({
+  onSubmit,
+}: {
+  onSubmit: (ex: NewExercise, photo?: string | null) => void
+}) {
   const [name, setName] = useState('')
   const [category, setCategory] = useState<ExerciseCategory>('compound')
   const [equipment, setEquipment] = useState<Equipment>('barbell')
   const [primary, setPrimary] = useState<Set<MuscleGroup>>(new Set())
   const [instructions, setInstructions] = useState('')
+  const [photo, setPhoto] = useState<string | null>(null)
 
   const togglePrimary = (m: MuscleGroup) =>
     setPrimary((prev) => {
@@ -44,14 +50,17 @@ export function ExerciseForm({ onSubmit }: { onSubmit: (ex: NewExercise) => void
       onSubmit={(e) => {
         e.preventDefault()
         if (!canSubmit) return
-        onSubmit({
-          name: name.trim(),
-          category,
-          equipment,
-          primaryMuscles: [...primary],
-          secondaryMuscles: [],
-          instructions: instructions.trim() || undefined,
-        })
+        onSubmit(
+          {
+            name: name.trim(),
+            category,
+            equipment,
+            primaryMuscles: [...primary],
+            secondaryMuscles: [],
+            instructions: instructions.trim() || undefined,
+          },
+          photo,
+        )
       }}
       className="flex flex-col gap-4"
     >
@@ -65,6 +74,13 @@ export function ExerciseForm({ onSubmit }: { onSubmit: (ex: NewExercise) => void
           autoFocus
         />
       </label>
+
+      <div>
+        <span className="mb-1.5 block text-sm font-medium text-[var(--color-ink-muted)]">
+          Foto (optional)
+        </span>
+        <PhotoPicker value={photo ?? undefined} onChange={setPhoto} />
+      </div>
 
       <div>
         <span className="mb-1.5 block text-sm font-medium text-[var(--color-ink-muted)]">

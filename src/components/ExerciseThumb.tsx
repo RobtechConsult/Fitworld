@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { exerciseThumb } from '@/data/exerciseImages'
+import { usePhotos } from '@/store/PhotosContext'
 import { IconDumbbell } from '@/components/icons'
 
 /** Quadratisches Übungs-Thumbnail mit Fallback (Hantel-Icon). */
@@ -12,7 +13,9 @@ export function ExerciseThumb({
   size?: number
   className?: string
 }) {
-  const src = exerciseThumb(exerciseId)
+  const { photos } = usePhotos()
+  // Eigenes Foto hat Vorrang vor der Muskelfigur.
+  const src = photos[exerciseId] ?? exerciseThumb(exerciseId)
   const [failed, setFailed] = useState(false)
 
   const box =

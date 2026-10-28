@@ -1,6 +1,7 @@
 import { lazy, Suspense } from 'react'
 import { HashRouter, Navigate, Route, Routes } from 'react-router-dom'
 import { StoreProvider } from '@/store/StoreContext'
+import { PhotosProvider } from '@/store/PhotosContext'
 import { AppShell } from '@/components/layout/AppShell'
 import { Dashboard } from '@/pages/Dashboard'
 import { Exercises } from '@/pages/exercises/Exercises'
@@ -30,6 +31,7 @@ function PageFallback() {
 export default function App() {
   return (
     <StoreProvider>
+     <PhotosProvider>
       {/* HashRouter: robuste Deep-Links auf GitHub Pages ohne Server-Rewrites. */}
       <HashRouter>
         <Routes>
@@ -59,6 +61,7 @@ export default function App() {
           </Route>
         </Routes>
       </HashRouter>
+     </PhotosProvider>
     </StoreProvider>
   )
 }
